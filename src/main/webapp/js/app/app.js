@@ -7,10 +7,10 @@
     /*
         Application Initialization
     */
-    var app = angular.module('infomarket', ['ngRoute', 'ngSanitize']);
-    var Root = '/infomarket/',
-        restBase = '/infomarket/',
-        getLinkURI = Root + 'start#!/app/infomarket#/list/';
+    var app = angular.module('flyer', ['ngRoute', 'ngSanitize']);
+    var Root = '/flyer/',
+        restBase = '/flyer/',
+        getLinkURI = Root + 'start#!/app/flyer#/list/';
 
     /*
         Application Config

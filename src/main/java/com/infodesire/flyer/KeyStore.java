@@ -1,7 +1,7 @@
 // (C) 1998-2015 Information Desire Software GmbH
 // www.infodesire.com
 
-package com.infodesire.infomarket;
+package com.infodesire.flyer;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;

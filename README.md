@@ -1,4 +1,4 @@
-infomarket
-==========
+flyer
+=====
 
-Wikilike intranet.
+Frontend (and sample backend) for a REST based document management system.

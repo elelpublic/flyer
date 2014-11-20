@@ -12,7 +12,7 @@
     
     <servlet>
         <servlet-name>ConfigServlet</servlet-name>
-        <servlet-class>com.infodesire.infomarket.ConfigServlet</servlet-class>
+        <servlet-class>com.infodesire.flyer.ConfigServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -22,7 +22,7 @@
 
 		<filter>
 		   <filter-name>ApplicationKeyFilter</filter-name>
-		   <filter-class>com.infodesire.infomarket.ApplicationKeyFilter</filter-class>
+		   <filter-class>com.infodesire.flyer.ApplicationKeyFilter</filter-class>
 		   <init-param>
 			  <param-name>test-param</param-name>
 			  <param-value>Initialization Paramter</param-value>

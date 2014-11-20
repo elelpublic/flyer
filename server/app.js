@@ -16,7 +16,7 @@ var port = process.env.PORT || 8500;    // set our port
 // Connect to DB
 
 var mongoose   = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/infomarket'); // connect to our database
+mongoose.connect('mongodb://localhost:27017/flyer'); // connect to our database
 
 require('./keyword');
 
