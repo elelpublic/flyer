@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="row-fluid">
+        <div class="span8">
+
+            <div class="_3cmB _5lBt">
+                <ul class="_5lBt-actions" ng-if="infobits.length > 0">
+                    <li><a href="#/add/keyword={{keyword.keyword}}"><i class="fa fa-plus-circle"></i> {{captions.add}}</a></li>
+                    <li><a href="javascript:;" ng-click="keywordEdit()"><i class="fa fa-pencil-square-o"></i> {{captions.edit}}</a></li>
+                    <!--<li><a href="#"><i class="fa fa-key"></i> Proprietes</a></li>-->
+                    <li><a href="javascript:;" onClick="javascript:location.reload();"><i class="fa fa-refresh"></i> {{captions.refresh}}</a></li>
+                </ul>
+                <h4 style="margin:0">{{keyword.keyword}}</h4>
+            </div>
+            
+            <ul class="_5lBp">
+                
+                <li class="_3cmB item" ng-repeat="infobit in infobits | orderBy: listSort" m-repeat-directive data-item-id="{{infobit.id}}">
+
+                    <div class="_5lBp-top">
+                        <ul class="row">
+                            <li><a href="#/edit/{{infobit.id}}"><i class="fa fa-pencil-square-o"></i> {{captions.edit}}</a></li>
+                            <li><a href="#/duplicate/{{infobit.id}}"><i class="fa fa-files-o"></i> {{captions.duplicate}}</a></li>
+                            <li><a href="javascript:;" ng-click="infobitRemove($event, infobit.id)"><i class="fa fa-times"></i> {{captions.remove}}</a></li>
+                        </ul>
+                    </div>
+
+                    <p style="white-space: pre-wrap;" ng-bind-html="infobit.content"></p>
+
+                    <div class="_5lBp-bottom">
+                        <ul class="row">
+                            <li><i class="fa fa-user" data-title="{{captions.user}}"></i> {{infobit.ownerName}}</li>
+                            <li><i class="fa fa-sliders" data-title="{{captions.category}}"></i> {{infobit.category}}</li>
+                            <li><i class="fa fa-calendar" data-title="{{captions.date}}"></i> {{infobit.createdTime | date:'dd-MM-yyyy HH:mm'}}</li>
+                            <li ng-if="infobit.createdTime < infobit.lastModifiedTime"><i class="fa fa-history"  data-title="{{captions.last_change}}"></i> {{infobit.lastModifiedTime | date:'dd-MM-yyyy HH:mm'}}</li>
+                            <li><a href="{{getLinkURI + keyword.keyword}}&infoNodeId={{infobit.id}}" ng-click="toggleExterURLShow($event);" class="ns-underline" target="_parent"><i class="fa fa-link"></i>  {{captions.getInfobitLink}}</a></li>
+                            <li class="rStar actived"><a href="javascript:;" ng-click="toggleStar($event, infobit.id)" data-title="{{captions.star_unstar}}"><i class="fa fa-star"></i> <span>{{infobit.stars}}</span></a></li>
+                        </ul>
+                    </div>
+                    
+                </li>
+                <li><a href="#/add/keyword={{keyword.keyword}}" class="_5LmPBtn"><i class="fa fa-plus-circle"></i> {{captions.addD}}</a></li>
+
+            </ul>
+
+        </div>
+        
+        <div class="span4">
+            <div class="_5lBc panel panel-type-danger panel-top-bordered">
+                <div class="panel-heading">
+                    {{captions.softLinks}}:
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li ng-repeat="softLink in softLinksList">
+                            <a href="#/list/{{softLink.targetKeywordName}}"><i class="fa fa-angle-right"></i> {{softLink.targetKeywordName}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="_5lBc panel panel-type-success panel-top-bordered">
+                <div class="panel-heading">
+                    {{captions.sortInfoNodes}}:
+                </div>
+                <div class="panel-body">
+                    <select style="width:100%;" ng-model="listSort" ng-init="listSort='-id'">
+                        <option value="-id">{{captions.sortByDate}} &darr;</option>
+                        <option value="-stars">{{captions.sortByStars}} &darr;</option>
+                        <option value="+id">{{captions.sortByDate}} &uarr;</option>
+                        <option value="+stars">{{captions.sortByStars}} &uarr;</option>
+                    </select>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<a href="#" class="scrollUpDownBtn"><i class="fa fa-arrow-circle-up"></i> {{captions.backToTop | ucfirst}}</a>

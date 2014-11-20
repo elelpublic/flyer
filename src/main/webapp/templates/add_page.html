@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="row-fluid">
+        <div class="span6 _3cmB">
+
+            <h4><i class="fa {{page_title_icon}}"></i> {{page_title}}:</h4>
+            <hr>
+            <form method="post" ng-submit="submitData()">
+                <label>{{captions.keyword}}:</label>
+                <input type="text" disabled readonly data-id="khd3kp" value="{{keyword.keyword}}" />
+                <label>{{captions.category}}:</label>
+                <select name="category" ng-model="post_category">
+                    <option></option>
+                    <option ng-repeat="category in categories" value="{{category.name}}">{{category.name}}</option>							
+                </select>
+                <label>{{captions.textLabel}}:</label>
+                <div></div>
+                <textarea name="text" ng-model="post_text" class="input-block-level _4aS" rows="5" maxlength="2500" required style="margin-bottom: 5px;"></textarea>
+                <span class="help-block" style="display: none;">{{captions.leghtLimitLeft | ucfirst}}: <i>2500</i></span>
+                <br>
+                <div class="row">
+                    <a href="javascript:history.back()" class="pull-left ns-underline" style="font-size:12px; color:#888; margin-top:5px;"><i class="fa fa-arrow-circle-left"></i> {{captions.cancel}}</a>
+                    <button type="submit" class="btn btn-success btn-with-icon-r pull-right">{{captions.submit}}</button>
+                </div>
+            </form>	
+
+        </div>
+        <div class="span6">
+            <ul class="_5lBp">
+
+                <li class="_3cmB item">
+                    <h4><i class="fa fa-desktop"></i> {{captions.livePreview}}:</h4>
+                    <hr>
+
+                    <p style="white-space: pre-wrap;" ng-bind-html="post_text"></p>
+
+                    <div class="_5lBp-attaches">
+                        <ul></ul>							
+                    </div>							
+
+                    <div class="_5lBp-bottom">
+                        <ul class="row">
+                            <li><i class="fa fa-user"></i></li>
+                            <li><i class="fa fa-sliders"></i> {{ post_category }}</li>
+                            <li><i class="fa fa-calendar"></i> {{ date | date:'dd-MM-yyyy HH:mm' }}</li>
+                            <li ng-if="last_change && infobit.date != last_change"><i class="fa fa-history"></i> {{ last_change | date:'dd-MM-yyyy HH:mm' }}</li>
+                        </ul>
+                    </div>						
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
