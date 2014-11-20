@@ -11,14 +11,14 @@ import java.io.IOException;
 
 
 /**
- * Stores and retrieves application key in ~/.infomarket/KEY
+ * Stores and retrieves application key in ~/.flyer/KEY
  *
  */
 public class KeyStore {
   
   
   private static File file = new File( new File( System.getProperty(
-    "user.home", "." ) ), ".infomarket/KEY" );
+    "user.home", "." ) ), ".flyer/KEY" );
 
 
   private static boolean loaded = false;
