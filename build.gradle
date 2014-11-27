@@ -43,7 +43,7 @@ dependencies {
     compile(
     
     	'com.google.guava:guava:18.0',
-    	'com.infodesire:bsmcommons:0.1',
+    	'com.infodesire:bsmcommons:0.4',
     	'commons-collections:commons-collections:3.2.1',
     	'log4j:log4j:1.2.17',
     	'org.apache.httpcomponents:httpclient:4.3.5',
