@@ -14,7 +14,7 @@
 (function(){
     var f = {
         u: "/flyer/",
-        restUrl: "/projectile/",
+        restUrl: "/flyer/",
         s: [],
         
         init: function(){
@@ -224,7 +224,7 @@
         
         getCaptions: function(callback) {
             var captions = {
-                newEntry: "InfoMarket|New entry",
+                newEntry: "Flyer|New entry",
                 lock: "System|Lock",
                 unlock: "System|Unlock",
             },  

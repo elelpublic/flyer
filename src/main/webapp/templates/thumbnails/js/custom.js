@@ -78,7 +78,7 @@ $(document).ready(function(){
                 }
             },
             uploadFile: {
-                url: '/projectile/rest/api/json/0/folderuploads/' + folder,
+                url: '/flyer/rest/api/json/0/folderuploads/' + folder,
                 data: {},
                 type: 'POST',
                 enctype: 'multipart/form-data',
