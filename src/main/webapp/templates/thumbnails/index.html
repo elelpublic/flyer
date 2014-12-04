@@ -1,0 +1,67 @@
+<div id="header">
+    <div class="container-fluid header-fixed">
+        <div class="row">
+            <div class="col-xs-3 header-logo _splr30">
+                <h3><i class="icon-jfi-paperclip"></i> Flyer</h3>
+            </div>
+            <div class="col-xs-9 header-content bgcolor-2">
+                <ul class="items-manipulation list-inline pull-left _splr30" style="display:none">
+                    <li><strong><i class="num"></i> Files selected:</strong></li>
+                    <li><a class="all-archive-action"><i class="icon-jfi-zip"></i> Archive</a></li>
+                    <li><a class="all-lock-action"><i class="icon-jfi-lock"></i> Lock</a></li>
+                    <li><a class="all-trash-action"><i class="icon-jfi-trash"></i> Trash</a></li>
+                </ul>
+                <ul class="filter-list-mode list-inline pull-right _splr30">
+                    <li><strong>Sort by:</strong></li>
+                    <li class="selected"><a data-sort="name">Name</a></li>
+                    <li><a data-sort="size">Size</a></li>
+                    <li><a data-sort="user">User</a></li>
+                    <li><a data-sort="date">Date</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content" class="container-fluid">
+    <div class="row">
+
+        <div class="col-xs-3 _splr30 bgcolor-2 _sptG left-side">
+            <div class="col-xs-3 left-side-bg bgcolor-2"></div>
+            <div class="left-side-fixed">
+                <div>
+                    <input type="file" name="files[]" id="filer1" multiple="multiple" />
+                    <div id="filerComment">
+                        <textarea class="form-control" name="Comment" placeholder="Write a comment here..."></textarea>
+                    </div>
+                </div>
+
+                <h4 class="section-title">Main</h4>
+                <div>
+                    <ul class="filter-list-type">
+                        <li><a><i class="icon-jfi-infinite"></i> All</a></li>
+                        <li><a><i class="icon-jfi-file-image"></i> Images</a></li>
+                        <li><a><i class="icon-jfi-file-audio"></i> Audios</a></li>
+                        <li><a><i class="icon-jfi-file-video"></i> Videos</a></li>
+                        <li><a><i class="icon-jfi-file-text"></i> Documens</a></li>
+                    </ul>
+                </div>
+
+                <h4 class="section-title">Size</h4>
+                <div>
+                    <span>5 KB of 2 GB used</span>
+                    <div class="jFiler-jProgressBar orange">
+                        <div class="bar" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-9 _splr30 _sptG right-side">
+            <div>
+                <ul class="files-items-list list-inline"><p class="jFiler-emptyMessage" align="center">- No files Uploaded -</p></ul>
+            </div>
+
+        </div>
+    </div>
+</div>
