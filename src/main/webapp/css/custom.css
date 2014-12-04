@@ -1,0 +1,230 @@
+/*
+	==============================
+          * Custom Styles *
+	==============================
+*/
+body {
+    font-family: "Helvetica Neue", Helvetica,Arial, sans-serif;
+    color: #393939;
+    background: #fcfcfc;
+    word-break: break-word;
+}
+
+a,
+a:hover,
+a:active{
+    text-decoration: none;
+}
+
+a:focus {
+    outline: thin dotted #333;
+    outline-offset: 1px;
+}
+
+a.ns-underline:hover,
+a.ns-underline:active{
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+}
+
+form {
+    margin: 0;
+}
+
+input[type=checkbox],input[type=radio] {
+    display: none;
+}
+
+input[type=checkbox]+label,input[type=radio]+label {
+    display: inline-block;
+    min-height: 20px;
+    font-weight: 400;
+    cursor: pointer;
+    padding-left: 26px;
+    margin: 0;
+    font-size: 14px;
+    background-image: url(../images/icons/sprite-forms.png);
+    background-repeat: no-repeat;
+    background-position: 0 -1px;
+}
+
+input[type=radio]+label {
+    background-position: 0 -99px;
+}
+
+input[type=checkbox]+label:hover {
+    background-position: 0 -20px;
+}
+
+input[type=radio]+label:hover {
+    background-position: 0 -119px;
+}
+
+input[type=checkbox]:checked+label {
+    background-position: 0 -39px;
+}
+
+input[type=radio]:checked+label {
+    background-position: 0 -139px;
+}
+
+input[type=checkbox][disabled]+label {
+    background-position: 0 -58px;
+    color: #888;
+    cursor: default;
+}
+
+input[type=radio][disabled]+label {
+    background-position: 0 -159px;
+    color: #353535;
+    cursor: default;
+}
+
+input[type=checkbox][disabled]:checked+label {
+    background-position: 0 -78px;
+    color: #353535;
+    cursor: default;
+}
+
+input[type=radio][disabled]:checked+label {
+    background-position: 0 -180px;
+    color: #353535;
+    cursor: default;
+}
+
+input{
+    word-break: normal;
+}
+
+textarea {
+    overflow: auto;
+    vertical-align: top;
+    max-width: 100%;
+}
+
+textarea._4aS{
+    resize: none;
+}
+
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  color: inherit;
+  border-color: #ee5f5b;
+}
+
+select:focus, 
+input:focus,
+textarea:focus,
+.btn:focus{
+    outline: none;
+    -webkit-box-shadow: 0 0 7px rgba(0,0,0,0.1);
+       -moz-box-shadow: 0 0 7px rgba(0,0,0,0.1);
+            box-shadow: 0 0 7px rgba(0,0,0,0.1);
+}
+
+p {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+b {
+    font-weight: bold;
+}
+
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.container{
+	padding: 30px;
+}
+.container-fluid{
+    min-width: 960px;
+    padding: 0;
+}
+
+kbd {
+    display: block;
+    padding: 5px 10px;
+    font-size: 90%;
+    color: #fff;
+    background-color: #333;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+kbd kbd {
+    padding: 0;
+    font-size: 100%;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+blockquote {
+    margin-bottom: 0px;
+}
+
+.btn.btn-with-icon-l i{
+    margin-right: 5px;
+}
+
+.btn.btn-with-icon-r i{
+    margin-left: 5px;
+}
+
+[class*="margin"] {
+    display: inline-block;
+}
+
+.margin5 {
+    margin: 5px;
+}
+.margin10 {
+    margin: 10px;
+}
+
+.margin15 {
+    margin: 15px;
+}
+
+.animated {
+  -webkit-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+}
+
+/*
+	==============================
+          * Plugins Code *
+	==============================
+*/
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.95);
+    z-index: 999;
+}
+.preloader span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.preloader span img{
+    border-radius: 50%;
+    box-shadow: 0 0 10px #000;
+}
