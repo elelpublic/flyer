@@ -23,7 +23,7 @@ $(document).ready(function(){
             }
         },
         uploadFile: {
-            url: '/projectile/rest/api/xml/0/folderuploads/6',
+            url: '/flyer/rest/api/xml/0/folderuploads/6',
             data: {},
             type: 'POST',
             enctype: 'multipart/form-data',

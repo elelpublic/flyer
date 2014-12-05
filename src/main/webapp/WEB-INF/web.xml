@@ -5,9 +5,9 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
 
-    <display-name>Infomarket</display-name>
+    <display-name>Flyer</display-name>
     <description>
-        Wikilike intranet.
+        Flyer. REST based document management system.
     </description>
     
     <servlet>
@@ -38,7 +38,7 @@
 		    <servlet-class>com.infodesire.flyer.ProxyServlet</servlet-class>
 		    <init-param>
 		      <param-name>targetUri</param-name>
-		      <param-value>https://localhost/projectile/rest</param-value>
+		      <param-value>http://localhost:8080/projectile/rest</param-value>
 		    </init-param>
 		    <init-param>
 		      <param-name>log</param-name>

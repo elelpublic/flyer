@@ -16,7 +16,7 @@ apply plugin: 'jetty'
 
 
 group = 'com.infodesire'
-version = '0.1-SNAPSHOT'
+version = '0.0.2'
 
 httpPort = 8081
 
@@ -62,6 +62,12 @@ dependencies {
     testCompile 'junit:junit:4.11'
 
 }
+
+compileJava {
+  sourceCompatibility = 1.6
+  targetCompatibility = 1.6
+}
+
 
 def warArchiveName = 'flyer.war'
 
