@@ -1,9 +1,5 @@
 $(document).ready(function(){
-    
-    $projectile.preloader();
-    
-    var folder = "6";
-    
+
     $projectile.ready(function(){
         
         /* 
@@ -48,9 +44,17 @@ $(document).ready(function(){
                                     </div>\
                                     {{fi-image}}\
                                     <div class="item-thumb-overlay">\
-                                        <div>\
+                                        <div class="item-thumb-overlay-buttons animated fadeIn">\
                                             <a class="item-thumb-info" title="More..."><i class="icon-jfi-infinite"></i></a>\
                                             <a href="{{fi-file}}" class="item-thumb-link" target="_blank" title="Download" download="{{fi-name}}"><i class="icon-jfi-download-o"></i></a>\
+                                        </div>\
+                                        <div class="item-thumb-overlay-info animated fadeIn">\
+                                            <a class="item-thumb-overlay-info-close icon-jfi-times pull-right"></a><br>\
+                                            <b class="title">{{fi-name}}</b>\
+                                            <br>\
+                                            <span class="others">{{fi-size2}} | {{fi-createdByName}} | {{fi-date}}</span>\
+                                            <br>\
+                                            <p class="comment">{{fi-comment}}</p>\
                                         </div>\
                                     </div>\
                                 </div>\
@@ -61,8 +65,8 @@ $(document).ready(function(){
                                         </ul>\
                                         <ul class="list-inline pull-right">\
                                             <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="Download" download="{{fi-name}}"></a></li>\
-                                            <li><a href="#" class="icon-jfi-{{fi-lockIcon}} item-lock-action dropdown" title="{{fi-lockTitle}}"></a></li>\
-                                            <li><a href="#" class="icon-jfi-trash item-trash-action" title="Remove"></a></li>\
+                                            <li><a class="icon-jfi-{{fi-lockIcon}} item-lock-action dropdown" title="{{fi-lockTitle}}"></a></li>\
+                                            <li><a class="icon-jfi-trash item-trash-action" title="Remove"></a></li>\
                                         </ul>\
                                     </div>\
                                 </div>\
@@ -78,22 +82,36 @@ $(document).ready(function(){
                 }
             },
             uploadFile: {
-                url: '/flyer/rest/api/json/0/folderuploads/' + folder,
+                url: $projectile.u + 'rest/api/json/0/folderuploads/' + $projectile.folder,
                 data: {},
                 type: 'POST',
                 enctype: 'multipart/form-data',
                 beforeSend: function(){},
-                success: function(data, el){
+                success: function(data, el, l, o, p, s){
                     el.attr("data-file-revisionId", data.Entries[0].id);
+                    el.attr("data-file-type", data.Entries[0].mimeType.split("/", 1).toString().toLowerCase());
+                    el.attr("data-file-size", data.Entries[0].size);
+                    el.attr("data-file-user", data.Entries[0].createdByName);
+                    el.attr("data-file-date", data.Entries[0].createdDate);
+                    el.attr("data-file-name", data.Entries[0].fileName);
+                    
+                    el.removeClass("animated");
                     
                     el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
-                        $('<ul class="list-inline pull-left"><li><em class="jFiler-upload-success text-success"><i class="icon-jfi-check-circle"></i> Success</em></li><li>|</li><li><a class="ns-underline" style="font-size:13px;">Comment<a></li></ul>').hide().appendTo($(this).parent()).fadeIn('slow');
+                        $('<ul class="list-inline pull-left"><li><em class="jFiler-upload-success text-success"><i class="icon-jfi-check-circle"></i> Success</em></li></ul>').hide().appendTo($(this).parent()).fadeIn('slow');
                         $(this).remove();
-                    })
+                    });
+                    
+                    if(p.next().attr("id") == "filerComment"){
+                        var comment = p.next("#filerComment").find("textarea");
+                        if(comment){
+                            comment.val("");
+                        }
+                    }
                 },
                 error: function(el){
                     el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
-                        $('<em class="jFiler-upload-error text-danger"><i class="icon-jfi-exclamation-circle"></i> Error!</em>').hide().appendTo($(this).parent()).fadeIn('slow');
+                        $('<ul class="list-inline pull-left"><li><em class="jFiler-upload-error text-danger"><i class="icon-jfi-exclamation-circle"></i> Error!</em></li></ul>').hide().appendTo($(this).parent()).fadeIn('slow');
                         $(this).remove();
                     })
                 },
@@ -154,17 +172,16 @@ $(document).ready(function(){
            template : function(r){ return "<li><a>"+r.text+"</a></li>"; },
            buttons:[
                {
-                   text:'<i class="icon-jfi-unlock"></i> ' + $projectile.captions.unlock, //Inner HTML
-                   addClass:'custom-button', //<li> Class 
+                   text:'<i class="icon-jfi-unlock"></i> ' + $projectile.captions.unlock, 
                    onClick: function(p,e){
+                       p.removeClass('dropdown');
                        p.trigger("files-item.lock");
-                       return true; //Return true - will close dropdown, false - will keep dropwdown 
+                       return true;
                    }
                },
                {}, 
                {
-                   text:'<i class="icon-jfi-question-circle"></i> ' + "Show Info", //Inner HTML
-                   addClass:'custom-button', //<li> Class 
+                   text:'<i class="icon-jfi-question-circle"></i> ' + "Show Info",
                    onClick: function(p,e){
                         var id = p.closest(".files-item").attr("data-file-orderKey"),
                             el = p,
@@ -172,7 +189,7 @@ $(document).ready(function(){
                                 return a.orderKey == id;
                             })[0];
                        modal({
-                           type: "info",
+                           type: "alert",
                            title: "Info",
                            text: "<h5><b>File:</b></h5>" + "<p>" + data.name + "</p><br>" + "<h5><b>Comment:</b></h5>" + "<p>" + data.lockComment + "</p><br>" + "<h5><b>User:</b></h5>" + "<p>" + data.lockedByName + "</p><br>" + "<h5><b>Time:</b></h5>" + "<p>" + $projectile.dateFormat(data.lockTime) + "</p>",
                            center: false,

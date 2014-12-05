@@ -15,18 +15,21 @@
     var f = {
         u: "/flyer/",
         restUrl: "/flyer/",
+        folder: null,
         s: [],
+        captions: {
+            newEntry: "Flyer|New entry",
+            lock: "System|Lock",
+            unlock: "System|Unlock",
+        },
         
         init: function(){
-            var elements = document.querySelectorAll("[class^='projectile-']");
-            Array.prototype.forEach.call(elements, function(el, i){
-                var attr = el.getAttribute('class');
-                switch(attr){
-                    case "projectile-filer":
-                        f.s.push( {t: "filer", el: el} );
-                    break;
-                }
-            });
+            var element = document.querySelectorAll("[class^='projectile-filer']");
+            if(!element || element.length <= 0){
+                return false;
+            }else{
+                f.s.push( {t: "filer", el: element[0]} );  
+            }
             
             f.load();
             f.customize();
@@ -61,6 +64,8 @@
                     break;
                 }
             }
+            
+            f.folder = (f.s[0].el.getAttribute('data-filer-folderId') ? f.s[0].el.getAttribute('data-filer-folderId') : f.getParameterByName('list', true));
         },
         
         check: function() {
@@ -104,7 +109,7 @@
                         if (+el.style.opacity > 0) {
                             (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16)
                         } else {
-                            document.body.removeChild(preloader[0]);
+                            preloader[0].parentNode.removeChild(preloader[0]);
                         }
                     };
                     tick();
@@ -176,18 +181,16 @@
                 }
             },
             remove: function(data){
-                f._ajax(f.restUrl + "rest/api/json/0/filerevisions/" + data.rId, 'DELETE', {}, function(r){
-                    
-                });
+                f._ajax(f.restUrl + "rest/api/json/0/filerevisions/" + data.rId, 'DELETE');
             },
             archive: function(){
                 
             },
         },
         
-        getFiles: function(callback) {
+        getFiles: function(folder, callback) {
             var files = [],
-                id = (f.s[0].el.getAttribute('data-filer-folderId') ? f.s[0].el.getAttribute('data-filer-folderId') : f.getParameterByName('list', true));
+                id = (folder && typeof folder == "string" ? folder : f.folder);
             f._ajax(f.restUrl + "rest/api/json/0/filehistories?folder=" + id, 'GET', {}, function(r){
                 if(r.Entries && r.Entries.length > 0){
                     var total = r.Entries.length,
@@ -212,22 +215,18 @@
                                     return +b.orderKey - +a.orderKey;
                                 });
                                 f.files = files;
-                                callback(files);
+                                (folder && typeof folder == "function" ? folder(files) : (callback && typeof callback == "function" ? callback(files) : null));
                             }
                         }, "json");  
                     }    
                 }else{
-                    callback(files);
+                    (folder && typeof folder == "function" ? folder(files) : (callback && typeof callback == "function" ? callback(files) : null));
                 }
             }, "json");
         },
         
         getCaptions: function(callback) {
-            var captions = {
-                newEntry: "Flyer|New entry",
-                lock: "System|Lock",
-                unlock: "System|Unlock",
-            },  
+            var captions = f.captions,
                 data = "",
                 first = true;
             for(key in captions){
@@ -250,6 +249,7 @@
         
         _ajax: function(url, type, data, callback, dataType) {
             var request = new XMLHttpRequest(),
+                data = (!data || f.isEmptyObj(data) ? false : data),
                 serialize = function(obj) {
                   var str = [];
                   for(var p in obj)
@@ -257,7 +257,7 @@
                       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                     }
                   return str.join("&");
-                }
+                };
             
             request.open(type, url, true);
 
@@ -267,12 +267,14 @@
                     if(dataType && dataType == "json"){
                         resp = JSON.parse(resp);   
                     }
-                    callback(resp, data.a);
+                    if(callback && typeof callback == "function"){
+                        callback(resp, data.a);   
+                    }
                 }
             };
 
             request.onerror = function() {
-                // There was a connection error of some sort
+                location.href = f.u + "404.html";
             };
             
             if(data){
@@ -310,6 +312,15 @@
                 }
             }
             return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
+        },
+        
+        isEmptyObj: function (obj) {
+            for(var prop in obj) {
+                if(obj.hasOwnProperty(prop))
+                    return false;
+            }
+
+            return true;
         },
 
         errorReport: function(msg) {
