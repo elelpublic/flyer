@@ -18,6 +18,9 @@ $(function(){
     $('body').on('click', 'a.item-thumb-info',function(){
         $(this).closest('li.files-item').toggleClass('file-big-info');
     });
+    $('body').on('click', '.item-thumb-overlay-info-close',function(){
+        $(this).closest('li.files-item').removeClass('file-big-info');
+    });
     
     /*
         Sort
@@ -27,6 +30,7 @@ $(function(){
         $('.filter-list-mode li').removeClass('selected');
         $(this).closest('li').addClass('selected');
         var el = $(this),
+            attr = el.attr("data-type"),
             sortBy = function(a, b){
                 var attr = el.attr("data-sort");
                 switch(attr){
@@ -44,23 +48,39 @@ $(function(){
                     break;
 
                 }
-            }, sort = $('ul.files-items-list li.files-item').not('.uploading').sort(function(a,b){
+            },
+            sort = $('ul.files-items-list li.files-item').sort(function(a,b){
                 return sortBy(a, b);
-            }),
-            sortAction = function(){
-                $(sort).removeClass('fadeOut').addClass('fadeIn');
-                $('ul.files-items-list').append(sort);
-            };
-        
-        $('ul.files-items-list li.files-item').addClass('animated fadeOut');
-        $('ul.files-items-list li.files-item').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-            $(this).remove();
-            sortAction();
+            });
+        $('ul.files-items-list').stop(true,true).fadeOut(250, function(){
+            $('ul.files-items-list li.files-item').remove();
+            
+            $('ul.files-items-list').append(sort);
+            
+            $(this).fadeIn(250);  
         });
     });
     /* 
         Type filter
     */
+    $('body').on('click', '.filter-list-type li a', function(e){
+        e.preventDefault();
+        $('.filter-list-type li').removeClass('selected');
+        $(this).closest('li').addClass('selected');
+        
+        var el = $(this),
+            attr = el.attr("data-type");
+        $('ul.files-items-list').stop(true,true).fadeOut(250, function(){
+            var sort = $.grep($('ul.files-items-list li.files-item'), function(a, b){
+                    if(attr == "*"){return true;}
+                    return $(a).attr("data-file-type") == attr; 
+            });
+            $('ul.files-items-list li.files-item').hide();
+            $(sort).show();
+            $(this).fadeIn(250);  
+        });
+    });
+    
     
     /* 
         Lock Action 
@@ -86,7 +106,7 @@ $(function(){
             el.removeClass("icon-jfi-unlock").addClass("icon-jfi-lock");
         }else{
             modal({type: "prompt", title: "Prompt", text: "Please, write a comment why are you locking this file:", callback: function(comment){
-                if(!comment){ comment = "-"; }
+                 if(!comment){ modal({type: "warning", title: "Info", text: "Comment can not be empty! Please write a comment!"}); return false}
                 $projectile.file.lock(data[0], comment);
                 notify({
                     title: "Info",
@@ -142,15 +162,8 @@ $(function(){
                         
                         $projectile.file.lock(data[0], comment);
                     }
-                    notify({
-                        title: "Info",
-                        message: "Files were locked",
-                        icon: "<i class=\"icon-jfi-lock\"></i>",
-                        theme: "dark-theme",
-                        closeBtn: false,
-                        autoHide: true,
-                        position: {x: "right", y: "top"}
-                    });
+                    
+                    location.reload();
                 }});
             break;
             case "all-trash-action":
