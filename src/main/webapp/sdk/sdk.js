@@ -65,7 +65,7 @@
                 }
             }
             
-            f.folder = (f.s[0].el.getAttribute('data-filer-folderId') ? f.s[0].el.getAttribute('data-filer-folderId') : f.getParameterByName('list', true));
+            f.folder = (f.s[0].el.getAttribute('data-filer-folderId') ? f.s[0].el.getAttribute('data-filer-folderId') : f.getParameterByName('list'));
         },
         
         check: function() {
