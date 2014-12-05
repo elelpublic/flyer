@@ -16,7 +16,7 @@ apply plugin: 'jetty'
 
 
 group = 'com.infodesire'
-version = '0.0.2'
+version = '0.0.3'
 
 httpPort = 8081
 
