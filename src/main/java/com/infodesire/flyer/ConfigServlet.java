@@ -34,7 +34,7 @@ public class ConfigServlet extends HttpServlet {
   
   // TODO: this might into the web.xml or setup code
   class Config {
-    static final String title = "Infomarket Configuration";
+    static final String title = "Flyer Configuration";
     static final String installKeyTitle = "Install a new Application Key";
     static final String installKeyText = "Copy the application key you obtained from the REST server into this field and confirm.";
     static final String reloadKeyStoreTitle = "Reload key store";
