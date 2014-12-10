@@ -43,12 +43,6 @@
 		<servlet>
 		    <servlet-name>proxy</servlet-name>
 		    <servlet-class>com.infodesire.resthelper.ProxyServlet</servlet-class>
-		    <!-- 
-		    <init-param>
-		      <param-name>targetUri</param-name>
-		      <param-value>http://localhost:8080/projectile/rest</param-value>
-		    </init-param>
-		     -->
 			   <init-param>
 				  <param-name>applicationId</param-name>
 				  <param-value>Flyer</param-value>
