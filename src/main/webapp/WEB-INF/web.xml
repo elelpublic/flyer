@@ -12,7 +12,13 @@
     
     <servlet>
         <servlet-name>ConfigServlet</servlet-name>
-        <servlet-class>com.infodesire.flyer.ConfigServlet</servlet-class>
+        <servlet-class>com.infodesire.resthelper.ConfigServlet</servlet-class>
+        
+				<init-param>
+					<param-name>applicationId</param-name>
+					<param-value>Flyer</param-value>
+				</init-param>
+        
     </servlet>
 
     <servlet-mapping>
@@ -22,12 +28,13 @@
 
 		<filter>
 		   <filter-name>ApplicationKeyFilter</filter-name>
-		   <filter-class>com.infodesire.flyer.ApplicationKeyFilter</filter-class>
+		   <filter-class>com.infodesire.resthelper.ApplicationKeyFilter</filter-class>
 		   <init-param>
-			  <param-name>test-param</param-name>
-			  <param-value>Initialization Paramter</param-value>
+			  <param-name>applicationId</param-name>
+			  <param-value>Flyer</param-value>
 		   </init-param>
 		</filter>
+		
 		<filter-mapping>
 		   <filter-name>ApplicationKeyFilter</filter-name>
 		   <url-pattern>/rest/*</url-pattern>
@@ -35,11 +42,11 @@
 
 		<servlet>
 		    <servlet-name>proxy</servlet-name>
-		    <servlet-class>com.infodesire.flyer.ProxyServlet</servlet-class>
-		    <init-param>
-		      <param-name>targetUri</param-name>
-		      <param-value>http://localhost:8080/projectile/rest</param-value>
-		    </init-param>
+		    <servlet-class>com.infodesire.resthelper.ProxyServlet</servlet-class>
+			   <init-param>
+				  <param-name>applicationId</param-name>
+				  <param-value>Flyer</param-value>
+			   </init-param>
 		    <init-param>
 		      <param-name>log</param-name>
 		      <param-value>true</param-value>
