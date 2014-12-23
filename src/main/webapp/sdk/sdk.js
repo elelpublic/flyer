@@ -18,9 +18,12 @@
         folder: null,
         s: [],
         captions: {
-            newEntry: "Flyer|New entry",
+            Flyer: "Flyer|Flyer",
             lock: "System|Lock",
             unlock: "System|Unlock",
+            sortBy: "Default|Sorting",
+            filerEmpty: "Flyer|No files available",
+            comment: "Default|Comment"
         },
         
         init: function(){
@@ -65,7 +68,7 @@
                 }
             }
             
-            f.folder = (f.s[0].el.getAttribute('data-filer-folderId') ? f.s[0].el.getAttribute('data-filer-folderId') : f.getParameterByName('list'));
+            f.folder = (f.s[0].el.getAttribute('data-filer-folderId') ? f.s[0].el.getAttribute('data-filer-folderId') : f._location.getParameter('list'));
         },
         
         check: function() {
@@ -86,13 +89,48 @@
             script.async = false;
             document.getElementsByTagName('head')[0].appendChild(script);
         },
-
-        getParameterByName: function(name, hash) {
-            if(!name){ return; }
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&\/]" + name + "/([^&#\/]*)"),
-                results = regex.exec((!hash ? location.search : location.hash));
-            return results === null ? false : decodeURIComponent(results[1].replace(/\+/g, " "));
+        
+        _location: {
+            addParameter: function(key, value, sourceURL){
+                var sourceURL = (sourceURL ? sourceURL : location.href),
+                    separator = (sourceURL.indexOf('?') > -1 ? "&" : "?");
+                if(f._location.getParameter(key)){
+                    sourceURL = f._location.removeParameter(key)
+                }
+                return sourceURL + separator + key + "=" + value;
+            },
+            removeParameter: function(key, sourceURL){
+                var sourceURL = (sourceURL ? sourceURL : location.href),
+                    rtn = sourceURL.split("?")[0],
+                    param,
+                    params_arr = [],
+                    queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+                if (queryString !== "") {
+                    params_arr = queryString.split("&");
+                    for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                        param = params_arr[i].split("=")[0];
+                        if (param === key) {
+                            params_arr.splice(i, 1);
+                        }
+                    }
+                    rtn = rtn + "?" + params_arr.join("&");
+                }
+                return rtn;
+            },
+            getParameter: function(name, hash){
+                if(!name){ return; }
+                name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                var regexS = "[\\?&\/]"+name+"[=\/]([^&#]*)",
+                    regex = new RegExp( regexS ),
+                    results = regex.exec( (!hash ? location.href : location.hash) );
+                if( results == null )
+                    return false;
+                else
+                    return decodeURIComponent(results[1].replace(/\+/g, " "));
+            },
+            redirect_to: function(url){
+                location.href = url;
+            }
         },
         
         preloader: function(event) {
@@ -162,26 +200,52 @@
         },
         
         file: {
-            lock: function(data, comment){
+            lock: function(data, callback){
                 if(!data.locked){
                     var params = {
                         locked: true,
-                        lockComment: comment
+                        lockComment: data._lockComment
                     }
                     f._ajax(f.restUrl + "rest/api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
-                        data.locked = true
-                    });
+                        if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
+                            data.locked = true
+                            r._transfered = true;
+                        }else{
+                            if(typeof(r) != "object"){r = new Object()} 
+                            r._transfered = false;
+                        }
+                        callback(r);
+                        
+                    }, "json");
                 }else{
                     var params = {
                         locked: false,
                     }
                     f._ajax(f.restUrl + "rest/api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
-                        data.locked = false
-                    });   
+                        if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
+                            data.locked = false
+                            r._transfered = true;
+                        }else{
+                            if(typeof(r) != "object"){r = new Object()} 
+                            r._transfered = false;
+                        }
+                        callback(r);
+                        
+                    }, "json");   
                 }
             },
-            remove: function(data){
-                f._ajax(f.restUrl + "rest/api/json/0/filerevisions/" + data.rId, 'DELETE');
+            remove: function(data, callback){
+                f._ajax(f.restUrl + "rest/api/json/0/filerevisions/" + data.rId, 'DELETE', null, function(r){
+                    if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
+                        data.locked = true
+                        r._transfered = true;
+                    }else{
+                        if(typeof(r) != "object"){r = new Object()} 
+                        r._transfered = false;
+                    }
+                    callback(r);
+                    
+                }, "json");
             },
             archive: function(){
                 
@@ -192,10 +256,11 @@
             var files = [],
                 id = (folder && typeof folder == "string" ? folder : f.folder);
             f._ajax(f.restUrl + "rest/api/json/0/filehistories?folder=" + id, 'GET', {}, function(r){
-                if(r.Entries && r.Entries.length > 0){
+                if(r.Entries && r.Entries.length > 0 && r.Entries[0]){
                     var total = r.Entries.length,
                         s = 0;
                     for(key in r.Entries){
+                        if(!r.Entries[key]){break;}
                         var val = r.Entries[key];
                         val.orderKey = key;
                         f._ajax(f.restUrl + "rest/api/json/0/filerevisions?fileHistory=" + val.id, 'GET', {a: val}, function(r2, b){
@@ -207,6 +272,13 @@
                             r2.Entries[0].lockTime = b.lockTime || null;
                             r2.Entries[0].revisions = b.revisions;
                             r2.Entries[0].orderKey = b.orderKey;
+                            r2.Entries[0].revisions = [];
+                            
+                            if(r2.Entries.length > 1){
+                                for(var i = 0; i<r2.Entries.length; i++){
+                                    r2.Entries[0].revisions.push(r2.Entries[i]);
+                                }
+                            }
                             
                             files.push(r2.Entries[0]);
                             s++;
@@ -245,6 +317,10 @@
                 f.captions = captions;
                 callback(captions);
             }, "json");
+        },
+        
+        changeCaptions: function() {
+            f.s[0].el.innerHTML = f.s[0].el.innerHTML.replace(/\%captions-(.*?)\%/g, function(match, a){return f.captions[a]});
         },
         
         _ajax: function(url, type, data, callback, dataType) {
@@ -292,6 +368,7 @@
             function allDone() {
                 if(isFinished.length < 2) return;
                 f.preloader("hide");
+                f.changeCaptions();
                 callback(f);
             }
         },
@@ -312,6 +389,14 @@
                 }
             }
             return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
+        },
+        
+        sizeFormat: function(bytes){
+            if(bytes == 0) return '0 Byte';
+            var k = 1000;
+            var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+            var i = Math.floor(Math.log(bytes) / Math.log(k));
+            return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
         },
         
         isEmptyObj: function (obj) {
