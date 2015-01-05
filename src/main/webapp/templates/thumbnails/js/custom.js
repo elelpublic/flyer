@@ -21,7 +21,7 @@ $(document).ready(function(){
                             <div class="files-item-container">\
                                 <div class="item-thumb">\
                                     <div class="item-info">\
-                                        <span class="item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 20}}</b></span>\
+                                        <span class="item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
                                         <span class="item-others">{{fi-size2}}</span>\
                                     </div>\
                                     {{fi-image}}\
@@ -204,7 +204,7 @@ $(document).ready(function(){
                                 return a.orderKey == id;
                             })[0];
                        modal({
-                           type: "alert",
+                           type: "info",
                            title: "Info",
                            text: "<b>File:</b><br>" + "<p>" + data.name + "</p>" + "<b>User:</b><br>" + "<p>" + data.lockedByName + "</p>" + "<b>Time:</b><br>" + "<p>" + $projectile.dateFormat(data.lockTime) + "</p>" + "<b>Comment:</b><br>" + "<p>" + data.lockComment + "</p>",
                            center: false,
@@ -274,16 +274,19 @@ $(document).ready(function(){
                             return a.id == id;
                         });
                     if(!send || !send[0]){return false}
-                    $projectile._config.btnLoading(el);
-                    $projectile.file.remove(send[0], function(r){
-                        if(r._transfered){
-                            el.closest($projectile._config.item_selector).fadeOut("fast", function(){
-                                $(this).remove();   
-                            })
-                        }else{
-                            $projectile._config.requestErrorMessage();   
-                        }
-                        $projectile._config.btnLoading(el,true);
+                    
+                    $projectile._config.removeAction({el: el, send: send}, function(data){
+                        $projectile._config.btnLoading(el);
+                        $projectile.file.remove(data.send[0], function(r){
+                            if(r._transfered){
+                                data.el.closest($projectile._config.item_selector).fadeOut("fast", function(){
+                                    $(this).remove();   
+                                })
+                            }else{
+                                $projectile._config.requestErrorMessage();   
+                            }
+                            $projectile._config.btnLoading(el,true);
+                        });
                     });
                 });
 

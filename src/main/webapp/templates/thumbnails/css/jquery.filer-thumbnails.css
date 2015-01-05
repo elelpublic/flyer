@@ -249,7 +249,7 @@ a[class*="trash-action"]:hover {
     position: fixed;
     z-index: 50;
     width: 100%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e1e1;
 }
 
 .header-logo {
@@ -297,7 +297,7 @@ a[class*="trash-action"]:hover {
 }
 
 .left-side {
-    border-right: 1px solid #eee;
+    border-right: 1px solid #e1e1e1;
 }
 
 .left-side-bg {
@@ -307,14 +307,14 @@ a[class*="trash-action"]:hover {
     left: 0;
     top: 0;
     z-index: -1;
-    border-right: 1px solid #eee;
+    border-right: 1px solid #e1e1e1;
 }
 
 .left-side .section-title {
     margin: 30px 0;
     font-size: 16px;
     font-weight: bold;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e1e1;
     padding-bottom: 10px;
 }
 
@@ -393,7 +393,7 @@ a[class*="trash-action"]:hover {
     position: relative;
     margin: 0 10px 30px 0;
     padding: 10px;
-    border: 1px solid #eee;
+    border: 1px solid #e1e1e1;
     background: #fff;
 }
 
@@ -403,7 +403,7 @@ a[class*="trash-action"]:hover {
     position: relative;
     height: 215px;
     overflow: hidden;
-    border: 1px solid #eee;
+    border: 1px solid #e1e1e1;
 }
 
 .files-items-list li.files-item .item-thumb img {

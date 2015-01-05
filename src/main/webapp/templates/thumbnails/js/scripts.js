@@ -20,6 +20,13 @@ $projectile._config = {
             }
         });
     },
+    removeAction: function(data, callback){
+        modal({type: "confirm", title: "Confirmation", text: "Are you sure you want to delete this file?", callback: function(a){
+            if(a){
+                callback(data);
+            }
+        }});
+    },
     btnLoading: function(el, a){
         if(!a){
             el.addClass('disabled animated pulse infinite'); 
