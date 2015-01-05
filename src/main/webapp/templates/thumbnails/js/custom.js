@@ -21,7 +21,7 @@ $(document).ready(function(){
                             <div class="files-item-container">\
                                 <div class="item-thumb">\
                                     <div class="item-info">\
-                                        <span class="item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                        <span class="item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 45}}</b></span>\
                                         <span class="item-others">{{fi-size2}}</span>\
                                     </div>\
                                     {{fi-image}}\
@@ -39,7 +39,7 @@ $(document).ready(function(){
                             <div class="files-item-inner">\
                                 <div class="item-thumb">\
                                     <div class="item-info">\
-                                        <span class="item-title" title="{{fi-name}}">{{fi-name | limitTo: 20}}</span>\
+                                        <span class="item-title" title="{{fi-name}}">{{fi-name | limitTo: 45}}</span>\
                                         <span class="item-others">{{fi-size2}} | {{fi-createdByName}} | {{fi-date}}</span>\
                                     </div>\
                                     {{fi-image}}\
