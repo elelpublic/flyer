@@ -7,7 +7,7 @@ $(document).ready(function(){
                 Config Filer
             ====================
         */
-        $('input#filer1').filer({
+        $($projectile._config.input_selector).filer({
             limit: null,
             maxSize: null,
             extensions: null,
@@ -21,7 +21,7 @@ $(document).ready(function(){
                             <div class="files-item-container">\
                                 <div class="item-thumb">\
                                     <div class="item-info">\
-                                        <span class="item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 30}}</b></span>\
+                                        <span class="item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
                                         <span class="item-others">{{fi-size2}}</span>\
                                     </div>\
                                     {{fi-image}}\
@@ -44,17 +44,17 @@ $(document).ready(function(){
                                     </div>\
                                     {{fi-image}}\
                                     <div class="item-thumb-overlay">\
-                                        <div class="item-thumb-overlay-buttons animated fadeIn">\
-                                            <a class="item-thumb-info" title="More..."><i class="icon-jfi-infinite"></i></a>\
-                                            <a href="{{fi-file}}" class="item-thumb-link" target="_blank" title="Download" download="{{fi-name}}"><i class="icon-jfi-download-o"></i></a>\
-                                        </div>\
                                         <div class="item-thumb-overlay-info animated fadeIn">\
-                                            <a class="item-thumb-overlay-info-close icon-jfi-times pull-right"></a><br>\
-                                            <b class="title">{{fi-name}}</b>\
-                                            <br>\
-                                            <span class="others">{{fi-size2}} | {{fi-createdByName}} | {{fi-date}}</span>\
-                                            <br>\
-                                            <p class="comment">{{fi-comment}}</p>\
+                                            <div style="display:table-cell;vertical-align: middle;">\
+                                                <br>\
+                                                <a href="{{fi-file}}" target="_blank" title="Download" download="{{fi-name}}" class="download-button-blue"><i class="icon-jfi-download-o"></i></a>\
+                                                <br><br>\
+                                                <b>{{fi-name}}</b>\
+                                                <br>\
+                                                <span class="others">{{fi-size2}} | {{fi-createdByName}} | {{fi-date}}</span>\
+                                                <br><br>\
+                                                <p class="comment">{{fi-comment}}</p>\
+                                            </div>\
                                         </div>\
                                     </div>\
                                 </div>\
@@ -65,7 +65,8 @@ $(document).ready(function(){
                                         </ul>\
                                         <ul class="list-inline pull-right">\
                                             <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="Download" download="{{fi-name}}"></a></li>\
-                                            <li><a class="icon-jfi-{{fi-lockIcon}} item-lock-action dropdown" title="{{fi-lockTitle}}"></a></li>\
+                                            {{fi-versionsButton}}\
+                                            {{fi-lockIcon}}\
                                             <li><a class="icon-jfi-trash item-trash-action" title="Remove"></a></li>\
                                         </ul>\
                                     </div>\
@@ -75,14 +76,14 @@ $(document).ready(function(){
                     </li>',
                 progressBar: '<div class="bar" style="width: 0"></div>',
                 _selectors: {
-                    list: '.files-items-list',
-                    item: '.files-item',
+                    list: $projectile._config.list_selector,
+                    item: $projectile._config.item_selector,
                     progressBar: '.bar',
-                    remove: '.item-trash-action',   
+                    remove: $projectile._config.remove_item_selector,   
                 }
             },
             uploadFile: {
-                url: $projectile.u + 'rest/api/json/0/folderuploads/' + $projectile.folder,
+                url: $projectile._config.uploadURL,
                 data: {},
                 type: 'POST',
                 enctype: 'multipart/form-data',
@@ -127,10 +128,24 @@ $(document).ready(function(){
                 $('.jFiler-emptyMessage').remove();
                 return true;
             },
-            onSelect: null,
+            onSelect: function(){
+                $('.file-verions-right-side').fadeOut("slow", function(){
+                    $(this).remove();
+                    $(".right-side").fadeIn("slow");
+                    history.pushState({}, "Flyer", $projectile._location.removeParameter("file"));
+                })   
+            },
             afterShow: null,
-            onRemove: function(el, data){
-                $projectile.file.remove(data);   
+            onRemove: function(el, data, id, callback){
+                $projectile._config.btnLoading(el.find(".item-trash-action"));
+                $projectile.file.remove(data, function(r){
+                    if(r._transfered){
+                        callback(el, id);
+                    }else{
+                        $projectile._config.requestErrorMessage();   
+                    }
+                    $projectile._config.btnLoading(el.find(".item-trash-action"),true);
+                });
             },
             onEmpty: function(a,b,c){
                 $('.files-items-list').html('<p class="jFiler-emptyMessage" align="center">- No files Uploaded -</p>');
@@ -148,7 +163,7 @@ $(document).ready(function(){
                 }
             }
         });
-        
+
         /* 
             ====================
                 Append Files
@@ -161,12 +176,12 @@ $(document).ready(function(){
             val.type = val.mimeType;
             val.file = $projectile.restUrl + "rest/api/binary/0/filerevisions?fileHistory=" + val.fId;
             val.rId = val.id;
-            val.lockIcon = (val.locked ? "unlock" : "lock");
-            val.lockTitle = (val.locked ? $projectile.captions.unlock : $projectile.captions.lock);
+            val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
+            val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="Versions"><i class="icon-jfi-history"></i></a></li>' : '');
         }
         $('input#filer1').trigger("filer.append", {data: $projectile.files});
-
-
+        
+        /* Lock Icon dropdown */
         $(".icon-jfi-unlock.dropdown").dropdown({
 			   
            template : function(r){ return "<li><a>"+r.text+"</a></li>"; },
@@ -189,9 +204,9 @@ $(document).ready(function(){
                                 return a.orderKey == id;
                             })[0];
                        modal({
-                           type: "alert",
+                           type: "info",
                            title: "Info",
-                           text: "<h5><b>File:</b></h5>" + "<p>" + data.name + "</p><br>" + "<h5><b>Comment:</b></h5>" + "<p>" + data.lockComment + "</p><br>" + "<h5><b>User:</b></h5>" + "<p>" + data.lockedByName + "</p><br>" + "<h5><b>Time:</b></h5>" + "<p>" + $projectile.dateFormat(data.lockTime) + "</p>",
+                           text: "<b>File:</b><br>" + "<p>" + data.name + "</p>" + "<b>User:</b><br>" + "<p>" + data.lockedByName + "</p>" + "<b>Time:</b><br>" + "<p>" + $projectile.dateFormat(data.lockTime) + "</p>" + "<b>Comment:</b><br>" + "<p>" + data.lockComment + "</p>",
                            center: false,
                            size: "small"
                        });
@@ -200,6 +215,90 @@ $(document).ready(function(){
                },
            ]
         });
+        
+        
+        /* 
+            ====================
+               Files Versions
+            ====================
+        */
+        var itemVersionsGet = function(){
+            if(!$projectile._location.getParameter("file") || !$projectile.files || $projectile.files.length == 0){ return false }
+            var id = $projectile._location.getParameter("file"),
+                data = $.grep($projectile.files, function(a,b){
+                    return a.fId == id;
+                });
+            if(!data || !data[0] || !data[0].revisions){return false;}
+            data = data[0].revisions;
+
+            var current = null;
+            for(key in data){
+                var val = data[key];
+                val.name = val.fileName;
+                val.date = $projectile.dateFormat(val.created);
+                val.type = val.mimeType;
+                val.file = $projectile.restUrl + "rest/api/binary/0/filerevisions/" + val.id;
+                val.rId = val.id;
+                val.lockTitle = (val.locked ? $projectile.captions.unlock : $projectile.captions.lock);
+                val.lockIcon = (val.fId ? '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>' : '');
+                val.forList = true;
+                val.versionsButton = '';
+                if(current){val.fId = current.fId}
+
+                if(val.fId){ current = val }
+            }
+
+            data.callback = function(list){
+                $('.file-verions-right-side').remove();
+
+                var html = $('<div class="col-xs-9 _splr30 _sptG right-side file-verions-right-side"><div><ul class="files-items-list list-inline"></ul></div></div>').hide();
+
+                for(key in list){
+                    var val = list[key];
+                    val.find(".item-assets-normal .list-inline.pull-left li:first-child").html("<span class='version-num'><i class='icon-jfi-history'></i> <b>" + (list.length - parseInt(key)) + "</b></span>");
+                    html.find(".files-items-list").append(val);
+                }
+
+                $('.filter-list-type, .filter-list-mode').addClass("disabled");
+
+                html.find(".files-items-list").prepend('<li class="files-item col-xs-4 veryBig-back-button"><div class="files-item-container"><div class="files-item-inner"><div class="item-thumb"><a><i class="icon-jfi-back"></i> Back</a></div></div></div></li>');
+
+                html.find('.veryBig-back-button a').on("click", function(e){
+                    $projectile._location.redirect_to($projectile._location.removeParameter("file"));
+                });
+
+                html.on("click", 'a.item-trash-action', function(e){
+                    var id = $(this).closest($projectile._config.item_selector).attr("data-file-revisionid"),
+                        el = $(this),
+                        send = $.grep(data, function(a,b){
+                            return a.id == id;
+                        });
+                    if(!send || !send[0]){return false}
+                    
+                    $projectile._config.removeAction({el: el, send: send}, function(data){
+                        $projectile._config.btnLoading(el);
+                        $projectile.file.remove(data.send[0], function(r){
+                            if(r._transfered){
+                                data.el.closest($projectile._config.item_selector).fadeOut("fast", function(){
+                                    $(this).remove();   
+                                })
+                            }else{
+                                $projectile._config.requestErrorMessage();   
+                            }
+                            $projectile._config.btnLoading(el,true);
+                        });
+                    });
+                });
+
+                $('.right-side').hide(0, function(){
+                    var par = $(this).parent();
+                    html.hide().appendTo(par).show(0);
+                });
+            }
+
+            $($projectile._config.input_selector).trigger("filer.generateList", {data: data});
+        }
+
+        itemVersionsGet();
     });
-    
 });

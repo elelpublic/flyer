@@ -213,6 +213,12 @@ a:hover {
     *color: #888;
 }
 
+a.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    cursor: default;
+}
+
 ._splr30 {
     padding-left: 30px;
     padding-right: 30px;
@@ -243,7 +249,7 @@ a[class*="trash-action"]:hover {
     position: fixed;
     z-index: 50;
     width: 100%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e1e1;
 }
 
 .header-logo {
@@ -291,7 +297,7 @@ a[class*="trash-action"]:hover {
 }
 
 .left-side {
-    border-right: 1px solid #eee;
+    border-right: 1px solid #e1e1e1;
 }
 
 .left-side-bg {
@@ -301,14 +307,14 @@ a[class*="trash-action"]:hover {
     left: 0;
     top: 0;
     z-index: -1;
-    border-right: 1px solid #eee;
+    border-right: 1px solid #e1e1e1;
 }
 
 .left-side .section-title {
     margin: 30px 0;
     font-size: 16px;
     font-weight: bold;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e1e1;
     padding-bottom: 10px;
 }
 
@@ -379,13 +385,15 @@ a[class*="trash-action"]:hover {
 /* item */
 .files-items-list li.files-item {
     vertical-align: top;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .files-items-list li.files-item .files-item-container {
     position: relative;
-    margin: 0 10px 20px 0;
+    margin: 0 10px 30px 0;
     padding: 10px;
-    border: 1px solid #eee;
+    border: 1px solid #e1e1e1;
     background: #fff;
 }
 
@@ -395,17 +403,18 @@ a[class*="trash-action"]:hover {
     position: relative;
     height: 215px;
     overflow: hidden;
+    border: 1px solid #e1e1e1;
 }
 
 .files-items-list li.files-item .item-thumb img {
     max-width: none;
-    max-height: 215px;
-    min-height: 215px;
+    max-height: 110%;
+    min-width: 100%;
 }
 
 .files-items-list li.files-item:not(.uploading) .item-thumb:hover .item-info,
 .files-items-list li.files-item.file-big-info .item-info {
-    bottom: -30%;
+    top: -30%;
 }
 
 .files-items-list li.files-item .item-thumb .item-thumb-overlay {
@@ -414,14 +423,15 @@ a[class*="trash-action"]:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.65);
+    color: #222;
+    background: rgba(255,255,255,0.85);
     opacity: 0;
     filter: alpha(opacity=0);
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
     z-index: 10;
+    overflow-y: auto;
 }
 
 .files-items-list li.files-item .item-thumb:hover .item-thumb-overlay,
@@ -441,24 +451,32 @@ a[class*="trash-action"]:hover {
     text-align: center;
 }
 
-.files-items-list li.files-item .item-thumb .item-thumb-overlay div.item-thumb-overlay-buttons a {
-    color: #fafafa;
-    margin: 0 5px;
-    -webkit-transition: all 0.2s;
-    -moz-transition: all 0.2s;
-    transition: all 0.2s;
+.files-items-list li.files-item .item-thumb .item-thumb-overlay a {
+    color: #222;
 }
 
-.files-items-list li.files-item .item-thumb .item-thumb-overlay div.item-thumb-overlay-buttons a:hover {
-    opacity: 0.7;
-    filter: alpha(opacity=70);
+.files-items-list li.files-item .item-thumb .item-thumb-overlay a:hover {
+    color: #f7a923;
 }
 
 .files-items-list li.files-item .item-thumb .item-thumb-overlay .item-thumb-overlay-info {
-    display: none;
-    padding: 10px;
+    display: table;
+    padding: 0 10px;
     overflow: auto;
+    width: 100%;
     height: 100%;
+    text-align: center;
+}
+
+.files-items-list li.files-item .item-thumb .item-thumb-overlay .item-thumb-overlay-info a.download-button-blue {
+    color: #fcfcfc;
+    background: #008BFF;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+    line-height: 35px;
+    font-size: 19px;
 }
 
 .files-items-list li.files-item .item-thumb .item-thumb-overlay .item-thumb-overlay-info b.title {
@@ -467,7 +485,7 @@ a[class*="trash-action"]:hover {
 
 .files-items-list li.files-item .item-thumb .item-thumb-overlay .item-thumb-overlay-info span.others {
     font-size: 11px;
-    border-bottom: 1px solid rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(0,0,0,0.3);
 }
 
 .files-items-list li.files-item.file-big-info .item-thumb .item-thumb-overlay .item-thumb-overlay-buttons {
@@ -498,18 +516,22 @@ a[class*="trash-action"]:hover {
 
 .files-items-list li.files-item .item-thumb .jFiler-icon-file {
     top: 50%;
-    margin-top: -45px;
+    margin-top: -10px;
 }
 
 /* info */
 .files-items-list li.files-item .item-info {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     width: 100%;
     color: #fff;
     padding: 5px 10px;
-    background: rgba(0,0,0,0.7);
+    background: -moz-linear-gradient(top,rgba(0,0,0,1) 0,rgba(0,0,0,0) 100%);
+    background: -webkit-linear-gradient(top,rgba(0,0,0,1) 0,rgba(0,0,0,0) 100%);
+    background: -o-linear-gradient(top,rgba(0,0,0,1) 0,rgba(0,0,0,0) 100%);
+    background: -ms-linear-gradient(top,rgba(0,0,0,1) 0,rgba(0,0,0,0) 100%);
+    background: linear-gradient(to bottom,rgba(0,0,0,1) 0,rgba(0,0,0,0) 100%);
     z-index: 9;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
@@ -545,4 +567,24 @@ a[class*="trash-action"]:hover {
 /* big Info config */
 .files-items-list li.files-item .item-info .item-comment {
     overflow-y: auto;
+}
+
+.files-items-list li.veryBig-back-button .item-thumb{
+    height: 245px;
+    text-align: center;
+    font-size: 36px;
+    line-height: 246px;
+}
+.files-items-list li.veryBig-back-button .item-thumb a{
+    display: block;
+}
+.version-num {
+    font-size: 11px;
+    border: 1px solid #f7a923;
+    padding: 3px 6px;
+    color: #f7a923;
+    border-radius: 3px;
+}
+.version-num b{
+    margin-left: 5px;
 }
