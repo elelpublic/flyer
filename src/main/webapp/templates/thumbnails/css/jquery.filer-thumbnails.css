@@ -249,7 +249,7 @@ a[class*="trash-action"]:hover {
     position: fixed;
     z-index: 50;
     width: 100%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e1e1;
 }
 
 .header-logo {
@@ -297,7 +297,7 @@ a[class*="trash-action"]:hover {
 }
 
 .left-side {
-    border-right: 1px solid #eee;
+    border-right: 1px solid #e1e1e1;
 }
 
 .left-side-bg {
@@ -307,14 +307,14 @@ a[class*="trash-action"]:hover {
     left: 0;
     top: 0;
     z-index: -1;
-    border-right: 1px solid #eee;
+    border-right: 1px solid #e1e1e1;
 }
 
 .left-side .section-title {
     margin: 30px 0;
     font-size: 16px;
     font-weight: bold;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e1e1;
     padding-bottom: 10px;
 }
 
@@ -393,7 +393,7 @@ a[class*="trash-action"]:hover {
     position: relative;
     margin: 0 10px 30px 0;
     padding: 10px;
-    border: 1px solid #eee;
+    border: 1px solid #e1e1e1;
     background: #fff;
 }
 
@@ -403,7 +403,7 @@ a[class*="trash-action"]:hover {
     position: relative;
     height: 215px;
     overflow: hidden;
-    border: 1px solid #eee;
+    border: 1px solid #e1e1e1;
 }
 
 .files-items-list li.files-item .item-thumb img {
@@ -414,7 +414,7 @@ a[class*="trash-action"]:hover {
 
 .files-items-list li.files-item:not(.uploading) .item-thumb:hover .item-info,
 .files-items-list li.files-item.file-big-info .item-info {
-    top: -30%;
+    top: -50%;
 }
 
 .files-items-list li.files-item .item-thumb .item-thumb-overlay {
@@ -541,12 +541,15 @@ a[class*="trash-action"]:hover {
 .files-items-list li.files-item .item-info .item-title {
     display: block;
     font-weight: bold;
-    margin-bottom: -5px;
+    line-height: 14px;
+    margin-top: 5px;
+    margin-bottom: -3px;
 }
 
 .files-items-list li.files-item .item-info .item-others {
     display: inline-block;
     font-size: 10px;
+    padding-bottom: 5px;
 }
 
 /* assets */

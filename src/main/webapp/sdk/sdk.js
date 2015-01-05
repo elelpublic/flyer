@@ -264,23 +264,25 @@
                         var val = r.Entries[key];
                         val.orderKey = key;
                         f._ajax(f.restUrl + "rest/api/json/0/filerevisions?fileHistory=" + val.id, 'GET', {a: val}, function(r2, b){
-                            r2.Entries[0].fId = b.id;
-                            r2.Entries[0].locked = b.locked;
-                            r2.Entries[0].lockComment = b.lockComment || null;
-                            r2.Entries[0].lockedBy = b.lockedBy || null;
-                            r2.Entries[0].lockedByName = b.lockedByName || null;
-                            r2.Entries[0].lockTime = b.lockTime || null;
-                            r2.Entries[0].revisions = b.revisions;
-                            r2.Entries[0].orderKey = b.orderKey;
-                            r2.Entries[0].revisions = [];
-                            
-                            if(r2.Entries.length > 1){
-                                for(var i = 0; i<r2.Entries.length; i++){
-                                    r2.Entries[0].revisions.push(r2.Entries[i]);
+                            if(r2.Entries && r2.Entries[0]){
+                                r2.Entries[0].fId = b.id;
+                                r2.Entries[0].locked = b.locked;
+                                r2.Entries[0].lockComment = b.lockComment || null;
+                                r2.Entries[0].lockedBy = b.lockedBy || null;
+                                r2.Entries[0].lockedByName = b.lockedByName || null;
+                                r2.Entries[0].lockTime = b.lockTime || null;
+                                r2.Entries[0].revisions = b.revisions;
+                                r2.Entries[0].orderKey = b.orderKey;
+                                r2.Entries[0].revisions = [];
+
+                                if(r2.Entries.length > 1){
+                                    for(var i = 0; i<r2.Entries.length; i++){
+                                        r2.Entries[0].revisions.push(r2.Entries[i]);
+                                    }
                                 }
+
+                                files.push(r2.Entries[0]);
                             }
-                            
-                            files.push(r2.Entries[0]);
                             s++;
                             if(s>=total){
                                 files = files.sort(function(a,b){
