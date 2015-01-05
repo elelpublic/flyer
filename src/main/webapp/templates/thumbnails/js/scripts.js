@@ -23,7 +23,8 @@ $projectile._config = {
     removeAction: function(data, callback){
         modal({type: "confirm", title: "Confirmation", text: "Are you sure you want to delete this file?", callback: function(a){
             if(a){
-                callback(data);
+                //callback(data);
+                console.log(data);
             }
         }});
     },

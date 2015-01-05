@@ -46,12 +46,6 @@
 						}
                         
                         if(n.clipBoardPaste){
-                            if (!window.Clipboard) {
-                               var pasteCatcher = document.createElement("div");
-                               pasteCatcher.setAttribute("contenteditable", "");
-                               pasteCatcher.style.display = "none";
-                               document.body.appendChild(pasteCatcher);
-                            } 
                             window.addEventListener("paste", f._clipboardPaste);
                         }
                     },
@@ -551,7 +545,7 @@
                         }
                         
                         var AttrId = el.attr('data-jfiler-index'),
-                            id = 0,
+                            id = null,
                             callback = function(el, id){
                                 f._itFl.splice(id,1);
                         
@@ -567,10 +561,11 @@
                                 });
                             };
                         
-                        for(key in f._itFl){
-                           if(f._itFl[key] && f._itFl[key].id && f._itFl[key].id == id){
-                               id = key;
-                           }
+                        for(var key in f._itFl){
+                            if (key === 'length' || !f._itFl.hasOwnProperty(key)) continue;
+                            if(f._itFl[key] && f._itFl[key].id == AttrId){
+                                id = key;
+                            }
                         }
                         
                         if(!f._itFl[id]){ return false }
@@ -582,7 +577,8 @@
                         }
                         
                         if(f._itFl[id].uploaded || f._itFl[id].file.file){
-                            if($projectile && $projectile._config && $projectile._config.removeAction){
+                            //if($projectile && $projectile._config && $projectile._config.removeAction){
+                            if(false){
                                 $projectile._config.removeAction({a: f._itFl[id], b: id, c: el}, function(data){
                                     n.onRemove(data.c, (typeof data.a.html.attr("data-file-revisionid")=="undefined" ? data.a.file : {rId: data.a.html.attr("data-file-revisionid")}), data.a, function(el, id){
                                         callback(el, id);

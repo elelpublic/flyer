@@ -414,7 +414,7 @@ a[class*="trash-action"]:hover {
 
 .files-items-list li.files-item:not(.uploading) .item-thumb:hover .item-info,
 .files-items-list li.files-item.file-big-info .item-info {
-    top: -30%;
+    top: -50%;
 }
 
 .files-items-list li.files-item .item-thumb .item-thumb-overlay {
@@ -541,12 +541,15 @@ a[class*="trash-action"]:hover {
 .files-items-list li.files-item .item-info .item-title {
     display: block;
     font-weight: bold;
-    margin-bottom: -5px;
+    line-height: 14px;
+    margin-top: 5px;
+    margin-bottom: -3px;
 }
 
 .files-items-list li.files-item .item-info .item-others {
     display: inline-block;
     font-size: 10px;
+    padding-bottom: 5px;
 }
 
 /* assets */
