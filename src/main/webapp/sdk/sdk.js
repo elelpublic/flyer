@@ -13,6 +13,7 @@
 */
 (function(){
     var f = {
+        version: "1.2.1",
         u: "/flyer/",
         restUrl: "/flyer/",
         folder: null,
@@ -76,16 +77,18 @@
         },
 
         getStyles: function(href) {
-            var headHTML = document.getElementsByTagName('head')[0].innerHTML,
+            var link = document.createElement("link"),
                 src = f.u + href;
-            headHTML += '<link type="text/css" rel="stylesheet" href="'+ src +'">';
-            document.getElementsByTagName('head')[0].innerHTML = headHTML;
+            link.href = src;
+            link.rel = "stylesheet";
+            link.type = "text/css";
+            document.head.appendChild(link);
         },
 
         getScript: function(href) {
             var script = document.createElement('script');
             script.type = "text/javascript";
-            script.src = f.u + href;
+            script.src = f.u + href + "?v=" + f.version;
             script.async = false;
             document.getElementsByTagName('head')[0].appendChild(script);
         },
