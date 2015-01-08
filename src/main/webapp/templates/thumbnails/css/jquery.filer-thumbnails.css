@@ -228,6 +228,18 @@ a[class*="trash-action"]:hover {
     color: #d9534f;
 }
 
+a[class*="lock-action"]:hover, a.icon-jfi-unlock.item-lock-action {
+    color: #f7a923;
+}
+
+a[class*="download-action"]:hover {
+    color: #0088cc
+}
+
+a[class*="item-versions-show"]:hover {
+    color: #27ae60
+}
+
 /* @Globals */
 .bgcolor-1 {
     background-color: #f9fafb;
@@ -278,7 +290,7 @@ a[class*="trash-action"]:hover {
     padding: 1px 6px;
 }
 
-.header-content .filter-list-mode li.selected a {
+.header-content .filter-list-mode li a.selected {
     background: #f7a923;
     border-radius: 3px;
     color: #fff;
@@ -543,7 +555,6 @@ a[class*="trash-action"]:hover {
     font-weight: bold;
     line-height: 14px;
     margin-top: 5px;
-    margin-bottom: -3px;
 }
 
 .files-items-list li.files-item .item-info .item-others {
@@ -590,4 +601,187 @@ a[class*="trash-action"]:hover {
 }
 .version-num b{
     margin-left: 5px;
+}
+.view-switcher {
+    padding-right: 10px;
+    border-right: 1px dotted #ccc
+}
+.view-switcher a.selected {
+    color: #f7a923;
+    cursor: default;
+}
+
+/*
+    == List View ==
+*/
+#content.list-view .right-side {
+    padding: 0 !important;
+}
+.files-items-table input[type=checkbox]+label,input[type=radio]+label {
+    display: inline-block;
+    min-height: 20px;
+    margin: 0;
+    font-size: 14px;
+    padding-left: 20px;
+    vertical-align: middle;
+}
+.files-items-table * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+/* 
+    Setting default grid system 
+*/
+.table-container {
+    display: table;
+    width: 100%;
+    max-width: 100%;
+}
+
+.table-heading {
+    display: table-row;
+}
+
+.table-body {
+    display: table-row-group;
+}
+
+.table-row {
+    display: table-row;
+}
+
+.table-col {
+    display: table-cell;
+}
+
+/* 
+    Customizing grid system
+*/
+.table-container {
+    position: relative;
+    color: #9ba0b3;
+    font-family: sans-serif;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table-heading {
+    background: #fafafa;
+    color: #81838a;
+}
+
+.table-heading .table-col {
+    font-weight: bold;
+    font-size: 13px;
+    padding: 15px;
+    border: 1px solid #f1f1f1;
+    word-break: normal;
+}
+
+.table-heading .table-col a[data-sort] {
+    cursor: pointer;
+    color: inherit;
+}
+
+.table-body {
+    font-size: 13px;
+}
+
+.table-body a.ns-underline{
+    color: #0088cc;
+}
+
+.table-body a.ns-underline:hover, .table-body a.ns-underline:hover{
+    color: #005580;
+    text-decoration: underline;
+}
+
+.table-body .table-row {
+    border-bottom: 1px solid #f1f1f1;
+    border-left: 3px solid transparent;
+}
+
+.table-body .table-row:not(.nsrow):hover {
+    border-left-color: #5f98fa;
+    background: #fafafa;
+}
+
+.table-body .table-row:last-child {
+    border-bottom-style: solid;
+}
+
+.table-body .table-row .table-col {
+    padding: 15px;
+    border-right: 1px solid #f1f1f1;
+}
+
+._fcli {
+    text-align: center;
+}
+
+.table-body .table-row.uploading, .table-body .table-row.uploading .files-item-actions {
+    background: #FFFAE6;
+}
+
+.files-item-actions {
+    text-align: right;
+}
+
+.files-item-actions ul {
+    list-style: none;
+}
+
+.files-item-actions ul>li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 15px;
+}
+
+.files-item-actions ul>li a{
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+}
+
+.files-item-actions ul>li a:hover {
+    opacity: 1;
+    filter: alpha(opacity=100); 
+}
+
+.files-item-actions ul>li a{
+    cursor: pointer;
+    color: #444;
+}
+
+.table-body .table-row:hover .files-item-actions{
+    visibility: visible;
+}
+
+.files-items-table .jFiler-jProgressBar {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    margin-top: -6px;
+    border-radius: 0
+}
+
+.files-items-table .jFiler-jProgressBar .bar{
+    border-radius: 0;
+}
+
+.files-item-icon {
+    font-size: 16px
+}
+
+.row-back-button:hover {
+    background: #fafafa;
+    color: #f7a923;
+    cursor: pointer;
+}
+
+@media screen and (max-width : 1000px) {
+    .table-body {
+        font-size: 11px;   
+    }
 }

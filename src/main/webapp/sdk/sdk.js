@@ -13,18 +13,54 @@
 */
 (function(){
     var f = {
-        version: "1.2.1",
+        version: "1.2.2",
         u: "/flyer/",
         restUrl: "/flyer/",
         folder: null,
         s: [],
         captions: {
             Flyer: "Flyer|Flyer",
-            lock: "System|Lock",
-            unlock: "System|Unlock",
-            sortBy: "Default|Sorting",
-            filerEmpty: "Flyer|No files available",
-            comment: "Default|Comment"
+            file: "Flyer|File",
+            files: "Flyer|Files",
+            lock: "Tooltip|Lock",
+            unlock: "Tooltip|Unlock",
+            sortBy: "Tooltip|Sort",
+            listView: "Flyer|ListView",
+            gridView: "Flyer|GridView",
+            filesSelected: "Flyer|Files selected",
+            remove: "Tooltip|Delete",
+            tName: "Document|Title",
+            tSize: "Document|Size",
+            tDate: "Document|Date",
+            tUser: "Document|Employee",
+            tComment: "Document|Comment",
+            tActions: "Document.Plural|Action",
+            commentLeave: "Flyer|Please enter a comment",
+            filter: "Default|Filter",
+            errorTitle: "System|Error",
+            errorText: "Defalut|Sorry, something is wrong, please try again later",
+            removeConfirmation: "${Phrases:Really delete $0 ?}:::${Flyer:File}",
+            noFiles: "Flyer|No files available",
+            noFilesSelected: "Flyer|No file selected",
+            dragDropFiles: "Flyer|Drag and Drop Files Here",
+            or: "Application|or",
+            browseFiles: "Flyer|Browse Files",
+            tPrompt: "System|Hint",
+            lockText: "Flyer|Please enter a reason for locking",
+            tInfo: "System|Hint",
+            lockCommentEmpty: "Flyer|Please enter a comment",
+            tConfirm: "System|Hint",
+            download: "Defaulft|Download",
+            success: "Document|Success",
+            versions: "Document|History",
+            infoShow: "Default|Info",
+            back: "System|Back",
+            unlockMessage: "Flyer|File was unlocked",
+            lockMessage: "Flyer|File was locked",
+            ok: "Document|OK",
+            yes: "Document|Yes",
+            no: "Tooltip|No",
+            cancel: "Document|Cancel",
         },
         
         init: function(){
@@ -36,7 +72,10 @@
             }
             
             f.load();
-            f.customize();
+            
+            f.getCaptions(function(){
+                f.customize();
+            });
         },
         
         customize: function() {
@@ -45,6 +84,9 @@
                     var a = el.getAttribute(name);
                     if(!a || typeof a == "undefined") { return false; } else { return a.toString(); } 
                 };
+            
+            f.folder = (f.s[0].el.getAttribute('data-filer-folderid') ? f.s[0].el.getAttribute('data-filer-folderid') : f._location.getParameter('list'));
+            
             if(attr("data-filer-type")){
                 switch(attr("data-filer-type")){
                     case "1":
@@ -68,8 +110,6 @@
                     break;
                 }
             }
-            
-            f.folder = (f.s[0].el.getAttribute('data-filer-folderId') ? f.s[0].el.getAttribute('data-filer-folderId') : f._location.getParameter('list'));
         },
         
         check: function() {
@@ -197,7 +237,13 @@
                 f._ajax(f.u + "templates/thumbnails/index.html", 'GET', {}, function(r){
                     f.s[0].el.innerHTML = r;
                     f.getScript("templates/thumbnails/js/scripts.js");
-                    f.getScript("templates/thumbnails/js/custom.js");
+                    if(f.storage("ViewMode") && f.storage("ViewMode") == "list"){
+                        f.getScript("templates/thumbnails/js/custom-list-view.js");
+                        $projectile.viewMode = "list";
+                    }else{
+                        f.getScript("templates/thumbnails/js/custom.js");
+                        $projectile.viewMode = "grid";
+                    }
                 });
             }
         },
@@ -267,7 +313,7 @@
                         var val = r.Entries[key];
                         val.orderKey = key;
                         f._ajax(f.restUrl + "rest/api/json/0/filerevisions?fileHistory=" + val.id, 'GET', {a: val}, function(r2, b){
-                            if(r2.Entries && r2.Entries[0]){
+                            if(r2 && r2.Entries && r2.Entries[0]){
                                 r2.Entries[0].fId = b.id;
                                 r2.Entries[0].locked = b.locked;
                                 r2.Entries[0].lockComment = b.lockComment || null;
@@ -367,22 +413,35 @@
         
         ready: function(callback) {
             var isFinished = [];
+            //f.getCaptions(function(){isFinished.push("getCaptions"); allDone()});
             f.getFiles(function(){isFinished.push("getFiles"); allDone()});
-            f.getCaptions(function(){isFinished.push("getCaptions"); allDone()});
             
             function allDone() {
-                if(isFinished.length < 2) return;
+                if(isFinished.length < 1) return;
                 f.preloader("hide");
                 f.changeCaptions();
                 callback(f);
             }
         },
         
+        storage: function(name, value){
+            if(typeof(Storage) == "undefined") { return false }
+
+            if(name && !value){
+                return localStorage.getItem("jFiler-" + name);
+            }else if(name && value){
+                localStorage.setItem("jFiler-" + name, value);
+                return true;
+            }else{
+                return true;
+            }
+        },
+        
         dateFormat: function(date) {
             date = !date ? new Date() : new Date(date);
             var d = {
-                day: date.getDay(),
-                month: date.getMonth(),
+                day: date.getDate(),
+                month: date.getMonth()+1,
                 year: date.getFullYear(),
                 hours: date.getHours(),
                 minutes: date.getMinutes(),

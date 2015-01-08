@@ -215,22 +215,22 @@ span.jFiler-icon-file.f-audio:after {
             transition: width 0.3s ease;
 }
 
-.jFiler-jProgressBar.dark .bar {
+.jFiler-jProgressBar .bar.dark {
     background-color: #555;
 }
 
-.jFiler-jProgressBar.blue .bar {
+.jFiler-jProgressBar .bar.blue {
     background-color: #428bca;
 }
 
-.jFiler-jProgressBar.green .bar {
+.jFiler-jProgressBar .bar.green {
     background-color: #5cb85c;
 }
 
-.jFiler-jProgressBar.orange .bar {
+.jFiler-jProgressBar .bar.orange {
     background-color: #f7a923;
 }
 
-.jFiler-jProgressBar.red .bar {
+.jFiler-jProgressBar .bar.red {
     background-color: #d9534f;
 }

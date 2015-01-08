@@ -2,21 +2,25 @@
     <div class="container-fluid header-fixed">
         <div class="row">
             <div class="col-xs-3 header-logo _splr30">
-                <h3><i class="icon-jfi-paperclip"></i> Flyer</h3>
+                <h3><i class="icon-jfi-paperclip"></i> %captions-Flyer%</h3>
             </div>
             <div class="col-xs-9 header-content bgcolor-2">
-                <ul class="items-manipulation list-inline pull-left _splr30" style="display:none">
-                    <li><strong><i class="num"></i> Files selected:</strong></li>
+                <ul class="view-switcher list-inline pull-left _splr30">
+                    <li><a class="list-view" title="%captions-listView%"><i class="icon-jfi-view-list"></i></a></li>
+                    <li><a class="grid-view" title="%captions-gridView%"><i class="icon-jfi-view-grid"></i></a></li>
+                </ul>
+                <ul class="items-manipulation list-inline pull-left _splr30" style="display:none; padding-left: 15px">
+                    <li><strong><i class="num"></i> %captions-filesSelected%:</strong></li>
                     <!--<li><a class="all-archive-action"><i class="icon-jfi-zip"></i> Archive</a></li>-->
-                    <li><a class="all-lock-action"><i class="icon-jfi-lock"></i> Lock</a></li>
-                    <li><a class="all-trash-action"><i class="icon-jfi-trash"></i> Trash</a></li>
+                    <li><a class="all-lock-action"><i class="icon-jfi-lock"></i> %captions-lock%</a></li>
+                    <li><a class="all-trash-action"><i class="icon-jfi-trash"></i> %captions-remove%</a></li>
                 </ul>
                 <ul class="filter-list-mode list-inline pull-right _splr30">
-                    <li><strong>Sort by:</strong></li>
-                    <li class="selected"><a data-sort="name">Name</a></li>
-                    <li><a data-sort="size">Size</a></li>
-                    <li><a data-sort="user">User</a></li>
-                    <li><a data-sort="date">Date</a></li>
+                    <li><strong class="text-capitalize">%captions-sortBy%:</strong></li>
+                    <li><a data-sort="name" class="selected">%captions-tName%</a></li>
+                    <li><a data-sort="size">%captions-tSize%</a></li>
+                    <li><a data-sort="date">%captions-tDate%</a></li>
+                    <li><a data-sort="user">%captions-tUser%</a></li>
                 </ul>
             </div>
         </div>
@@ -32,11 +36,14 @@
                 <div>
                     <input type="file" name="files[]" id="filer1" multiple="multiple" />
                     <div id="filerComment">
-                        <textarea class="form-control" name="Comment" placeholder="Write a comment here..."></textarea>
+                        <textarea class="form-control" name="Comment" placeholder="%captions-commentLeave%"></textarea>
                     </div>
                 </div>
+                
+                <!--
+                *** Filter Hide :( ***
 
-                <h4 class="section-title">Filter</h4>
+                <h4 class="section-title">%captions-filter%</h4>
                 <div>
                     <ul class="filter-list-type">
                         <li class="selected"><a data-type="*"><i class="icon-jfi-infinite"></i> All</a></li>
@@ -46,14 +53,12 @@
                         <li><a data-type="text"><i class="icon-jfi-file-text"></i> Documens</a></li>
                     </ul>
                 </div>
+                -->
             </div>
         </div>
 
         <div class="col-xs-9 _splr30 _sptG right-side">
-            <div>
-                <ul class="files-items-list list-inline"><p class="jFiler-emptyMessage" align="center">- No files Uploaded -</p></ul>
-            </div>
-
+            <div></div>
         </div>
     </div>
 </div>
