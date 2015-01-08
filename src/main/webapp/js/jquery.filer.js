@@ -470,7 +470,7 @@
                             
                             if(l.length < 1){
                                 if(n.appendTo){
-                                    l = n.appendTo;
+                                    l = $(n.appendTo);
                                 }else{
                                     p.find('.jFiler-items').remove();
                                     l = $('<div class="jFiler-items"></div>');
@@ -479,7 +479,13 @@
                                 
                                 l.on('click', n.templates._selectors.remove, function(e){
                                     e.preventDefault();
-                                    f._remove(e, $(this).closest(n.templates._selectors.item));
+                                    if($projectile && $projectile._config && $projectile._config.removeAction){
+                                        $projectile._config.removeAction({e: e, el: $(this).closest(n.templates._selectors.item)}, function(data){
+                                            f._remove(data.e, data.el);
+                                        });    
+                                    }else{
+                                        f._remove(e, $(this).closest(n.templates._selectors.item));   
+                                    }
                                 });
                             }
                             
@@ -505,7 +511,7 @@
                             
                             if(l.length < 1){
                                 if(n.appendTo){
-                                    l = n.appendTo;
+                                    l = $(n.appendTo);
                                 }else{
                                     p.find('.jFiler-items').remove();
                                     l = $('<div class="jFiler-items"></div>');
@@ -514,7 +520,13 @@
                                 
                                 l.on('click', n.templates._selectors.remove, function(e){
                                     e.preventDefault();
-                                    f._remove(e, $(this).closest(n.templates._selectors.item));
+                                    if($projectile && $projectile._config && $projectile._config.removeAction){
+                                        $projectile._config.removeAction({e: e, el: $(this).closest(n.templates._selectors.item)}, function(data){
+                                            f._remove(data.e, data.el);
+                                        });    
+                                    }else{
+                                        f._remove(e, $(this).closest(n.templates._selectors.item));   
+                                    }
                                 });
                             }
                             
