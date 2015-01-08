@@ -35,37 +35,17 @@ $projectile._config = {
             el.removeClass('disabled animated pulse infinite'); 
         }
     },
-    items_selected: [],
-    views: {
-        list: {
-                rightSide: '<div class="table-container files-items-table">\
-                                <div class="table-heading filter-list-mode">\
-                                    <div class="table-col" style="width:1px"><input type="checkbox" class="file-item-check" id="files-item-all" disabled><label for="files-item-all"></label></div>\
-                                    <div class="table-col"><a class="selected" data-sort="name">'+$projectile.captions.tName+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col"><a data-sort="size">'+$projectile.captions.tSize+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col"><a data-sort="date">'+$projectile.captions.tDate+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col"><a data-sort="user">'+$projectile.captions.tUser+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col">'+$projectile.captions.tComment+' <i class="icon-jfi-sort"></i></div>\
-                                    <div class="table-col">'+$projectile.captions.tActions+'</div>\
-                                </div>\
-                                <div class="table-body files-items-list"></div>\
-                            </div>\
-                            <p class="jFiler-emptyMessage" align="center">- '+$projectile.captions.noFiles+' -</p>'
-            },
-            grid: {
-                rightSide: '<ul class="files-items-list list-inline"><p class="jFiler-emptyMessage" align="center">- '+$projectile.captions.noFiles+' -</p></ul>'
-            }   
-    }
+    items_selected: []
 }
 
 $projectile._config._filerOpts = {
         limit: null,
         maxSize: null,
         extensions: null,
-        changeInput: '<div class="jFiler-input-dropDown"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>'+$projectile.captions.dragDropFiles+'</h3> <span class="margin15">'+$projectile.captions.or+'</span></div><a class="jFiler-input-choose-btn blue">'+$projectile.captions.browseFiles+'</a></div></div>',
+        changeInput: true,
         showThumbs: true,
-        appendTo: '.right-side',
-        theme: 'thumbnails',
+        appendTo: '.files-items-table',
+        theme: 'table',
         templates: {
             thumbs: null,
             item: '',
@@ -135,13 +115,6 @@ $projectile._config._filerOpts = {
 }
 
 $(function(){
-    
-    /* fix <header> */
-    $(window).scroll(function(){
-        $('#header .header-fixed, .left-side .left-side-bg').css({
-            'left': - $(this).scrollLeft()
-        });
-    });
     
     /*
         Sort Items
@@ -330,36 +303,4 @@ $(function(){
             }});
         }
     });
-    
-    /* 
-        View Swither
-    */
-    $('body').on('click', ".view-switcher li a[class]", function(e){
-        e.preventDefault();
-        var current = $(this).attr("class");
-        if($(this).hasClass("selected")){return true}
-        switch(current){
-            case 'list-view':
-                $projectile.storage("ViewMode", "list");
-            break;
-            case 'grid-view':
-                $projectile.storage("ViewMode", "grid");
-            break;
-        }
-        location.reload();
-    });
-    
-    var viewMode = function(){
-        var _c = $projectile._config.views,
-            mode = $projectile.viewMode;
-        if(!_c[mode]){ mode = "list"}
-        
-        $('.view-switcher').find("a."+mode+"-view").addClass("selected");
-        
-        /* important */
-        $('#content').addClass(mode + "-view");
-        $('.right-side div:first-child').html(_c[mode].rightSide);
-    }
-    
-    viewMode();
 });

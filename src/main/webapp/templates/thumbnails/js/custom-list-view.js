@@ -7,70 +7,41 @@ $(document).ready(function(){
                 Config Filer
             ====================
         */
-        
+
         var _filerOpts = $projectile._config._filerOpts;
-        _filerOpts.theme = 'thumbnails';
-        _filerOpts.templates.item = '<li class="files-item uploading animated zoomIn col-xs-4">\
-                                        <div class="files-item-container">\
-                                            <div class="files-item-inner">\
-                                                <div class="item-thumb">\
-                                                    <div class="item-info">\
-                                                        <span class="item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 45}}</b></span>\
-                                                        <span class="item-others">{{fi-size2}}</span>\
-                                                    </div>\
-                                                    {{fi-image}}\
-                                                </div>\
-                                                <div class="item-assets row">\
-                                                    {{fi-progressBar}}\
-                                                    <ul class="list-inline pull-right">\
-                                                        <li><a class="icon-jfi-trash item-trash-action"></a></li>\
+        _filerOpts.theme = 'list';
+        _filerOpts.templates.item = '<div class="table-row files-item uploading">\
+                                        <div class="table-col"><i class="icon-jfi-reload files-item-icon"></i></div>\
+                                        <div class="table-col"><span title="{{fi-name}}">{{fi-name | limitTo: 45}}</span></div>\
+                                        <div class="table-col">{{fi-size2}}</div>\
+                                        <div class="table-col"></div>\
+                                        <div class="table-col"></div>\
+                                        <div class="table-col"></div>\
+                                        <div class="files-item-actions table-col" style="display:block">\
+                                            <ul class="list-inline">\
+                                                <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
+                                            </ul>\
+                                        </div>\
+                                        {{fi-progressBar}}\
+                                    </div>';
+        _filerOpts.templates.itemAppended = '<div class="table-row files-item" data-file-id="{{fi-fId}}" data-file-revisionId="{{fi-rId}}" data-file-type="{{fi-type}}" data-file-extension="{{fi-extension}}" data-file-name="{{fi-name}}" data-file-user="{{fi-createdByName}}" data-file-size="{{fi-size}}" data-file-date="{{fi-createdDate}}" data-file-orderKey="{{fi-orderKey}}">\
+                                                <div class="table-col _fcli"><input type="checkbox" class="file-item-check" id="files-item-{{fi-fId}}"><label for="files-item-{{fi-fId}}"></label></div>\
+                                                <div class="table-col"><a href="{{fi-file}}" target="_blank" class="item-download-action ns-underline" title="{{fi-name}}">{{fi-name | limitTo: 45}}</a></div>\
+                                                <div class="table-col">{{fi-size2}}</div>\
+                                                <div class="table-col">{{fi-date}}</div>\
+                                                <div class="table-col">{{fi-createdByName}}</div>\
+                                                <div class="table-col">{{fi-comment}}</div>\
+                                                <div class="files-item-actions table-col">\
+                                                    <ul class="list-inline">\
+                                                        <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="'+$projectile.captions.download+'" download="{{fi-name}}"></a></li>\
+                                                        {{fi-versionsButton}}\
+                                                        {{fi-lockIcon}}\
+                                                        <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
                                                     </ul>\
                                                 </div>\
-                                            </div>\
-                                        </div>\
-                                    </li>';
-        _filerOpts.templates.itemAppended = '<li class="files-item col-xs-4" data-file-id="{{fi-fId}}" data-file-revisionId="{{fi-rId}}" data-file-type="{{fi-type}}" data-file-extension="{{fi-extension}}" data-file-name="{{fi-name}}" data-file-user="{{fi-createdByName}}" data-file-size="{{fi-size}}" data-file-date="{{fi-createdDate}}" data-file-orderKey="{{fi-orderKey}}">\
-                                        <div class="files-item-container">\
-                                            <div class="files-item-inner">\
-                                                <div class="item-thumb">\
-                                                    <div class="item-info">\
-                                                        <span class="item-title" title="{{fi-name}}">{{fi-name | limitTo: 45}}</span>\
-                                                        <span class="item-others">{{fi-size2}} | {{fi-createdByName}} | {{fi-date}}</span>\
-                                                    </div>\
-                                                    {{fi-image}}\
-                                                    <div class="item-thumb-overlay">\
-                                                        <div class="item-thumb-overlay-info animated fadeIn">\
-                                                            <div style="display:table-cell;vertical-align: middle;">\
-                                                                <br>\
-                                                                <a href="{{fi-file}}" target="_blank" title="'+$projectile.captions.download+'" class="download-button-blue"><i class="icon-jfi-download-o"></i></a>\
-                                                                <br><br>\
-                                                                <b>{{fi-name}}</b>\
-                                                                <br>\
-                                                                <span class="others">{{fi-size2}} | {{fi-createdByName}} | {{fi-date}}</span>\
-                                                                <br><br>\
-                                                                <p class="comment">{{fi-comment}}</p>\
-                                                            </div>\
-                                                        </div>\
-                                                    </div>\
-                                                </div>\
-                                                <div class="item-assets row">\
-                                                    <div class="item-assets-normal">\
-                                                        <ul class="list-inline pull-left">\
-                                                            <li><input type="checkbox" class="file-item-check" id="files-item-{{fi-fId}}"><label for="files-item-{{fi-fId}}">&nbsp;</label></li>\
-                                                        </ul>\
-                                                        <ul class="list-inline pull-right">\
-                                                            <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="'+$projectile.captions.download+'" download="{{fi-name}}"></a></li>\
-                                                            {{fi-versionsButton}}\
-                                                            {{fi-lockIcon}}\
-                                                            <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
-                                                        </ul>\
-                                                    </div>\
-                                                </div>\
-                                            </div>\
-                                        </div>\
-                                    </li>';
+                                            </div>';
+
         _filerOpts.uploadFile.success = function(data, el, l, o, p, s){
-                    
             el.attr("data-file-id", data.Entries[0].fileHistory);
             el.attr("data-file-revisionId", data.Entries[0].id);
             el.attr("data-file-type", data.Entries[0].mimeType.split("/", 1).toString().toLowerCase());
@@ -98,41 +69,36 @@ $(document).ready(function(){
 
                 el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
                     var parent = el,
-                        inner = parent.find(".files-item-inner"),
+                        inner = parent,
                         newItem = $(list[0]),
                         progress = $(this);
                     inner.fadeOut("slow", function(){
                         parent.html(newItem.html());
 
-                        parent.find(".item-assets-normal ul:first-child").html("");
-
-                        $('<li><em class="jFiler-upload-success text-success"><i class="icon-jfi-check-circle"></i></em></li>').hide().appendTo(parent.find(".item-assets-normal ul:first-child")).fadeIn('slow');
-                        $(this).remove();
+                        parent.find(".table-col:first-child").html('<i class="icon-jfi-check files-item-icon" style="color: #68b830"></i>');
 
                         inner.fadeIn("slow");
                     });
                 });
             }
 
-            $($projectile._config.input_selector).trigger("filer.generateList", {data: data});
+            el.removeClass("uploading");
 
-            if(p.next().attr("id") == "filerComment"){
-                var comment = p.next("#filerComment").find("textarea");
-                if(comment){
-                    comment.val("");
-                }
-            }
+            $($projectile._config.input_selector).trigger("filer.generateList", {data: data});   
         }
         
         _filerOpts.uploadFile.error = function(el){
+                    
+            el.removeClass('uploading');
+
             el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
-                $('<ul class="list-inline pull-left"><li><em class="jFiler-upload-error text-danger"><i class="icon-jfi-exclamation-circle"></i> '+$projectile.captions.errorTitle+'!</em></li></ul>').hide().appendTo($(this).parent()).fadeIn('slow');
+                $(this).closest(".table-row").find(".files-item-icon").parent().html('<i class="icon-jfi-minus-circle files-item-icon" style="color: #d9534f"></i>');
                 $(this).remove();
             })
         }
-        
-        $($projectile._config.input_selector).filer(_filerOpts);
 
+        $($projectile._config.input_selector).filer(_filerOpts);
+        
         /* 
             ====================
                 Append Files
@@ -146,10 +112,10 @@ $(document).ready(function(){
             val.file = $projectile.restUrl + "rest/api/binary/0/filerevisions/" + val.id;
             val.rId = val.id;
             val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
-            val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.tVersions+'"><i class="icon-jfi-history"></i></a></li>' : '');
+            val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.versions+'"><i class="icon-jfi-history"></i></a></li>' : '');
         }
         $($projectile._config.input_selector).trigger("filer.append", {data: $projectile.files});
-        
+
         /* Lock Icon dropdown */
         $(".icon-jfi-unlock.dropdown").dropdown({
 			   
@@ -185,7 +151,7 @@ $(document).ready(function(){
                },
            ]
         });
-    
+               
         /* 
             ====================
                Files Versions
@@ -220,19 +186,19 @@ $(document).ready(function(){
             data.callback = function(list){
                 $('.file-verions-right-side').remove();
 
-                var html = $('<div class="col-xs-9 _splr30 _sptG right-side file-verions-right-side"><div>' + $projectile._config.views["grid"].rightSide + '</div>').hide();
+                var html = $('<div class="col-xs-9 _splr30 _sptG right-side file-verions-right-side"><div>' + $projectile._config.views["list"].rightSide + '</div>').hide();
                 
                 html.find("input.file-item-check").remove();
                 
                 for(key in list){
                     var val = list[key];
-                    val.find(".item-assets-normal .list-inline.pull-left li:first-child").html("<span class='version-num'><i class='icon-jfi-history'></i> <b>" + (list.length - parseInt(key)) + "</b></span>");
+                    val.find("._fcli").html(list.length - parseInt(key));
                     html.find($projectile._config.list_selector).append(val);
                 }
 
-                html.find(".files-items-list").prepend('<li class="files-item col-xs-4 veryBig-back-button"><div class="files-item-container"><div class="files-item-inner"><div class="item-thumb"><a><i class="icon-jfi-back"></i> '+$projectile.captions.back+'</a></div></div></div></li>');
+                html.find($projectile._config.list_selector).prepend('<div class="table-row nsrow row-back-button"><div class="table-col"><i class="icon-jfi-back files-item-icon"></i></div><div class="table-col"><span style="display:block; font-weight: bold;">'+$projectile.captions.back+'</span></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div></div>');
 
-                html.find('.veryBig-back-button a').on("click", function(e){
+                html.find('.row-back-button').on("click", function(e){
                     $projectile._location.redirect_to($projectile._location.removeParameter("file"));
                 });
 
