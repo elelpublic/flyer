@@ -9,7 +9,7 @@ $(document).ready(function(){
         */
 
         var _filerOpts = $projectile._config._filerOpts;
-        _filerOpts.theme = 'list';
+        _filerOpts.theme = 'table';
         _filerOpts.templates.item = '<div class="table-row files-item uploading">\
                                         <div class="table-col"><i class="icon-jfi-reload files-item-icon"></i></div>\
                                         <div class="table-col"><span title="{{fi-name}}">{{fi-name | limitTo: 45}}</span></div>\
@@ -19,7 +19,7 @@ $(document).ready(function(){
                                         <div class="table-col"></div>\
                                         <div class="files-item-actions table-col" style="display:block">\
                                             <ul class="list-inline">\
-                                                <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
+                                                <li><a class="icon-jfi-ban item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
                                             </ul>\
                                         </div>\
                                         {{fi-progressBar}}\
@@ -40,29 +40,49 @@ $(document).ready(function(){
                                                     </ul>\
                                                 </div>\
                                             </div>';
-
+        
         _filerOpts.uploadFile.success = function(data, el, l, o, p, s){
-            el.attr("data-file-id", data.Entries[0].fileHistory);
-            el.attr("data-file-revisionId", data.Entries[0].id);
-            el.attr("data-file-type", data.Entries[0].mimeType.split("/", 1).toString().toLowerCase());
-            el.attr("data-file-size", data.Entries[0].size);
-            el.attr("data-file-user", data.Entries[0].createdByName);
-            el.attr("data-file-date", data.Entries[0].createdDate);
-            el.attr("data-file-name", data.Entries[0].fileName);
-
             var val = data.Entries[0],
-                data = [];
+                data = [],
+                revisionsFind = function(id){
+                    var items = $($projectile._config.item_selector + "[data-file-id='"+id+"']");
+                    if(items && items.length > 0){
+                        var matches = $.grep($projectile.files, function(a,b){
+                            return a.fId == id;
+                        });
+                        items.remove();
+                        return matches;
+                    }
+                    return [];
+                },
+                lockFind = function(id){
+                    var items = $($projectile._config.item_selector + "[data-file-id='"+id+"']");
+                    if(items && items.length > 0){
+                        var matches = $.grep($projectile.files, function(a,b){
+                            return a.fId == id;
+                        });
+                        if(matches[0] && matches[0].locked){
+                            return true;   
+                        }
+                    }
+                    return false;
+                }
 
             val.name = val.fileName;
             val.date = $projectile.dateFormat(val.created);
             val.type = val.mimeType;
             val.file = $projectile.restUrl + "rest/api/binary/0/filerevisions/" + val.id;
             val.rId = val.id;
-            val.lockIcon = '';
-            val.versionsButton = '';
+            val.orderKey = $projectile.files.length.toString();
+            val.fId = val.fileHistory;
+            val.locked = lockFind(val.fId);
+            val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
+            val.revisions = revisionsFind(val.fId);
+            val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.versions+'"><i class="icon-jfi-history"></i></a></li>' : '');
             val.forList = true;
 
             data.push(val);
+            $projectile.files.push(val);
 
             data.callback = function(list){
                 el.removeClass("animated");
@@ -75,16 +95,27 @@ $(document).ready(function(){
                     inner.fadeOut("slow", function(){
                         parent.html(newItem.html());
 
-                        parent.find(".table-col:first-child").html('<i class="icon-jfi-check files-item-icon" style="color: #68b830"></i>');
+                        for (i = 0; i < newItem[0].attributes.length; i++){
+                            var a = newItem[0].attributes[i];
+                            if(a.name == "data-jfiler-index"){continue}
+                            parent.attr(a.name, a.value);
+                        }
 
                         inner.fadeIn("slow");
                     });
                 });
+                
+                el.removeClass("uploading");
             }
 
-            el.removeClass("uploading");
+            $($projectile._config.input_selector).trigger("filer.generateList", {data: data});
 
-            $($projectile._config.input_selector).trigger("filer.generateList", {data: data});   
+            if(p.next().attr("id") == "filerComment"){
+                var comment = p.next("#filerComment").find("textarea");
+                if(comment){
+                    comment.val("");
+                }
+            }
         }
         
         _filerOpts.uploadFile.error = function(el){
@@ -92,7 +123,10 @@ $(document).ready(function(){
             el.removeClass('uploading');
 
             el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
-                $(this).closest(".table-row").find(".files-item-icon").parent().html('<i class="icon-jfi-minus-circle files-item-icon" style="color: #d9534f"></i>');
+                 $(this).closest(".table-row").find(".files-item-icon").parent().html('<i class="icon-jfi-minus-circle files-item-icon" style="color: #d9534f"></i>');
+                setTimeout(function(){
+                    el.fadeOut("slow")   
+                }, 1500);
                 $(this).remove();
             })
         }
@@ -209,11 +243,11 @@ $(document).ready(function(){
                             return a.id == id;
                         });
                     if(!send || !send[0]){return false}
-                    
+                    send[0].isVersion = true;
                     $projectile._config.removeAction({el: el, send: send}, function(data){
                         $projectile._config._filerOpts.onRemove(data.el.closest($projectile._config.item_selector), data.send[0], id, function(el, id){
+                            location.reload();
                             el.fadeOut("fast", function(){
-                                location.reload();
                                 $(this).remove();   
                             })
                         });

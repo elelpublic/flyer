@@ -23,7 +23,7 @@ $(document).ready(function(){
                                                 <div class="item-assets row">\
                                                     {{fi-progressBar}}\
                                                     <ul class="list-inline pull-right">\
-                                                        <li><a class="icon-jfi-trash item-trash-action"></a></li>\
+                                                        <li><a class="icon-jfi-ban item-trash-action"></a></li>\
                                                     </ul>\
                                                 </div>\
                                             </div>\
@@ -42,7 +42,8 @@ $(document).ready(function(){
                                                         <div class="item-thumb-overlay-info animated fadeIn">\
                                                             <div style="display:table-cell;vertical-align: middle;">\
                                                                 <br>\
-                                                                <a href="{{fi-file}}" target="_blank" title="'+$projectile.captions.download+'" class="download-button-blue"><i class="icon-jfi-download-o"></i></a>\
+                                                                <a href="{{fi-file}}" title="'+$projectile.captions.download+'" class="download-button-blue" download="{{fi-name}}"><i class="icon-jfi-download-o"></i></a>\
+                                                                <a href="{{fi-file}}" target="_blank" title="'+$projectile.captions.openFile+'" class="download-button-red"><i class="icon-jfi-external-link"></i></a>\
                                                                 <br><br>\
                                                                 <b>{{fi-name}}</b>\
                                                                 <br>\
@@ -59,7 +60,7 @@ $(document).ready(function(){
                                                             <li><input type="checkbox" class="file-item-check" id="files-item-{{fi-fId}}"><label for="files-item-{{fi-fId}}">&nbsp;</label></li>\
                                                         </ul>\
                                                         <ul class="list-inline pull-right">\
-                                                            <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="'+$projectile.captions.download+'" download="{{fi-name}}"></a></li>\
+                                                            <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-external-link item-open-action" title="'+$projectile.captions.openFile+'"></a></li>\
                                                             {{fi-versionsButton}}\
                                                             {{fi-lockIcon}}\
                                                             <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
@@ -70,28 +71,47 @@ $(document).ready(function(){
                                         </div>\
                                     </li>';
         _filerOpts.uploadFile.success = function(data, el, l, o, p, s){
-                    
-            el.attr("data-file-id", data.Entries[0].fileHistory);
-            el.attr("data-file-revisionId", data.Entries[0].id);
-            el.attr("data-file-type", data.Entries[0].mimeType.split("/", 1).toString().toLowerCase());
-            el.attr("data-file-size", data.Entries[0].size);
-            el.attr("data-file-user", data.Entries[0].createdByName);
-            el.attr("data-file-date", data.Entries[0].createdDate);
-            el.attr("data-file-name", data.Entries[0].fileName);
-
             var val = data.Entries[0],
-                data = [];
+                data = [],
+                revisionsFind = function(id){
+                    var items = $($projectile._config.item_selector + "[data-file-id='"+id+"']");
+                    if(items && items.length > 0){
+                        var matches = $.grep($projectile.files, function(a,b){
+                            return a.fId == id;
+                        });
+                        items.remove();
+                        return matches;
+                    }
+                    return [];
+                },
+                lockFind = function(id){
+                    var items = $($projectile._config.item_selector + "[data-file-id='"+id+"']");
+                    if(items && items.length > 0){
+                        var matches = $.grep($projectile.files, function(a,b){
+                            return a.fId == id;
+                        });
+                        if(matches[0] && matches[0].locked){
+                            return true;   
+                        }
+                    }
+                    return false;
+                }
 
             val.name = val.fileName;
             val.date = $projectile.dateFormat(val.created);
             val.type = val.mimeType;
             val.file = $projectile.restUrl + "rest/api/binary/0/filerevisions/" + val.id;
             val.rId = val.id;
-            val.lockIcon = '';
-            val.versionsButton = '';
+            val.orderKey = $projectile.files.length.toString();
+            val.fId = val.fileHistory;
+            val.locked = lockFind(val.fId);
+            val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
+            val.revisions = revisionsFind(val.fId);
+            val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.versions+'"><i class="icon-jfi-history"></i></a></li>' : '');
             val.forList = true;
 
             data.push(val);
+            $projectile.files.push(val);
 
             data.callback = function(list){
                 el.removeClass("animated");
@@ -104,9 +124,12 @@ $(document).ready(function(){
                     inner.fadeOut("slow", function(){
                         parent.html(newItem.html());
 
-                        parent.find(".item-assets-normal ul:first-child").html("");
-
-                        $('<li><em class="jFiler-upload-success text-success"><i class="icon-jfi-check-circle"></i></em></li>').hide().appendTo(parent.find(".item-assets-normal ul:first-child")).fadeIn('slow');
+                        for (i = 0; i < newItem[0].attributes.length; i++){
+                            var a = newItem[0].attributes[i];
+                            if(a.name == "data-jfiler-index"){continue}
+                            parent.attr(a.name, a.value);
+                        }
+                        
                         $(this).remove();
 
                         inner.fadeIn("slow");
@@ -126,7 +149,10 @@ $(document).ready(function(){
         
         _filerOpts.uploadFile.error = function(el){
             el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
-                $('<ul class="list-inline pull-left"><li><em class="jFiler-upload-error text-danger"><i class="icon-jfi-exclamation-circle"></i> '+$projectile.captions.errorTitle+'!</em></li></ul>').hide().appendTo($(this).parent()).fadeIn('slow');
+                $('<ul class="list-inline pull-left"><li><em class="jFiler-upload-error text-danger"><i class="icon-jfi-exclamation-circle"></i> '+$projectile.captions.errorText+'!</em></li></ul>').hide().appendTo($(this).parent()).fadeIn('slow');
+                setTimeout(function(){
+                    el.fadeOut("slow")   
+                }, 1500);
                 $(this).remove();
             })
         }
@@ -146,7 +172,7 @@ $(document).ready(function(){
             val.file = $projectile.restUrl + "rest/api/binary/0/filerevisions/" + val.id;
             val.rId = val.id;
             val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
-            val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.tVersions+'"><i class="icon-jfi-history"></i></a></li>' : '');
+            val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.versions+'"><i class="icon-jfi-history"></i></a></li>' : '');
         }
         $($projectile._config.input_selector).trigger("filer.append", {data: $projectile.files});
         
@@ -243,11 +269,11 @@ $(document).ready(function(){
                             return a.id == id;
                         });
                     if(!send || !send[0]){return false}
-                    
+                    send[0].isVersion = true;
                     $projectile._config.removeAction({el: el, send: send}, function(data){
                         $projectile._config._filerOpts.onRemove(data.el.closest($projectile._config.item_selector), data.send[0], id, function(el, id){
+                            location.reload();
                             el.fadeOut("fast", function(){
-                                location.reload();
                                 $(this).remove();   
                             })
                         });

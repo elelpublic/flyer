@@ -559,8 +559,6 @@
                         var AttrId = el.attr('data-jfiler-index'),
                             id = null,
                             callback = function(el, id){
-                                f._itFl.splice(id,1);
-                        
                                 if(f._itFl.length < 1){
                                     f._reset();
                                     f._clear();
@@ -575,12 +573,12 @@
                         
                         for(var key in f._itFl){
                             if (key === 'length' || !f._itFl.hasOwnProperty(key)) continue;
-                            if(f._itFl[key] && f._itFl[key].id == AttrId){
+                            if(f._itFl[key].id == AttrId){
                                 id = key;
                             }
                         }
                         
-                        if(!f._itFl[id]){ return false }
+                        if(!f._itFl.hasOwnProperty(id)){ return false }
                         
                         if(f._itFl[id].ajax){
                             f._itFl[id].ajax.abort();
@@ -589,23 +587,16 @@
                         }
                         
                         if(f._itFl[id].uploaded || f._itFl[id].file.file){
-                            //if($projectile && $projectile._config && $projectile._config.removeAction){
-                            if(false){
-                                $projectile._config.removeAction({a: f._itFl[id], b: id, c: el}, function(data){
-                                    n.onRemove(data.c, (typeof data.a.html.attr("data-file-revisionid")=="undefined" ? data.a.file : {rId: data.a.html.attr("data-file-revisionid")}), data.a, function(el, id){
-                                        callback(el, id);
-                                    });
-                                });
-                            }else{
-                                n.onRemove(el, (typeof f._itFl[id].html.attr("data-file-revisionid")=="undefined" ? f._itFl[id].file : {rId: f._itFl[id].html.attr("data-file-revisionid")}), id, function(el, id){
-                                    callback(el, id);
-                                });
-                            }
+                            n.onRemove(el, (f._itFl[id].file.id ? f._itFl[id].file : {rId: f._itFl[id].html.attr("data-file-revisionid")}), id, function(el, id){
+                                callback(el, id);
+                            });
                         }else{
                             n.onRemove(el, f._itFl[id].file, id, function(el, id){
                                 callback(el, id);   
                             })
                         }
+                        
+                        f._itFl.splice(id,1);
                     },
                     _addToMemory: function(i){
                         f._itFl.push({
