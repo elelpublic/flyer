@@ -5,6 +5,7 @@ $projectile._config = {
     item_selector: ".files-item",
     remove_item_selector: ".item-trash-action",
     requestErrorMessage: function(a, b){
+        var text = $projectile.captions.errorText;
         return modal({
             type: "error",
             title: $projectile.captions.errorTitle,
