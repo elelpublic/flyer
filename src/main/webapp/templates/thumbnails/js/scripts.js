@@ -4,11 +4,17 @@ $projectile._config = {
     list_selector: ".files-items-list",
     item_selector: ".files-item",
     remove_item_selector: ".item-trash-action",
-    requestErrorMessage: function(a, b){
+    requestErrorMessage: function(a, b, c){
+        var text = $projectile.captions.errorText + "!";
+        
+        if(a == "lock" && c && c.locked){
+            text = $projectile.captions.lockDenied.replace("$0", c.fileName).replace("$1", c.lockedBy).replace("$2", $projectile.dateFormat(c.lockTime)).replace("$3",c.lockComment);   
+        }
+        
         return modal({
             type: "error",
             title: $projectile.captions.errorTitle,
-            text: $projectile.captions.errorText,
+            text: text,
             buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel},
         });
     },
@@ -17,7 +23,7 @@ $projectile._config = {
             if(r._transfered){
                 if(callback){callback(r);}else{return true};
             }else{
-                $projectile._config.requestErrorMessage("lock", r);   
+                $projectile._config.requestErrorMessage("lock", r, data);
             }
         });
     },
@@ -41,11 +47,11 @@ $projectile._config = {
                 rightSide: '<div class="table-container files-items-table">\
                                 <div class="table-heading filter-list-mode">\
                                     <div class="table-col" style="width:1px"><input type="checkbox" class="file-item-check" id="files-item-all" disabled><label for="files-item-all"></label></div>\
-                                    <div class="table-col"><a class="selected" data-sort="name">'+$projectile.captions.tName+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col"><a data-sort="size">'+$projectile.captions.tSize+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col"><a data-sort="date">'+$projectile.captions.tDate+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col"><a data-sort="user">'+$projectile.captions.tUser+' <i class="icon-jfi-sort"></i></a></div>\
-                                    <div class="table-col">'+$projectile.captions.tComment+' <i class="icon-jfi-sort"></i></div>\
+                                    <div class="table-col"><a class="selected" data-sort="name">'+$projectile.captions.tName+'</a></div>\
+                                    <div class="table-col"><a data-sort="size">'+$projectile.captions.tSize+'</a></div>\
+                                    <div class="table-col"><a data-sort="date">'+$projectile.captions.tDate+'</a></div>\
+                                    <div class="table-col"><a data-sort="user">'+$projectile.captions.tUser+'</a></div>\
+                                    <div class="table-col">'+$projectile.captions.tComment+'</div>\
                                     <div class="table-col">'+$projectile.captions.tActions+'</div>\
                                 </div>\
                                 <div class="table-body files-items-list"></div>\
@@ -357,7 +363,7 @@ $(function(){
         $('.view-switcher').find("a."+mode+"-view").addClass("selected");
         
         /* important */
-        $('#content').addClass(mode + "-view");
+        $('.projectile-filer').addClass(mode + "-view");
         $('.right-side div:first-child').html(_c[mode].rightSide);
     }
     

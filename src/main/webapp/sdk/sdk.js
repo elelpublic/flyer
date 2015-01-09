@@ -13,7 +13,7 @@
 */
 (function(){
     var f = {
-        version: "1.2.2",
+        version: "1.2.3",
         u: "/flyer/",
         restUrl: "/flyer/",
         folder: null,
@@ -38,7 +38,7 @@
             commentLeave: "Flyer|Please enter a comment",
             filter: "Default|Filter",
             errorTitle: "System|Error",
-            errorText: "Defalut|Sorry, something is wrong, please try again later",
+            errorText: "Access|Access denied",
             removeConfirmation: "${Phrases:Really delete $0 ?}:::${Flyer:File}",
             noFiles: "Flyer|No files available",
             noFilesSelected: "Flyer|No file selected",
@@ -49,6 +49,7 @@
             lockText: "Flyer|Please enter a reason for locking",
             tInfo: "System|Hint",
             lockCommentEmpty: "Flyer|Please enter a comment",
+            lockDenied: "${Flyer:File '$0' is locked by $1 at $2. Comment was '$3'}",
             tConfirm: "System|Hint",
             download: "Defaulft|Download",
             success: "Document|Success",
@@ -61,6 +62,7 @@
             yes: "Document|Yes",
             no: "Tooltip|No",
             cancel: "Document|Cancel",
+            openFile: "Document|Open"
         },
         
         init: function(){
@@ -237,12 +239,12 @@
                 f._ajax(f.u + "templates/thumbnails/index.html", 'GET', {}, function(r){
                     f.s[0].el.innerHTML = r;
                     f.getScript("templates/thumbnails/js/scripts.js");
-                    if(f.storage("ViewMode") && f.storage("ViewMode") == "list"){
-                        f.getScript("templates/thumbnails/js/custom-list-view.js");
-                        $projectile.viewMode = "list";
-                    }else{
+                    if(f.storage("ViewMode") && f.storage("ViewMode") == "grid"){
                         f.getScript("templates/thumbnails/js/custom.js");
                         $projectile.viewMode = "grid";
+                    }else{
+                        f.getScript("templates/thumbnails/js/custom-list-view.js");
+                        $projectile.viewMode = "list";
                     }
                 });
             }
@@ -284,7 +286,9 @@
                 }
             },
             remove: function(data, callback){
-                f._ajax(f.restUrl + "rest/api/json/0/filerevisions/" + data.rId, 'DELETE', null, function(r){
+                var url = "rest/api/json/0/filerevisions/" + data.rId;
+                if(data.fId && (!data.isVersion || data.revisions)){ url = "rest/api/json/0/filehistories/" + data.fId; }
+                f._ajax(f.restUrl + url, 'DELETE', null, function(r){
                     if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                         data.locked = true
                         r._transfered = true;
@@ -304,6 +308,7 @@
         getFiles: function(folder, callback) {
             var files = [],
                 id = (folder && typeof folder == "string" ? folder : f.folder);
+            f.files = [];
             f._ajax(f.restUrl + "rest/api/json/0/filehistories?folder=" + id, 'GET', {}, function(r){
                 if(r.Entries && r.Entries.length > 0 && r.Entries[0]){
                     var total = r.Entries.length,

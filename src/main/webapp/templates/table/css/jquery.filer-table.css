@@ -1,6 +1,10 @@
+/*
+    @Page
+*/
+
 .files-items-table input[type=checkbox]+label,input[type=radio]+label {
     display: inline-block;
-    min-height: 20px;
+    min-height: 19px;
     margin: 0;
     font-size: 14px;
     vertical-align: middle;
