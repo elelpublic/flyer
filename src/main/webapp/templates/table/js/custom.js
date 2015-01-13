@@ -35,6 +35,11 @@ $(document).ready(function(){
                                             </div>';
 
         _filerOpts.uploadFile.success = function(data, el, l, o, p, s){
+        	if( !data || !data.Entries ) {
+        		_filerOpts.uploadFile.error( el );
+        		modal( { type: 'error', title: $projectile.captions.errorTitle, text: data.Message } );
+        		return false;
+        	}
             var val = data.Entries[0],
                 data = [],
                 revisionsFind = function(id){
@@ -118,7 +123,7 @@ $(document).ready(function(){
             el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
                 $(this).closest(".table-row").find(".files-item-icon").parent().html('<i class="icon-jfi-minus-circle files-item-icon" style="color: #d9534f"></i>');
                 setTimeout(function(){
-                    el.fadeOut("slow")   
+                    el.fadeOut("slow", function(){$(this).remove()})
                 }, 1500);
                 $(this).remove();
             })
