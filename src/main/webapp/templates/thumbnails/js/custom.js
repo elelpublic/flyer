@@ -71,6 +71,11 @@ $(document).ready(function(){
                                         </div>\
                                     </li>';
         _filerOpts.uploadFile.success = function(data, el, l, o, p, s){
+        	if( !data || !data.Entries ) {
+        		_filerOpts.uploadFile.error( el );
+        		modal( { type: 'error', title: $projectile.captions.errorTitle, text: data.Message } );
+        		return false;
+        	}
             var val = data.Entries[0],
                 data = [],
                 revisionsFind = function(id){
@@ -151,7 +156,7 @@ $(document).ready(function(){
             el.find('.jFiler-jProgressBar').fadeOut("slow", function(){
                 $('<ul class="list-inline pull-left"><li><em class="jFiler-upload-error text-danger"><i class="icon-jfi-exclamation-circle"></i> '+$projectile.captions.errorText+'!</em></li></ul>').hide().appendTo($(this).parent()).fadeIn('slow');
                 setTimeout(function(){
-                    el.fadeOut("slow")   
+                	el.fadeOut("slow", function(){$(this).remove()})
                 }, 1500);
                 $(this).remove();
             })
