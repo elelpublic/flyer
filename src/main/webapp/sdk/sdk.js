@@ -183,21 +183,7 @@
             var preloader = document.body.getElementsByClassName('preloader');
             
             if (preloader && preloader.length > 0) {
-                function fadeOut(el) {
-                    el.style.opacity = 1;
-                    var last = +new Date();
-                    var tick = function() {
-                        el.style.opacity = +el.style.opacity - (new Date() - last) / 400;
-                        last = +new Date();
-                        if (+el.style.opacity > 0) {
-                            (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16)
-                        } else {
-                            preloader[0].parentNode.removeChild(preloader[0]);
-                        }
-                    };
-                    tick();
-                }
-                fadeOut(preloader[0]);
+                preloader[0].parentNode.removeChild(preloader[0]);
             }
             
             if(event == "hide") { return; }
