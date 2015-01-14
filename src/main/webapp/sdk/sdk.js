@@ -183,36 +183,7 @@
             var preloader = document.body.getElementsByClassName('preloader');
             
             if (preloader && preloader.length > 0) {
-                function fadeOut(el, options) {
-                    var start = new Date;
-                    var id = setInterval(function() {
-                        var timePassed = new Date - start;
-                        var progress = timePassed / options.duration;
-                        if (progress > 1) {
-                            progress = 1;
-                        }
-                        options.progress = progress;
-                        var delta = options.delta(progress);
-                        options.step(delta);
-                        if (progress == 1) {
-                            clearInterval(id);
-                            options.complete();
-                        }
-                    }, options.delay || 10);
-                }
-                fadeOut(preloader[0], {
-                    duration: 400,
-                    delta: function(progress) {
-                        progress = this.progress;
-                        return (0.5 - Math.cos(progress * Math.PI) / 2);
-                    },
-                    complete: function(){
-                        preloader[0].parentNode.removeChild(preloader[0]);
-                    },
-                    step: function(delta) {
-                        preloader[0].style.opacity = 1 - delta;
-                    }
-                });
+                preloader[0].parentNode.removeChild(preloader[0]);
             }
             
             if(event == "hide") { return; }
