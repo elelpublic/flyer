@@ -295,6 +295,7 @@ a[class*="item-versions-show"]:hover {
 
 .header-content {
     padding: 23px 0;
+    background: rgba(247, 248, 250, 0.98);
 }
 
 .header-content .filter-list-mode li a {
