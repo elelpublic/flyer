@@ -32,7 +32,7 @@
             tName: "Document|Title",
             tSize: "Document|Size",
             tDate: "Document|Date",
-            tUser: "Document|Employee",
+            tUser: "Document|User",
             tComment: "Document|Comment",
             tActions: "Document.Plural|Action",
             commentLeave: "Flyer|Please enter a comment",
