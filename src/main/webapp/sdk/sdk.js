@@ -194,9 +194,9 @@
             if(!type){
                 if (typeof jQuery == "undefined") { f.getScript("bower_components/jquery/jquery.min.js"); }
                 f.getScript("js/jquery.filer.js");
-                if(typeof modal == "undefined") { f.getStyles("css/plugins/jquery.modal.css"); f.getScript("js/jquery.modal.min.js"); }
-                if(typeof notify == "undefined") { f.getStyles("css/plugins/jquery.notify.css"); f.getScript("js/jquery.notify.min.js"); }
-                f.getStyles("css/plugins/jquery.dropdown.css"); f.getScript("js/jquery.dropdown.min.js");
+                if(typeof modal == "undefined") { f.getStyles("bower_components/jquery.modal/css/jquery.modal.css"); f.getScript("bower_components/jquery.modal/js/jquery.modal.min.js"); }
+                if(typeof notify == "undefined") { f.getStyles("bower_components/jquery.notify/css/jquery.notify.css"); f.getScript("bower_components/jquery.notify/js/jquery.notify.min.js"); }
+                f.getStyles("bower_components/jquery.dropdown/css/jquery.dropdown.css"); f.getScript("bower_components/jquery.dropdown/js/jquery.dropdown.min.js");
             }
             if(type == "1") {
                 f.getStyles("css/plugins/jquery.filer.css");
