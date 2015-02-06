@@ -32,7 +32,7 @@
             tName: "Document|Title",
             tSize: "Document|Size",
             tDate: "Document|Date",
-            tUser: "Document|User",
+            tUser: "Document|Employee",
             tComment: "Document|Comment",
             tActions: "Document.Plural|Action",
             commentLeave: "Flyer|Please enter a comment",
@@ -120,19 +120,21 @@
 
         getStyles: function(href) {
             var link = document.createElement("link"),
-                src = f.u + href;
+                src = f.u + href,
+		head = document.head || document.getElementsByTagName('head')[0];
             link.href = src;
             link.rel = "stylesheet";
             link.type = "text/css";
-            document.head.appendChild(link);
+            head.appendChild(link);
         },
 
         getScript: function(href) {
-            var script = document.createElement('script');
+            var script = document.createElement('script'),
+		head = document.head || document.getElementsByTagName('head')[0];
             script.type = "text/javascript";
             script.src = f.u + href + "?v=" + f.version;
             script.async = false;
-            document.getElementsByTagName('head')[0].appendChild(script);
+            head.appendChild(script);
         },
         
         _location: {
@@ -183,7 +185,21 @@
             var preloader = document.body.getElementsByClassName('preloader');
             
             if (preloader && preloader.length > 0) {
-                preloader[0].parentNode.removeChild(preloader[0]);
+                function fadeOut(el) {
+                    el.style.opacity = 1;
+                    var last = +new Date();
+                    var tick = function() {
+                        el.style.opacity = +el.style.opacity - (new Date() - last) / 400;
+                        last = +new Date();
+                        if (+el.style.opacity > 0) {
+                            (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16)
+                        } else {
+                            preloader[0].parentNode.removeChild(preloader[0]);
+                        }
+                    };
+                    tick();
+                }
+                fadeOut(preloader[0]);
             }
             
             if(event == "hide") { return; }
@@ -194,9 +210,9 @@
             if(!type){
                 if (typeof jQuery == "undefined") { f.getScript("bower_components/jquery/jquery.min.js"); }
                 f.getScript("js/jquery.filer.js");
-                if(typeof modal == "undefined") { f.getStyles("bower_components/jquery.modal/css/jquery.modal.css"); f.getScript("bower_components/jquery.modal/js/jquery.modal.min.js"); }
-                if(typeof notify == "undefined") { f.getStyles("bower_components/jquery.notify/css/jquery.notify.css"); f.getScript("bower_components/jquery.notify/js/jquery.notify.min.js"); }
-                f.getStyles("bower_components/jquery.dropdown/css/jquery.dropdown.css"); f.getScript("bower_components/jquery.dropdown/js/jquery.dropdown.min.js");
+                if(typeof modal == "undefined") { f.getStyles("css/plugins/jquery.modal.css"); f.getScript("js/jquery.modal.min.js"); }
+                if(typeof notify == "undefined") { f.getStyles("css/plugins/jquery.notify.css"); f.getScript("js/jquery.notify.min.js"); }
+                f.getStyles("css/plugins/jquery.dropdown.css"); f.getScript("js/jquery.dropdown.min.js");
             }
             if(type == "1") {
                 f.getStyles("css/plugins/jquery.filer.css");
