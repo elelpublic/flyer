@@ -19,6 +19,9 @@
   ],
   "dependencies": {
     "jquery": "~2.0.3",
-    "bootstrap": "~3.3.1"
+    "bootstrap": "~3.3.1",
+    "jquery.modal": "",
+    "jquery.notify": "",
+    "jquery.dropdown": ""
   }
 }
