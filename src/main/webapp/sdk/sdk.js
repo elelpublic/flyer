@@ -120,19 +120,21 @@
 
         getStyles: function(href) {
             var link = document.createElement("link"),
-                src = f.u + href;
+                src = f.u + href,
+                head = document.head || document.getElementsByTagName('head')[0];
             link.href = src;
             link.rel = "stylesheet";
             link.type = "text/css";
-            document.head.appendChild(link);
+            head.appendChild(link);
         },
 
         getScript: function(href) {
-            var script = document.createElement('script');
+            var script = document.createElement('script'),
+            	head = document.head || document.getElementsByTagName('head')[0];
             script.type = "text/javascript";
             script.src = f.u + href + "?v=" + f.version;
             script.async = false;
-            document.getElementsByTagName('head')[0].appendChild(script);
+            head.appendChild(script);
         },
         
         _location: {
