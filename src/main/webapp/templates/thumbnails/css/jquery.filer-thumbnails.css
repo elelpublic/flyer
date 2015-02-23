@@ -609,7 +609,7 @@ a[class*="item-versions-show"]:hover {
     height: 220px;
     text-align: center;
     font-size: 36px;
-    line-height: 246px;
+    line-height: 220px;
 }
 .files-items-list li.veryBig-back-button .item-thumb a{
     display: block;
@@ -830,5 +830,9 @@ a[class*="item-versions-show"]:hover {
     }
     .files-items-list li.files-item .item-info .item-others{
         display: none;
+    }
+    .files-items-list li.veryBig-back-button .item-thumb{
+    	height: 190px;
+    	line-height: 190px;
     }
 }
