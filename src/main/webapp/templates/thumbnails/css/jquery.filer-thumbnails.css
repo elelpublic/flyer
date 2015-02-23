@@ -117,17 +117,16 @@
 
 /* blue */
 .jFiler-input-choose-btn.blue {
-    color: #728CB5;
-    border: 1px solid #728CB5;
+    color: #008BFF;
+    border: 1px solid #008BFF;
 }
 
 .jFiler-input-choose-btn.blue:hover {
-    background: #728CB5;
+    background: #008BFF;
 }
 
 .jFiler-input-choose-btn.blue:active {
-    *background: #008BFF;
-    background: #728CB5;
+    background: #008BFF;
 }
 
 /* green */
@@ -271,10 +270,9 @@ a[class*="item-versions-show"]:hover {
 }
 
 .header-logo {
-    background: #16a7fa;
+    *background: #16a7fa;
+    *background: rgba(114, 140, 181, 0.85);
     background: #008BFF;
-    background: #728CB5;
-    background: rgba(114, 140, 181, 0.85);
     color: #fff;
 }
 
