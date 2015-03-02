@@ -14,8 +14,8 @@
 (function(){
     var f = {
         version: "1.2.3",
-        u: "/flyer/",
-        restUrl: "/flyer/",
+        u: "",
+        restUrl: "../../restapps/flyer/",
         folder: null,
         s: [],
         captions: {
@@ -245,7 +245,7 @@
                         locked: true,
                         lockComment: data._lockComment
                     }
-                    f._ajax(f.restUrl + "rest/api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
+                    f._ajax(f.restUrl + "api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
                         if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                             data.locked = true
                             r._transfered = true;
@@ -260,7 +260,7 @@
                     var params = {
                         locked: false,
                     }
-                    f._ajax(f.restUrl + "rest/api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
+                    f._ajax(f.restUrl + "api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
                         if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                             data.locked = false
                             r._transfered = true;
@@ -274,8 +274,8 @@
                 }
             },
             remove: function(data, callback){
-                var url = "rest/api/json/0/filerevisions/" + data.rId;
-                if(data.fId && (!data.isVersion || data.revisions)){ url = "rest/api/json/0/filehistories/" + data.fId; }
+                var url = "api/json/0/filerevisions/" + data.rId;
+                if(data.fId && (!data.isVersion || data.revisions)){ url = "api/json/0/filehistories/" + data.fId; }
                 f._ajax(f.restUrl + url, 'DELETE', null, function(r){
                     if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                         data.locked = true
@@ -297,7 +297,7 @@
             var files = [],
                 id = (folder && typeof folder == "string" ? folder : f.folder);
             f.files = [];
-            f._ajax(f.restUrl + "rest/api/json/0/filehistories?folder=" + id, 'GET', {}, function(r){
+            f._ajax(f.restUrl + "api/json/0/filehistories?folder=" + id, 'GET', {}, function(r){
                 if(r.Entries && r.Entries.length > 0 && r.Entries[0]){
                     var total = r.Entries.length,
                         s = 0;
@@ -305,7 +305,7 @@
                         if(!r.Entries[key]){break;}
                         var val = r.Entries[key];
                         val.orderKey = key;
-                        f._ajax(f.restUrl + "rest/api/json/0/filerevisions?fileHistory=" + val.id, 'GET', {a: val}, function(r2, b){
+                        f._ajax(f.restUrl + "api/json/0/filerevisions?fileHistory=" + val.id, 'GET', {a: val}, function(r2, b){
                             if(r2 && r2.Entries && r2.Entries[0]){
                                 r2.Entries[0].fId = b.id;
                                 r2.Entries[0].locked = b.locked;
@@ -352,7 +352,7 @@
                 first = false;
             }
             
-            f._ajax(f.restUrl + "rest/api/json/0/captions" + data, 'GET', {}, function(r){
+            f._ajax(f.restUrl + "api/json/0/captions" + data, 'GET', {}, function(r){
                 var i = 0;
                 for(key in captions){
                     captions[key] = r.Entries[i].translation.replace(/:\s*$/, ""); //removes last :

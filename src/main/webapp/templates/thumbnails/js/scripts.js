@@ -1,6 +1,7 @@
 $projectile._config = {
     input_selector: "input#filer1",
-    uploadURL: $projectile.u + 'rest/api/json/0/folderuploads/' + $projectile.folder,
+//    uploadURL: $projectile.u + 'restapps/flyer/api/json/0/folderuploads/' + $projectile.folder,
+    uploadURL: '/projectile/restapps/flyer/api/json/0/folderuploads/' + $projectile.folder,
     list_selector: ".files-items-list",
     item_selector: ".files-item",
     remove_item_selector: ".item-trash-action",
