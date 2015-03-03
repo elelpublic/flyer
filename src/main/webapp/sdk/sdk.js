@@ -14,8 +14,8 @@
 (function(){
     var f = {
         version: "1.2.4",
-        u: "",
-        restUrl: "../../restapps/flyer/",
+        u: "/projectile/apps/flyer/", // source directory
+        restUrl: "/projectile/restapps/flyer/", // rest request url
         folder: null,
         s: [],
         captions: {
