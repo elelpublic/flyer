@@ -13,7 +13,7 @@
 */
 (function(){
     var f = {
-        version: "1.2.3",
+        version: "1.2.4",
         u: "",
         restUrl: "../../restapps/flyer/",
         folder: null,
