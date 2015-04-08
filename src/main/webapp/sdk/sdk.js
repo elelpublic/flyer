@@ -13,10 +13,13 @@
 */
 (function(){
     var f = {
-        version: "1.2.4",
+        version: "1.2.5",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         folder: null,
+        supportDownload : typeof document.createElement('a').download != 'undefined'
+        	&& !( navigator.userAgent.indexOf('Linux') != -1
+        	&& navigator.userAgent.indexOf('Firefox') != -1 ), // download does not work with linux firefox
         s: [],
         captions: {
             Flyer: "Flyer|Flyer",
