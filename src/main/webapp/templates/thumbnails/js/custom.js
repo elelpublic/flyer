@@ -42,7 +42,7 @@ $(document).ready(function(){
                                                         <div class="item-thumb-overlay-info animated fadeIn">\
                                                             <div style="display:table-cell;vertical-align: middle;">\
                                                                 <br>\
-                                                                <a href="{{fi-file}}" title="'+$projectile.captions.download+'" class="download-button-blue" download="{{fi-name}}"><i class="icon-jfi-download-o"></i></a>\
+                                                                <a href="{{fi-file}}" target="_blank" title="'+$projectile.captions.download+'" class="download-button-blue"'+($projectile.supportDownload?' download="{{fi-name}}"':'')+'><i class="icon-jfi-download-o"></i></a>\
                                                                 <a href="{{fi-file}}" target="_blank" title="'+$projectile.captions.openFile+'" class="download-button-red"><i class="icon-jfi-external-link"></i></a>\
                                                                 <br><br>\
                                                                 <b>{{fi-name}}</b>\

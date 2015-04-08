@@ -33,7 +33,7 @@ $(document).ready(function(){
                                                 <div class="table-col">{{fi-comment}}</div>\
                                                 <div class="files-item-actions table-col">\
                                                     <ul class="list-inline">\
-                                                        <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="'+$projectile.captions.download+'" download="{{fi-name}}"></a></li>\
+                                                        <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="'+$projectile.captions.download+'"'+($projectile.supportDownload?' download="{{fi-name}}"':'')+'></a></li>\
                                                         {{fi-versionsButton}}\
                                                         {{fi-lockIcon}}\
                                                         <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
