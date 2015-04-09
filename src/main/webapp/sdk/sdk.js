@@ -65,7 +65,16 @@
             yes: "Document|Yes",
             no: "Tooltip|No",
             cancel: "Document|Cancel",
-            openFile: "Document|Open"
+            openFile: "Document|Open",
+            today: "System|Today",
+            yesterday: "System|Yesterday",
+            day_0: "WeekdayShort|0",
+            day_1: "WeekdayShort|1",
+            day_2: "WeekdayShort|2",
+            day_3: "WeekdayShort|3",
+            day_4: "WeekdayShort|4",
+            day_5: "WeekdayShort|5",
+            day_6: "WeekdayShort|6"
         },
         
         init: function(){
@@ -437,18 +446,35 @@
             date = !date ? new Date() : new Date(date);
             var d = {
                 day: date.getDate(),
+                dayName: f.captions["day_"+date.getDate()],
                 month: date.getMonth()+1,
                 year: date.getFullYear(),
                 hours: date.getHours(),
                 minutes: date.getMinutes(),
                 seconds: date.getSeconds()
-            };
+            },
+                dateformat = "";
+            /*
             for(key in d){
                 if(parseInt(d[key]) <= 9){
                     d[key] = "0" + d[key].toString();    
                 }
             }
-            return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
+            */
+            
+            //date
+            var today = new Date(),
+                yesterday = new Date(new Date().setDate(today.getDate()-1));
+            if(date.toDateString() == today.toDateString()){
+                dateformat = f.captions.today;
+            }else if(date.toDateString == yesterday.toDateString()){
+                dateformat = f.captions.yesterday;
+            }else{
+                d.dayName + " " + d.day+"."+d.month+"."+d.year   
+            }
+            
+            return dateformat + " " + d.hours+":"+d.minutes+":"+d.seconds;
+            //return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
         },
         
         sizeFormat: function(bytes){
