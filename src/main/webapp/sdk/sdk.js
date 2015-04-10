@@ -467,10 +467,10 @@
                 yesterday = new Date(new Date().setDate(today.getDate()-1));
             if(date.toDateString() == today.toDateString()){
                 dateformat = f.captions.today;
-            }else if(date.toDateString == yesterday.toDateString()){
+            }else if(date.toDateString() == yesterday.toDateString()){
                 dateformat = f.captions.yesterday;
             }else{
-                d.dayName + " " + d.day+"."+d.month+"."+d.year   
+                dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
             }
             
             return dateformat + " " + d.hours+":"+d.minutes+":"+d.seconds;
