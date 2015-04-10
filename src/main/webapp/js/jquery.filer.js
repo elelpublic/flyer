@@ -353,6 +353,7 @@
                             e.stopPropagation();
                             p.addClass('dragged');
                             f._set('feedback', n.captions.drop);
+                            clearTimeout(f._dgrChx);
                             n.dragDrop.dragEnter != null && typeof n.dragDrop.dragEnter == "function" ? n.dragDrop.dragEnter(e, o, s, p) : null;
                         },
                         dragLeave: function(e) {
@@ -361,9 +362,11 @@
                             
                             if(!f._dragDrop._dragLeaveCheck(e)){return false}
                             
-                            p.removeClass('dragged');
-                            f._set('feedback', n.captions.feedback);
-                            n.dragDrop.dragLeave != null && typeof n.dragDrop.dragLeave == "function" ? n.dragDrop.dragLeave(e, o, s, p) : null;
+                            f._dgrChx = setTimeout(function(){
+                                p.removeClass('dragged');
+                                f._set('feedback', n.captions.feedback);
+                                n.dragDrop.dragLeave != null && typeof n.dragDrop.dragLeave == "function" ? n.dragDrop.dragLeave(e, o, s, p) : null;
+                            }, 250);
                         },
                         drop: function(e) {
                             e.preventDefault();
@@ -378,6 +381,7 @@
                             }
                             f._set('feedback', n.captions.feedback);
                             f._onChange(e, e.originalEvent.dataTransfer.files);
+                            clearTimeout(f._dgrChx);
                             n.dragDrop.drop != null && typeof n.dragDrop.drop == "function" ? n.dragDrop.drop(e.originalEvent.dataTransfer.files, e, o, s, p) : null;
                         },
                         _dragLeaveCheck: function(e){
