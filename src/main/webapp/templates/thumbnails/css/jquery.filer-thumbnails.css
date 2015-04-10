@@ -245,6 +245,10 @@ a[class*="item-versions-show"]:hover {
     color: #27ae60
 }
 
+a[class*="item-settings-action"]:hover {
+    color: #616161
+}
+
 /* @Globals */
 .bgcolor-1 {
     background-color: #f9fafb;
