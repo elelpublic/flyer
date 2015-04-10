@@ -61,6 +61,7 @@
             back: "System|Back",
             unlockMessage: "Flyer|File was unlocked",
             lockMessage: "Flyer|File was locked",
+            settings: "Document|Settings",
             ok: "Document|OK",
             yes: "Document|Yes",
             no: "Tooltip|No",
@@ -285,6 +286,22 @@
                     }, "json");   
                 }
             },
+            edit: function(data, callback){
+                var params = {
+                    comment: data.comment,
+                }
+                f._ajax(f.restUrl + "api/json/0/filerevisions/?fileHistory=" + data.fId, 'PUT', params, function(r){
+                    if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
+                        data.locked = true
+                        r._transfered = true;
+                    }else{
+                        if(typeof(r) != "object"){r = new Object()} 
+                        r._transfered = false;
+                    }
+                    callback(r);
+
+                }, "json");
+            },
             remove: function(data, callback){
                 var url = "api/json/0/filerevisions/" + data.rId;
                 if(data.fId && (!data.isVersion || data.revisions)){ url = "api/json/0/filehistories/" + data.fId; }
@@ -333,7 +350,7 @@
                                     for(var i = 0; i<r2.Entries.length; i++){
                                         r2.Entries[0].revisions.push(r2.Entries[i]);
                                     }
-                                }
+                                } 
 
                                 files.push(r2.Entries[0]);
                             }
@@ -396,8 +413,12 @@
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400){
                     resp = request.responseText;
-                    if(dataType && dataType == "json"){
+                    if(dataType && dataType == "json" && resp.substr(0,1)!="<"){
                         resp = JSON.parse(resp);   
+                    }else{
+                        if(resp.substr(0, 12) == "<html><head>"){
+                            resp = false;
+                        }
                     }
                     if(callback && typeof callback == "function"){
                         callback(resp, data.a);   
@@ -406,7 +427,7 @@
             };
 
             request.onerror = function() {
-                location.href = f.u + "404.html";
+                console.error("Failed to load response data!", arguments);
             };
             
             if(data){
@@ -467,10 +488,10 @@
                 yesterday = new Date(new Date().setDate(today.getDate()-1));
             if(date.toDateString() == today.toDateString()){
                 dateformat = f.captions.today;
-            }else if(date.toDateString == yesterday.toDateString()){
+            }else if(date.toDateString() == yesterday.toDateString()){
                 dateformat = f.captions.yesterday;
             }else{
-                d.dayName + " " + d.day+"."+d.month+"."+d.year   
+                dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
             }
             
             return dateformat + " " + d.hours+":"+d.minutes+":"+d.seconds;
