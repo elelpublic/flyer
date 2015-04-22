@@ -36,6 +36,7 @@ $(document).ready(function(){
                                                         <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="'+$projectile.captions.download+'"'+($projectile.supportDownload?' download="{{fi-name}}"':'')+'></a></li>\
                                                         {{fi-versionsButton}}\
                                                         {{fi-lockIcon}}\
+                                                        <!--<li><a class="icon-jfi-settings item-settings-action" title="'+$projectile.captions.settings+'"></a></li>-->\
                                                         <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
                                                     </ul>\
                                                 </div>\

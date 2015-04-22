@@ -27,6 +27,7 @@ $projectile._config = {
             if(a){
                 callback(data);
             }
+            return true;
         }});
     },
     btnLoading: function(el, a){
@@ -216,7 +217,7 @@ $(function(){
             break;
             case "all-lock-action":
                 modal({type: "prompt", title: $projectile.captions.tPrompt, text: $projectile.captions.lockText+":", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}, callback: function(comment){
-                    if(!comment){ modal({type: "warning", title: $projectile.captions.tInfo, text: $projectile.captions.lockCommentEmpty+"!", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel},}); return false }
+                    if(!comment){ modal({type: "warning", title: $projectile.captions.tInfo, text: $projectile.captions.lockCommentEmpty+"!", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel},}); return true }
                     for(key in $projectile._config.items_selected){
                         var val = $projectile._config.items_selected[key],
                             data = $.grep($projectile.files, function(a,b){
@@ -228,7 +229,7 @@ $(function(){
                     }
                     
                     location.reload();
-                    
+                    return true;
                 }});
             break;
             case "all-trash-action":
@@ -250,6 +251,7 @@ $(function(){
                         }
                         $(".items-manipulation").hide();
                     }
+                    return true;
                 }});
             break;
         }
@@ -285,7 +287,7 @@ $(function(){
             });
         }else{
             modal({type: "prompt", title: $projectile.captions.tPrompt, text: $projectile.captions.lockText+":", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}, callback: function(comment){
-                    if(!comment){ $projectile._config.btnLoading(el,true); modal({type: "warning", title: $projectile.captions.tInfo, text: $projectile.captions.lockCommentEmpty+"!", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}}); return false }
+                    if(!comment){ $projectile._config.btnLoading(el,true); modal({type: "warning", title: $projectile.captions.tInfo, text: $projectile.captions.lockCommentEmpty+"!", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}}); return true }
                 data[0]._lockComment = comment;
                 $projectile._config.btnLoading(el);        
                 $projectile._config.lockService(data[0], function(){
@@ -301,6 +303,7 @@ $(function(){
                     $projectile._config.btnLoading(el,true);
                     el.removeClass("icon-jfi-lock").addClass("icon-jfi-unlock");
                 });
+                return true;
             }});
         }
     });

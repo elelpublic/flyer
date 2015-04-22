@@ -60,9 +60,10 @@ $(document).ready(function(){
                                                             <li><input type="checkbox" class="file-item-check" id="files-item-{{fi-fId}}"><label for="files-item-{{fi-fId}}">&nbsp;</label></li>\
                                                         </ul>\
                                                         <ul class="list-inline pull-right">\
-                                                            <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-external-link item-open-action" title="'+$projectile.captions.openFile+'"></a></li>\
+                                                            <li style="padding-left:0;"><a href="{{fi-file}}" target="_blank" class="icon-jfi-external-link item-open-action" title="'+$projectile.captions.openFile+'"></a></li>\
                                                             {{fi-versionsButton}}\
                                                             {{fi-lockIcon}}\
+                                                            <!--<li><a class="icon-jfi-settings item-settings-action" title="'+$projectile.captions.settings+'"></a></li>-->\
                                                             <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
                                                         </ul>\
                                                     </div>\

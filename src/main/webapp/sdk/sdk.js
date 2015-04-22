@@ -61,11 +61,21 @@
             back: "System|Back",
             unlockMessage: "Flyer|File was unlocked",
             lockMessage: "Flyer|File was locked",
+            settings: "Document|Settings",
             ok: "Document|OK",
             yes: "Document|Yes",
             no: "Tooltip|No",
             cancel: "Document|Cancel",
-            openFile: "Document|Open"
+            openFile: "Document|Open",
+            today: "System|Today",
+            yesterday: "System|Yesterday",
+            day_0: "WeekdayShort|0",
+            day_1: "WeekdayShort|1",
+            day_2: "WeekdayShort|2",
+            day_3: "WeekdayShort|3",
+            day_4: "WeekdayShort|4",
+            day_5: "WeekdayShort|5",
+            day_6: "WeekdayShort|6"
         },
         
         init: function(){
@@ -276,6 +286,22 @@
                     }, "json");   
                 }
             },
+            edit: function(data, callback){
+                var params = {
+                    comment: data.comment,
+                }
+                f._ajax(f.restUrl + "api/json/0/filerevisions/?fileHistory=" + data.fId, 'PUT', params, function(r){
+                    if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
+                        data.locked = true
+                        r._transfered = true;
+                    }else{
+                        if(typeof(r) != "object"){r = new Object()} 
+                        r._transfered = false;
+                    }
+                    callback(r);
+
+                }, "json");
+            },
             remove: function(data, callback){
                 var url = "api/json/0/filerevisions/" + data.rId;
                 if(data.fId && (!data.isVersion || data.revisions)){ url = "api/json/0/filehistories/" + data.fId; }
@@ -324,7 +350,7 @@
                                     for(var i = 0; i<r2.Entries.length; i++){
                                         r2.Entries[0].revisions.push(r2.Entries[i]);
                                     }
-                                }
+                                } 
 
                                 files.push(r2.Entries[0]);
                             }
@@ -387,8 +413,12 @@
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400){
                     resp = request.responseText;
-                    if(dataType && dataType == "json"){
+                    if(dataType && dataType == "json" && resp.substr(0,1)!="<"){
                         resp = JSON.parse(resp);   
+                    }else{
+                        if(resp.substr(0, 12) == "<html><head>"){
+                            resp = false;
+                        }
                     }
                     if(callback && typeof callback == "function"){
                         callback(resp, data.a);   
@@ -397,7 +427,7 @@
             };
 
             request.onerror = function() {
-                location.href = f.u + "404.html";
+                console.error("Failed to load response data!", arguments);
             };
             
             if(data){
@@ -437,18 +467,35 @@
             date = !date ? new Date() : new Date(date);
             var d = {
                 day: date.getDate(),
+                dayName: f.captions["day_"+date.getDate()],
                 month: date.getMonth()+1,
                 year: date.getFullYear(),
                 hours: date.getHours(),
                 minutes: date.getMinutes(),
                 seconds: date.getSeconds()
-            };
+            },
+                dateformat = "";
+            /*
             for(key in d){
                 if(parseInt(d[key]) <= 9){
                     d[key] = "0" + d[key].toString();    
                 }
             }
-            return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
+            */
+            
+            //date
+            var today = new Date(),
+                yesterday = new Date(new Date().setDate(today.getDate()-1));
+            if(date.toDateString() == today.toDateString()){
+                dateformat = f.captions.today;
+            }else if(date.toDateString() == yesterday.toDateString()){
+                dateformat = f.captions.yesterday;
+            }else{
+                dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
+            }
+            
+            return dateformat + " " + d.hours+":"+d.minutes+":"+d.seconds;
+            //return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
         },
         
         sizeFormat: function(bytes){
