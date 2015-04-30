@@ -819,6 +819,28 @@ a[class*="item-settings-action"]:hover {
     display: none;
 }
 
+.files-item-tooltip-image {
+    position: fixed;
+    left: 0;
+    top: 0;
+    max-width: 185px;
+    min-width: 170px;
+    background: #fff;
+    border: 6px solid #444;
+    z-index: 51;
+    display: none;
+}
+
+.files-item-tooltip-image .jFiler-item-thumb-image {
+    max-height: 185px;
+}
+
+.files-item-tooltip-image .files-item-tooltip-title {
+    background: #444;
+    color: #fff;
+    padding: 4px 3px 0px 3px;
+}
+
 @media screen and (max-width : 1000px) {
     .table-body {
         font-size: 11px;   
