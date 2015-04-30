@@ -467,7 +467,7 @@
             date = !date ? new Date() : new Date(date);
             var d = {
                 day: date.getDate(),
-                dayName: f.captions["day_"+date.getDate()],
+                dayName: f.captions["day_"+date.getDay()],
                 month: date.getMonth()+1,
                 year: date.getFullYear(),
                 hours: date.getHours(),
