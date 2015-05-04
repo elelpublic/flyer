@@ -501,7 +501,7 @@ a[class*="item-settings-action"]:hover {
 
 .files-items-list li.files-item .item-thumb .item-thumb-overlay .item-thumb-overlay-info a.download-button-blue, .files-items-list li.files-item .item-thumb .item-thumb-overlay .item-thumb-overlay-info a.download-button-red {
     color: #fcfcfc;
-    background: #F97B7B;
+    background: #ed5a5a;
     border-radius: 50%;
     width: 35px;
     height: 35px;
@@ -852,7 +852,8 @@ a[class*="item-settings-action"]:hover {
         margin: 0;   
     }
     .files-items-list li.files-item .item-info .item-title{
-        margin-bottom: 5px;   
+        margin-bottom: 5px;
+        font-size: 13px;
     }
     .files-items-list li.files-item .item-info .item-others{
         display: none;

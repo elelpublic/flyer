@@ -155,6 +155,7 @@ $(document).ready(function(){
             val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
             val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.versions+'"><i class="icon-jfi-history"></i></a></li>' : '');
         }
+        $projectile.files.sort($projectile._config.defaultSort);
         $($projectile._config.input_selector).trigger("filer.append", {data: $projectile.files});
 
         /* Lock Icon dropdown */
