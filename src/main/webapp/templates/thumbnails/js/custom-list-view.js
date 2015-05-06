@@ -26,7 +26,7 @@ $(document).ready(function(){
                                     </div>';
         _filerOpts.templates.itemAppended = '<div class="table-row files-item" data-file-id="{{fi-fId}}" data-file-revisionId="{{fi-rId}}" data-file-type="{{fi-type}}" data-file-extension="{{fi-extension}}" data-file-name="{{fi-name}}" data-file-user="{{fi-createdByName}}" data-file-size="{{fi-size}}" data-file-date="{{fi-createdDate}}" data-file-orderKey="{{fi-orderKey}}">\
                                                 <div class="table-col _fcli"><input type="checkbox" class="file-item-check" id="files-item-{{fi-fId}}"><label for="files-item-{{fi-fId}}"></label></div>\
-                                                <div class="table-col"><a href="{{fi-file}}" target="_blank" class="item-download-action ns-underline" title="{{fi-name}}">{{fi-name | limitTo: 45}}</a></div>\
+                                                <div class="table-col"><a href="{{fi-file}}" target="_blank" class="item-download-action files-item-title ns-underline" title="{{fi-name}}">{{fi-name | limitTo: 45}}</a></div>\
                                                 <div class="table-col">{{fi-size2}}</div>\
                                                 <div class="table-col">{{fi-date}}</div>\
                                                 <div class="table-col">{{fi-createdByName}}</div>\
@@ -40,6 +40,7 @@ $(document).ready(function(){
                                                         <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
                                                     </ul>\
                                                 </div>\
+                                                <div class="files-item-tooltip-image">{{fi-image}}<div class="files-item-tooltip-title">{{fi-name}}</div></div>\
                                             </div>';
         
         _filerOpts.uploadFile.success = function(data, el, l, o, p, s){
@@ -154,6 +155,7 @@ $(document).ready(function(){
             val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
             val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.versions+'"><i class="icon-jfi-history"></i></a></li>' : '');
         }
+        $projectile.files.sort($projectile._config.defaultSort);
         $($projectile._config.input_selector).trigger("filer.append", {data: $projectile.files});
 
         /* Lock Icon dropdown */

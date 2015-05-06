@@ -51,6 +51,9 @@ $projectile._config = {
             el.removeClass('disabled animated pulse infinite'); 
         }
     },
+    defaultSort: function(a, b){
+        return +new Date(a.created) - +new Date(b.created);
+    },
     items_selected: [],
     views: {
         list: {
@@ -165,7 +168,9 @@ $(function(){
     $('body').on('click', '.filter-list-mode:not(.disabled) a[data-sort]', function(e){
         e.preventDefault();
         
-        if($(this).hasClass("selected")){return true}
+        var inverted = false;
+        
+        if($(this).hasClass("inverted")){ inverted = true; $(this).removeClass('inverted'); }else{ $(this).addClass('inverted') }
         $('.filter-list-mode a[data-sort]').removeClass('selected');
         
         var el = $(this),
@@ -176,7 +181,7 @@ $(function(){
                         return $(a).attr("data-file-name").toUpperCase().localeCompare($(b).attr("data-file-name").toUpperCase());
                     break;
                     case "size":
-                        return +$(a).attr("data-file-size") - +$(b).attr("data-file-size");
+                        return $(a).attr("data-file-size") - +$(b).attr("data-file-size")
                     break;
                     case "user":
                         return $(a).attr("data-file-user").toUpperCase().localeCompare($(b).attr("data-file-user").toUpperCase());
@@ -190,6 +195,10 @@ $(function(){
             sort = $($projectile._config.list_selector + " " + $projectile._config.item_selector).sort(function(a,b){
                 return sortBy(a, b);
             });
+        
+        if(inverted){
+            sort = sort.toArray().reverse();   
+        }
         
         $($projectile._config.list_selector).stop(true,true).fadeOut(250, function(){
             $($projectile._config.list_selector + " " + $projectile._config.item_selector).remove();
@@ -276,8 +285,7 @@ $(function(){
             case "all-trash-action":
                 modal({type: "confirm", title: $projectile.captions.tConfirm, text: $projectile.captions.removeConfirmation, buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}, callback: function(answear){
                     if(answear){
-                        for(var key=-1; key<=$projectile._config.items_selected.length; key++){
-                            key = key == -1 ? 0 : key - 1;
+                        for(var key=0; key<$projectile._config.items_selected.length; key++){
                             var val = $projectile._config.items_selected[key],
                                 data = $.grep($projectile.files, function(a,b){
                                     return a.fId == val.substring(11);
@@ -285,14 +293,16 @@ $(function(){
                                 el = $('[data-file-revisionid="'+data[0].rId+'"]');
                             $('input#filer1').trigger("filer.removeFile", {fileEl: el, fileData: data[0]});
                             
-                            var idx = $projectile._config.items_selected[key];
-                            if (idx) {
-                                $projectile._config.items_selected.splice(key, 1);
+                            if($projectile._config.items_selected.length-(key+1) <= 0){
+                                $(".items-manipulation").hide();
+                            }else{
+                                $(".items-manipulation").find("li:first-child i.num").text($projectile._config.items_selected.length-(key+1));
                             }
                         }
+                        
+                        $projectile._config.items_selected = [];
                         $(".items-manipulation").hide();
                     }
-                    return true;
                 }});
             break;
         }
@@ -406,4 +416,77 @@ $(function(){
     }
     
     viewMode();
+    
+    /*
+        List View - Thumbnail
+    */
+    if($projectile.viewMode == 'list'){
+        $('body').on('mouseenter mousemove blur mouseout', $projectile._config.item_selector + '[data-file-type="image"] a.files-item-title', function(e){
+            var title = $(this),
+                parent = title.closest($projectile._config.item_selector),
+                tooltip = parent.find('div.files-item-tooltip-image'),
+                isVisible = tooltip.is(':visible'),
+                id = parseInt(parent.attr("data-file-orderkey"));
+            
+            title.removeAttr("title");
+            
+            e.offsetX = e.offsetX==undefined?e.pageX - title.offset().left:e.offsetX;
+            e.offsetY = e.offsetY==undefined?e.pageY - title.offset().top:e.offsetY;
+            
+            var setPosition = function(e, title, tooltip){
+                tooltip.css({
+                    left: title.offset().left + e.offsetX - $(window).scrollLeft(),
+                    top: title.offset().top + e.offsetY - $(window).scrollTop()
+                });
+                
+                //fix top
+                if(tooltip.offset().top+tooltip.outerHeight() > $(window).height()){
+                    tooltip.css({
+                        top: title.offset().top + e.offsetY/2 - 3 - title.outerHeight() - tooltip.outerHeight() - $(window).scrollTop()
+                    });
+                }                
+                if(tooltip.offset().top - $(window).scrollTop() < 0){
+                    tooltip.css({
+                        top: 3
+                    });
+                }
+                
+                //fix left
+                if(tooltip.offset().left+tooltip.outerWidth() > $(window).width()){
+                    tooltip.css({
+                        left: title.offset().left + e.offsetX/2 - 3 - tooltip.outerWidth() - $(window).scrollLeft()
+                    });
+                }                
+                if(tooltip.offset().left - $(window).scrollLeft() < 0){
+                    tooltip.css({
+                        left: 3
+                    });
+                }
+            };
+            
+            switch(e.type){
+                case 'mouseenter':
+                    if(!isVisible){
+                        window['lsvto42'+id] = setTimeout(function(title, tooltip){
+                            $.each($(".files-item-tooltip-image"), function(a, b){
+                                 $(b).hide();
+                            });
+                            if(title.is(':hover')){
+                                tooltip.show();
+                                setPosition(e, title, tooltip);
+                            }
+                        }, 540, title, tooltip);
+                    }
+                break;
+                case 'mousemove':
+                    setPosition(e, title, tooltip);
+                break;
+                case 'blur':
+                case 'mouseout':
+                    clearTimeout(window['lsvto42'+id]);
+                    tooltip.hide();
+                break;
+            }
+        });
+    }
 });
