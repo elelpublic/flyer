@@ -49,7 +49,7 @@ $(document).ready(function(){
                                                                 <br>\
                                                                 <span class="others">{{fi-size2}} | {{fi-createdByName}} | {{fi-date}}</span>\
                                                                 <br><br>\
-                                                                <p class="comment">{{fi-comment}}</p>\
+                                                                <p class="comment file-comment">{{fi-comment}}</p>\
                                                             </div>\
                                                         </div>\
                                                     </div>\
@@ -63,7 +63,7 @@ $(document).ready(function(){
                                                             <li style="padding-left:0;"><a href="{{fi-file}}" target="_blank" class="icon-jfi-external-link item-open-action" title="'+$projectile.captions.openFile+'"></a></li>\
                                                             {{fi-versionsButton}}\
                                                             {{fi-lockIcon}}\
-                                                            <!--<li><a class="icon-jfi-settings item-settings-action" title="'+$projectile.captions.settings+'"></a></li>-->\
+                                                            <li><a class="icon-jfi-pencil item-change-comment-action" title="'+$projectile.captions.change_comment+'"></a></li>\
                                                             <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
                                                         </ul>\
                                                     </div>\
