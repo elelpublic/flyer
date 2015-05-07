@@ -30,13 +30,13 @@ $(document).ready(function(){
                                                 <div class="table-col">{{fi-size2}}</div>\
                                                 <div class="table-col">{{fi-date}}</div>\
                                                 <div class="table-col">{{fi-createdByName}}</div>\
-                                                <div class="table-col">{{fi-comment}}</div>\
+                                                <div class="table-col file-comment">{{fi-comment}}</div>\
                                                 <div class="files-item-actions table-col">\
                                                     <ul class="list-inline">\
                                                         <li><a href="{{fi-file}}" target="_blank" class="icon-jfi-download-o item-download-action" title="'+$projectile.captions.download+'"'+($projectile.supportDownload?' download="{{fi-name}}"':'')+'></a></li>\
                                                         {{fi-versionsButton}}\
                                                         {{fi-lockIcon}}\
-                                                        <!--<li><a class="icon-jfi-settings item-settings-action" title="'+$projectile.captions.settings+'"></a></li>-->\
+                                                        <li><a class="icon-jfi-pencil item-change-comment-action" title="'+$projectile.captions.change_comment+'"></a></li>\
                                                         <li><a class="icon-jfi-trash item-trash-action" title="'+$projectile.captions.remove+'"></a></li>\
                                                     </ul>\
                                                 </div>\

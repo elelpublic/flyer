@@ -13,13 +13,10 @@
 */
 (function(){
     var f = {
-        version: "1.2.5",
+        version: "1.2.6",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         folder: null,
-        supportDownload : typeof document.createElement('a').download != 'undefined'
-        	&& !( navigator.userAgent.indexOf('Linux') != -1
-        	&& navigator.userAgent.indexOf('Firefox') != -1 ), // download does not work with linux firefox
         s: [],
         captions: {
             Flyer: "Flyer|Flyer",
@@ -61,7 +58,7 @@
             back: "System|Back",
             unlockMessage: "Flyer|File was unlocked",
             lockMessage: "Flyer|File was locked",
-            settings: "Document|Settings",
+            change_comment: "Application|Comment",
             ok: "Document|OK",
             yes: "Document|Yes",
             no: "Tooltip|No",
@@ -290,9 +287,8 @@
                 var params = {
                     comment: data.comment,
                 }
-                f._ajax(f.restUrl + "api/json/0/filerevisions/?fileHistory=" + data.fId, 'PUT', params, function(r){
+                f._ajax(f.restUrl + "api/json/0/filerevisions/" + data.rId, 'PUT', params, function(r){
                     if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
-                        data.locked = true
                         r._transfered = true;
                     }else{
                         if(typeof(r) != "object"){r = new Object()} 
@@ -384,7 +380,9 @@
             f._ajax(f.restUrl + "api/json/0/captions" + data, 'GET', {}, function(r){
                 var i = 0;
                 for(key in captions){
-                    captions[key] = r.Entries[i].translation.replace(/:\s*$/, ""); //removes last :
+                    if(r.Entries && r.Entries[i]){
+                        captions[key] = r.Entries[i].translation.replace(/:\s*$/, ""); //removes last :
+                    }
                     i++;
                 }
                 f.captions = captions;
@@ -514,6 +512,10 @@
 
             return true;
         },
+        
+        supportDownload : typeof document.createElement('a').download != 'undefined'
+        	&& !( navigator.userAgent.indexOf('Linux') != -1
+        	&& navigator.userAgent.indexOf('Firefox') != -1 ), // download does not work with linux firefox
 
         errorReport: function(msg) {
             console.log(msg);
