@@ -359,25 +359,39 @@ $(function(){
         }
     });
     
-    /* Item settings Action */
-    $("body").on("click", $projectile._config.item_selector + " a.item-settings-action", function(e){
+    /* Item comment change Action */
+    $("body").on("click", $projectile._config.item_selector + " a.item-change-comment-action", function(e){
         e.preventDefault();
-        var id = parseInt($(this).closest($projectile._config.item_selector).attr("data-file-orderKey")),
+        var id = $(this).closest($projectile._config.item_selector).attr("data-file-revisionid"),
+            fId = $(this).closest($projectile._config.item_selector).attr("data-file-id"),
             el = $(this),
+            isRevision = null,
             data = $.grep($projectile.files, function(a,b){
-                return a.orderKey == id;
-            })[0];
+                if(a.fId == fId && a.rId != id){
+                    isRevision = b;
+                }else{
+                    return a.rId == id;
+                }
+            });
+        if(isRevision != null){
+            data = $.grep($projectile.files[isRevision].revisions, function(a,b){
+                return a.rId == id;
+            });
+        }
+        
+        data = data[0];
+        
         if(!data){return false}
         modal({
-            title: $projectile.captions.settings,
-            text: "<label>"+$projectile.captions.tComment+"</label><textarea class='form-control' rows='6' id='file_comment_field_9'>"+data.comment+"</textarea>",
+            title: $projectile.captions.change_comment,
+            text: "<label>"+$projectile.captions.tComment+"</label><textarea class='form-control' rows='6' id='file_comment_field_9'>"+(data.comment ? data.comment : "")+"</textarea>",
             center: false,
             buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel},
             callback: function(a, b){
                 if(a){
                     data.comment = b.find("textarea#file_comment_field_9").val();
                     $projectile._config.editService(data, function(){
-                        el.closest($projectile._config.item_selector).find("p.comment").html(data.comment);
+                        el.closest($projectile._config.item_selector).find(".file-comment").html(data.comment);
                     });
                 }
                 return true;
