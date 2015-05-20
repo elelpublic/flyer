@@ -12,10 +12,13 @@
             | custom parameters for jquery.filer
 */
 (function(){
+	var bsm = window.top ? window.top.bsm : window.bsm;
     var f = {
-        version: "1.2.6",
+        version: "1.2.7",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
+        bsm: bsm,
+        clientId: bsm ? bsm.clientId : '0',
         folder: null,
         s: [],
         captions: {
@@ -255,7 +258,7 @@
                         locked: true,
                         lockComment: data._lockComment
                     }
-                    f._ajax(f.restUrl + "api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
+                    f._ajax(f.restUrl + "api/json/" + f.clientId + "/filehistories/" + data.fId, 'PUT', params, function(r){
                         if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                             data.locked = true
                             r._transfered = true;
@@ -270,7 +273,7 @@
                     var params = {
                         locked: false,
                     }
-                    f._ajax(f.restUrl + "api/json/0/filehistories/" + data.fId, 'PUT', params, function(r){
+                    f._ajax(f.restUrl + "api/json/" + f.clientId + "/filehistories/" + data.fId, 'PUT', params, function(r){
                         if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                             data.locked = false
                             r._transfered = true;
@@ -287,7 +290,7 @@
                 var params = {
                     comment: data.comment,
                 }
-                f._ajax(f.restUrl + "api/json/0/filerevisions/" + data.rId, 'PUT', params, function(r){
+                f._ajax(f.restUrl + "api/json/" + f.clientId + "/filerevisions/" + data.rId, 'PUT', params, function(r){
                     if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                         r._transfered = true;
                     }else{
@@ -299,8 +302,8 @@
                 }, "json");
             },
             remove: function(data, callback){
-                var url = "api/json/0/filerevisions/" + data.rId;
-                if(data.fId && (!data.isVersion || data.revisions)){ url = "api/json/0/filehistories/" + data.fId; }
+                var url = "api/json/" + f.clientId + "/filerevisions/" + data.rId;
+                if(data.fId && (!data.isVersion || data.revisions)){ url = "api/json/" + f.clientId + "/filehistories/" + data.fId; }
                 f._ajax(f.restUrl + url, 'DELETE', null, function(r){
                     if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                         data.locked = true
@@ -322,7 +325,7 @@
             var files = [],
                 id = (folder && typeof folder == "string" ? folder : f.folder);
             f.files = [];
-            f._ajax(f.restUrl + "api/json/0/filehistories?folder=" + id, 'GET', {}, function(r){
+            f._ajax(f.restUrl + "api/json/" + f.clientId + "/filehistories?folder=" + id, 'GET', {}, function(r){
                 if(r.Entries && r.Entries.length > 0 && r.Entries[0]){
                     var total = r.Entries.length,
                         s = 0;
@@ -330,7 +333,7 @@
                         if(!r.Entries[key]){break;}
                         var val = r.Entries[key];
                         val.orderKey = key;
-                        f._ajax(f.restUrl + "api/json/0/filerevisions?fileHistory=" + val.id, 'GET', {a: val}, function(r2, b){
+                        f._ajax(f.restUrl + "api/json/" + f.clientId + "/filerevisions?fileHistory=" + val.id, 'GET', {a: val}, function(r2, b){
                             if(r2 && r2.Entries && r2.Entries[0]){
                                 r2.Entries[0].fId = b.id;
                                 r2.Entries[0].locked = b.locked;
@@ -377,7 +380,7 @@
                 first = false;
             }
             
-            f._ajax(f.restUrl + "api/json/0/captions" + data, 'GET', {}, function(r){
+            f._ajax(f.restUrl + "api/json/" + f.clientId + "/captions" + data, 'GET', {}, function(r){
                 var i = 0;
                 for(key in captions){
                     if(r.Entries && r.Entries[i]){
