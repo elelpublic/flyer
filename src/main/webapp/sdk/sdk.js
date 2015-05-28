@@ -12,13 +12,12 @@
             | custom parameters for jquery.filer
 */
 (function(){
-	var bsm = window.top ? window.top.bsm : window.bsm;
     var f = {
         version: "1.2.7",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
-        bsm: bsm,
-        clientId: bsm ? bsm.clientId : '0',
+        bsm: window.top.bsm,
+        clientId: this.bsm ? this.bsm.clientId : '0',
         folder: null,
         s: [],
         captions: {
