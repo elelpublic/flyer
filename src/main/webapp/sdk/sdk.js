@@ -13,7 +13,7 @@
 */
 (function(){
     var f = {
-        version: "1.2.7",
+        version: "1.2.8",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         bsm: window.top.bsm,
