@@ -78,7 +78,7 @@ $(document).ready(function(){
             val.name = val.fileName;
             val.date = $projectile.dateFormat(val.created);
             val.type = val.mimeType;
-            val.file = $projectile.restUrl + "api/binary/0/filerevisions/" + val.id;
+            val.file = $projectile.restUrl + "api/binary/" + $projectile.clientId + "/filerevisions/" + val.id;
             val.rId = val.id;
             val.orderKey = $projectile.files.length.toString();
             val.fId = val.fileHistory;
@@ -150,7 +150,7 @@ $(document).ready(function(){
             val.name = val.fileName;
             val.date = $projectile.dateFormat(val.created);
             val.type = val.mimeType;
-            val.file = $projectile.restUrl + "api/binary/0/filerevisions/" + val.id;
+            val.file = $projectile.restUrl + "api/binary/" + $projectile.clientId + "/filerevisions/" + val.id;
             val.rId = val.id;
             val.lockIcon = '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>';
             val.versionsButton = (val.revisions.length > 0 ? '<li><a href="'+$projectile._location.addParameter("file",val.fId)+'" class="item-versions-show dropdown" title="'+$projectile.captions.versions+'"><i class="icon-jfi-history"></i></a></li>' : '');
@@ -214,7 +214,7 @@ $(document).ready(function(){
                 val.name = val.fileName;
                 val.date = $projectile.dateFormat(val.created);
                 val.type = val.mimeType;
-                val.file = $projectile.restUrl + "api/binary/0/filerevisions/" + val.id;
+                val.file = $projectile.restUrl + "api/binary/" + $projectile.clientId + "/filerevisions/" + val.id;
                 val.rId = val.id;
                 val.lockTitle = (val.locked ? $projectile.captions.unlock : $projectile.captions.lock);
                 val.lockIcon = (val.fId ? '<li><a class="icon-jfi-'+(val.locked ? "unlock" : "lock")+' item-lock-action dropdown" title="'+(val.locked ? $projectile.captions.unlock : $projectile.captions.lock)+'"></a></li>' : '');
