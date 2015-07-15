@@ -13,7 +13,7 @@
 */
 (function(){
     var f = {
-        version: "1.2.7",
+        version: "1.2.8",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         bsm: window.top.bsm,
@@ -466,15 +466,16 @@
         dateFormat: function(date) {
             date = !date ? new Date() : new Date(date);
             var d = {
-                day: date.getDate(),
-                dayName: f.captions["day_"+date.getDay()],
-                month: date.getMonth()+1,
-                year: date.getFullYear(),
-                hours: date.getHours(),
-                minutes: date.getMinutes(),
-                seconds: date.getSeconds()
+                day: date.getUTCDate(),
+                dayName: f.captions["day_"+date.getUTCDay()],
+                month: date.getUTCMonth()+1,
+                year: date.getUTCFullYear(),
+                hours: date.getUTCHours(),
+                minutes: date.getUTCMinutes(),
+                seconds: date.getUTCSeconds()
             },
                 dateformat = "";
+            
             /*
             for(key in d){
                 if(parseInt(d[key]) <= 9){
