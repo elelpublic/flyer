@@ -476,13 +476,11 @@
             },
                 dateformat = "";
             
-            /*
             for(key in d){
-                if(parseInt(d[key]) <= 9){
+                if(typeof(d[key]) == "number" && parseInt(d[key]) <= 9){
                     d[key] = "0" + d[key].toString();    
                 }
             }
-            */
             
             //date
             var today = new Date(),
