@@ -8,7 +8,7 @@ $projectile._config = {
         var text = $projectile.captions.errorText + "!";
         
         if(a == "lock" && c && c.locked){
-            text = $projectile.captions.lockDenied.replace("$0", c.fileName).replace("$1", c.lockedBy).replace("$2", $projectile.dateFormat(c.lockTime)).replace("$3",c.lockComment);   
+            text = $projectile.captions.lockDenied.replace("$0", c.fileName).replace("$1", c.lockedByName).replace("$2", $projectile.dateFormat(c.lockTime, true)).replace("$3",c.lockComment);
         }
         
         return modal({

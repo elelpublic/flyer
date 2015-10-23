@@ -16,7 +16,7 @@ apply plugin: 'jetty'
 
 
 group = 'com.infodesire'
-version = '0.1.14-SNAPSHOT'
+version = '0.1.14'
 
 httpPort = 8081
 
@@ -93,7 +93,7 @@ task projectileWar ( dependsOn: 'war', type: Copy ) {
 task projectile ( dependsOn: 'war', type: Copy ) {
 	
 	def zipFile = file( '' + buildDir + '/libs/' + warArchiveName )
-	def outputDir = file( '../dists/current/thirdparty/tomcat/webapps/projectile/flyer' )
+	def outputDir = file( '../dists/current/thirdparty/tomcat/webapps/projectile/apps/flyer' )
 
 	from zipTree(zipFile)
 	into outputDir
