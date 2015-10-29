@@ -334,7 +334,7 @@ $(function(){
                     position: {x: "right", y: "top"}
                 });
                 $projectile._config.btnLoading(el,true);
-                el.removeClass("icon-jfi-unlock").addClass("icon-jfi-lock");
+                el.removeClass("icon-jfi-unlock").addClass("icon-jfi-lock").attr("title", $projectile.captions.lock);
             });
         }else{
             modal({type: "prompt", title: $projectile.captions.tPrompt, text: $projectile.captions.lockText+":", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}, callback: function(comment){
@@ -352,7 +352,7 @@ $(function(){
                         position: {x: "right", y: "top"}
                     });
                     $projectile._config.btnLoading(el,true);
-                    el.removeClass("icon-jfi-lock").addClass("icon-jfi-unlock");
+                    el.removeClass("icon-jfi-lock").addClass("icon-jfi-unlock").attr("title", $projectile.captions.unlock);
                 });
                 return true;
             }});
