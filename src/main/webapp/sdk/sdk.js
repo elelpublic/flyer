@@ -12,12 +12,12 @@
             | custom parameters for jquery.filer
 */
 (function(){
+    var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "1.2.8",
+        version: "1.2.11",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
-        bsm: window.top.bsm,
-        clientId: this.bsm ? this.bsm.clientId : '0',
+        clientId: bsm ? bsm.clientId : '0',
         folder: null,
         s: [],
         captions: {
@@ -463,16 +463,16 @@
             }
         },
         
-        dateFormat: function(date) {
+        dateFormat: function(date, strict) {
             date = !date ? new Date() : new Date(date);
             var d = {
-                day: date.getUTCDate(),
-                dayName: f.captions["day_"+date.getUTCDay()],
-                month: date.getUTCMonth()+1,
-                year: date.getUTCFullYear(),
-                hours: date.getUTCHours(),
-                minutes: date.getUTCMinutes(),
-                seconds: date.getUTCSeconds()
+                day: date.getDate(),
+                dayName: f.captions["day_"+date.getDay()],
+                month: date.getMonth()+1,
+                year: date.getFullYear(),
+                hours: date.getHours(),
+                minutes: date.getMinutes(),
+                seconds: date.getSeconds()
             },
                 dateformat = "";
             
@@ -483,14 +483,19 @@
             }
             
             //date
-            var today = new Date(),
-                yesterday = new Date(new Date().setDate(today.getDate()-1));
-            if(date.toDateString() == today.toDateString()){
-                dateformat = f.captions.today;
-            }else if(date.toDateString() == yesterday.toDateString()){
-                dateformat = f.captions.yesterday;
-            }else{
-                dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
+            if( strict ) {
+            	dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
+            }
+            else {
+            	var today = new Date(),
+            	yesterday = new Date(new Date().setDate(today.getDate()-1));
+            	if(date.toDateString() == today.toDateString()){
+            		dateformat = f.captions.today;
+            	}else if(date.toDateString() == yesterday.toDateString()){
+            		dateformat = f.captions.yesterday;
+            	}else{
+            		dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
+            	}
             }
             
             return dateformat + " " + d.hours+":"+d.minutes+":"+d.seconds;
