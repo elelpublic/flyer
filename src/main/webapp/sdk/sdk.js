@@ -14,7 +14,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "1.2.11",
+        version: "1.2.12",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
