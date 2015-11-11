@@ -14,7 +14,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "1.2.12",
+        version: "1.2.13",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
@@ -504,7 +504,7 @@
         },
         
         // date1 is localized, date2 can be utc
-        dateEqual( date1, date2, getter ) {
+        dateEqual: function( date1, date2, getter ) {
         	return date1.getFullYear() == date2[getter+'FullYear']() && date1.getMonth() == date2[getter+'Month']() && date1.getDate() == date2[getter+'Date']();
         },
         
