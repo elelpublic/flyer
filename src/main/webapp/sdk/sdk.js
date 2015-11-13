@@ -14,7 +14,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "1.2.11",
+        version: "1.2.13",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
@@ -464,15 +464,16 @@
         },
         
         dateFormat: function(date, strict) {
+        	var isUTC = !!date, getter = isUTC ? 'getUTC' : 'get';
             date = !date ? new Date() : new Date(date);
             var d = {
-                day: date.getDate(),
-                dayName: f.captions["day_"+date.getDay()],
-                month: date.getMonth()+1,
-                year: date.getFullYear(),
-                hours: date.getHours(),
-                minutes: date.getMinutes(),
-                seconds: date.getSeconds()
+                day: date[getter+'Date'](),
+                dayName: f.captions["day_"+date[getter+'Day']()],
+                month: date[getter+'Month']()+1,
+                year: date[getter+'FullYear'](),
+                hours: date[getter+'Hours'](),
+                minutes: date[getter+'Minutes'](),
+                seconds: date[getter+'Seconds']()
             },
                 dateformat = "";
             
@@ -489,9 +490,9 @@
             else {
             	var today = new Date(),
             	yesterday = new Date(new Date().setDate(today.getDate()-1));
-            	if(date.toDateString() == today.toDateString()){
+            	if(f.dateEqual( today, date, getter )){
             		dateformat = f.captions.today;
-            	}else if(date.toDateString() == yesterday.toDateString()){
+            	}else if(f.dateEqual( yesterday, date, getter )){
             		dateformat = f.captions.yesterday;
             	}else{
             		dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
@@ -500,6 +501,11 @@
             
             return dateformat + " " + d.hours+":"+d.minutes+":"+d.seconds;
             //return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
+        },
+        
+        // date1 is localized, date2 can be utc
+        dateEqual: function( date1, date2, getter ) {
+        	return date1.getFullYear() == date2[getter+'FullYear']() && date1.getMonth() == date2[getter+'Month']() && date1.getDate() == date2[getter+'Date']();
         },
         
         sizeFormat: function(bytes){
