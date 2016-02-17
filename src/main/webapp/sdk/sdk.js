@@ -14,7 +14,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "0.1.17",
+        version: "0.1.18",
         u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
@@ -464,48 +464,43 @@
         },
         
         dateFormat: function(date, strict) {
-        	var isUTC = !!date, getter = isUTC ? 'getUTC' : 'get';
-            date = !date ? new Date() : new Date(date);
-            var d = {
-                day: date[getter+'Date'](),
-                dayName: f.captions["day_"+date[getter+'Day']()],
-                month: date[getter+'Month']()+1,
-                year: date[getter+'FullYear'](),
-                hours: date[getter+'Hours'](),
-                minutes: date[getter+'Minutes'](),
-                seconds: date[getter+'Seconds']()
-            },
+
+            var parts = date.split('T'),
+                day = new Date(parts[0]),
+                dateParts = parts[0].split('-'),
+                timeParts = parts[1].split(':'),
                 dateformat = "";
-            
-            for(key in d){
-                if(typeof(d[key]) == "number" && parseInt(d[key]) <= 9){
-                    d[key] = "0" + d[key].toString();    
+
+            var d = {
+                dayName: f.captions["day_" + day.getDay()],
+                day: dateParts[2],
+                month: dateParts[1],
+                year: dateParts[0],
+                hours: timeParts[0],
+                minutes: timeParts[1],
+                seconds: timeParts[2]
+            };
+
+            //date
+            if (strict) {
+                dateformat = d.dayName + " " + d.day + "." + d.month + "." + d.year;
+            } else {
+                var today = new Date(),
+                    yesterday = new Date(new Date().setDate(today.getDate() - 1));
+                if (f.dateEqual(today, day)) {
+                    dateformat = f.captions.today;
+                } else if (f.dateEqual(yesterday, day)) {
+                    dateformat = f.captions.yesterday;
+                } else {
+                    dateformat = d.dayName + " " + d.day + "." + d.month + "." + d.year;
                 }
             }
-            
-            //date
-            if( strict ) {
-            	dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
-            }
-            else {
-            	var today = new Date(),
-            	yesterday = new Date(new Date().setDate(today.getDate()-1));
-            	if(f.dateEqual( today, date, getter )){
-            		dateformat = f.captions.today;
-            	}else if(f.dateEqual( yesterday, date, getter )){
-            		dateformat = f.captions.yesterday;
-            	}else{
-            		dateformat = d.dayName + " " + d.day+"."+d.month+"."+d.year;
-            	}
-            }
-            
-            return dateformat + " " + d.hours+":"+d.minutes+":"+d.seconds;
-            //return d.hours+":"+d.minutes+":"+d.seconds+" "+d.day+"."+d.month+"."+d.year;
+
+            return dateformat + " " + d.hours + ":" + d.minutes + ":" + d.seconds;
         },
         
-        // date1 is localized, date2 can be utc
-        dateEqual: function( date1, date2, getter ) {
-        	return date1.getFullYear() == date2[getter+'FullYear']() && date1.getMonth() == date2[getter+'Month']() && date1.getDate() == date2[getter+'Date']();
+        dateEqual: function( date1, date2 ) {
+        	return date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate();
         },
         
         sizeFormat: function(bytes){
