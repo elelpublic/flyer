@@ -94,6 +94,7 @@
                         }
                         f._itFl = [];
                         f._itFc = null;
+						f._ajFc = 0;
                         l = $();
                         p.find('.jFiler-items').fadeOut("fast", function(){
                             $(this).remove();   
@@ -313,8 +314,13 @@
                                     }
                                     return myXhr
                                 },
-                                complete: function() {
+                                complete: function(jqXHR, textStatus) {
                                     c.ajax = false;
+									f._ajFc++;
+									if(f._ajFc >= f.files.length) {
+										f._ajFc = 0;
+										n.uploadFile.onComplete != null && typeof n.uploadFile.onComplete == "function" ? n.uploadFile.onComplete(l, p, o, s, jqXHR, textStatus) : null;
+									}
                                 },
                                 beforeSend: function(jqXHR, settings){
                                     return n.uploadFile.beforeSend != null && typeof n.uploadFile.beforeSend == "function" ? n.uploadFile.beforeSend(el, l, o, p, s, jqXHR, settings) : true;
@@ -340,6 +346,8 @@
                         progressHandling: function(e, el){
                             if (e.lengthComputable) {
 				                var t = Math.round(e.loaded * 100 / e.total).toString();
+								
+								t = t==100 ? 99 : t;
                                 
 				                n.uploadFile.onProgress != null && typeof n.uploadFile.onProgress == "function" ? n.uploadFile.onProgress(t, el, s) : null;
                                 
@@ -351,10 +359,10 @@
                         dragEnter: function(e){
                             e.preventDefault();
                             e.stopPropagation();
-                            p.addClass('dragged');
-                            f._set('feedback', n.captions.drop);
-                            clearTimeout(f._dgrChx);
-                            n.dragDrop.dragEnter != null && typeof n.dragDrop.dragEnter == "function" ? n.dragDrop.dragEnter(e, o, s, p) : null;
+							p.addClass('dragged');
+							f._set('feedback', n.captions.drop);
+							clearTimeout(f._dgrChx);
+							n.dragDrop.dragEnter != null && typeof n.dragDrop.dragEnter == "function" ? n.dragDrop.dragEnter(e, o, s, p) : null;
                         },
                         dragLeave: function(e) {
                             e.preventDefault();
@@ -524,7 +532,7 @@
                                 
                                 l.on('click', n.templates._selectors.remove, function(e){
                                     e.preventDefault();
-                                    if($projectile && $projectile._config && $projectile._config.removeAction){
+                                    if($projectile && $projectile._config && $projectile._config.removeAction && $(this).closest(n.templates._selectors.item).attr('data-jfiler-upload-error') == null){
                                         $projectile._config.removeAction({e: e, el: $(this).closest(n.templates._selectors.item)}, function(data){
                                             f._remove(data.e, data.el);
                                         });    
@@ -647,7 +655,8 @@
                     },
                     files:null,
                     _itFl:[],
-                    _itFc: null
+                    _itFc: null,
+					_ajFc: null,
                 }
                 f.init();
                 s.on("filer.append", function(e, data){f._append(e, data)});

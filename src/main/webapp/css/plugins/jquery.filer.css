@@ -204,7 +204,7 @@ span.jFiler-icon-file.f-audio:after {
     color: #ffffff;
     text-align: center;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    background-color: #50A1E9;
+    background-color: #48A0DC;
     box-sizing: border-box;
     -webkit-border-radius: 4px;
        -moz-border-radius: 4px;
@@ -213,6 +213,14 @@ span.jFiler-icon-file.f-audio:after {
        -moz-transition: width 0.3s ease;
          -o-transition: width 0.3s ease;
             transition: width 0.3s ease;
+	    -webkit-animation: progress-bar-stripes 2s linear infinite;
+    -o-animation: progress-bar-stripes 2s linear infinite;
+    animation: progress-bar-stripes 2s linear infinite;
+    background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-image: -o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    -webkit-background-size: 20px 20px;
+    background-size: 20px 20px;
 }
 
 .jFiler-jProgressBar .bar.dark {
