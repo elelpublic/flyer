@@ -127,30 +127,19 @@
 	File Icons
 -------------------------*/
 span.jFiler-icon-file {
+	position: relative;
+    display: block;
+    background: #e1e1e1 url('../../images/icons/file_196x.png') no-repeat;
+    background-size: contain;
     width: 57px;
-    height: 70px;
-    position: relative;
-    display: inline-block;
-    line-height: 70px;
+    height: 74px;
+    line-height: 90px;
     text-align: center;
-    border-radius: 3px;
+    margin: 0 auto;
     color: #fff;
-    font-family: sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: bold;
     overflow: hidden;
-    box-shadow: 42px -55px 0 0 #A4A7AC inset;
-}
-
-span.jFiler-icon-file:after {
-    position: absolute;
-    top: -1px;
-    right: -1px;
-    display: inline-block;
-    content: '';
-    border-style: solid;
-    border-width: 16px 0 0 16px;
-    border-color: transparent transparent transparent #DADDE1;
 }
 
 span.jFiler-icon-file i[class*="icon-jfi-"] {
@@ -159,26 +148,17 @@ span.jFiler-icon-file i[class*="icon-jfi-"] {
 
 /* image */
 span.jFiler-icon-file.f-image {
-    box-shadow: 42px -55px 0 0 #e15955 inset
-}
-span.jFiler-icon-file.f-image:after {
-    border-left-color: #c6393f
+	background-color: #e15955
 }
 
 /* video */
 span.jFiler-icon-file.f-video {
-    box-shadow: 42px -55px 0 0 #4183d7 inset
-}
-span.jFiler-icon-file.f-video:after {
-    border-left-color: #446cb3
+    background-color: #4183d7
 }
 
 /* audio */
 span.jFiler-icon-file.f-audio {
-    box-shadow: 42px -55px 0 0 #5bab6e inset
-}
-span.jFiler-icon-file.f-audio:after {
-    border-left-color: #448353
+    background-color: #5bab6e
 }
 
 

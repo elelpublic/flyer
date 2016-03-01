@@ -303,9 +303,9 @@ a[class*="item-change-comment-action"]:hover {
 }
 
 .header-content {
-    padding: 23px 0;
-	color: #7B8994;
-    background: rgba(247, 248, 250, 0.98);
+    padding: 23px 0 24px 0;
+	color: #747474;
+    background: #F7F8FA;
 }
 
 .header-content .view-switcher {
@@ -323,7 +323,8 @@ a[class*="item-change-comment-action"]:hover {
 	margin-left: 15px;
 	padding: 0;
 	background: none;
-	display: none;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .header-content .items-manipulation {
@@ -331,7 +332,7 @@ a[class*="item-change-comment-action"]:hover {
 	display: none;
 	width: 100%;
 	left: 100px;
-	background: rgba(247, 248, 250, 0.9);
+	background: #F7F8FA;
 	padding-left: 0px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -340,11 +341,17 @@ a[class*="item-change-comment-action"]:hover {
 	z-index: 3;
 }
 
+.header-content .folder-manipulation {
+	padding-left: 0;
+	background: #F7F8FA;
+    z-index: 3;
+}
+
 .header-content .folder-manipulation > li {
 	position: relative;
 	padding: 5px 10px;
 	margin-top: -6px;
-    margin-bottom: -5px;
+    margin-bottom: -6px;
 	margin-left: 5px;
     border-radius: 4px;
 	border: 1px solid #BDC4CA;

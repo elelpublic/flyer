@@ -56,7 +56,7 @@ $projectile._config = {
         }
     },
     defaultSort: function(a, b){
-        return +new Date(b.created) - +new Date(a.created);
+        return +new Date(a.created) - +new Date(b.created);
     },
     items_selected: [],
     views: {
@@ -112,7 +112,12 @@ $projectile._config = {
 
 			var viewMode = $projectile.viewMode,
 				html = $('<div class="col-xs-9 _splr30 _sptG right-side file-verions-right-side"><div>' + $projectile._config.views[viewMode].rightSide + '</div>').hide();
-
+			
+			$('.view-path').empty();
+			$(".view-path").css('max-width', $('.folder-manipulation').position().left - $('.view-path').position().left - 20);
+			$('.view-path').append('<li><a class="versions-back-button" title="'+$projectile.captions.back+'"><i class="icon-jfi-arrow-left"></i></a></li>');
+			$('.view-path').append('<li title="'+data[0].name+'">'+data[0].name+'</li>');
+			
 			html.find("input.file-item-check").remove();
 
 			for(key in list){
@@ -127,13 +132,13 @@ $projectile._config = {
 				html.find($projectile._config.list_selector).append(val);
 			}
 			
-			if(viewMode == 'grid'){
-				html.find(".files-items-list").prepend('<li class="files-item col-xs-4 veryBig-back-button"><div class="files-item-container"><div class="files-item-inner"><div class="item-thumb"><a class="versions-back-button"><i class="icon-jfi-back"></i> '+$projectile.captions.back+'</a></div></div></div></li>');
-			}else{
-				html.find($projectile._config.list_selector).prepend('<div class="table-row nsrow row-back-button versions-back-button"><div class="table-col"><i class="icon-jfi-back files-item-icon"></i></div><div class="table-col"><span style="display:block; font-weight: bold;">'+$projectile.captions.back+'</span></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div></div>');	
-			}
+//			if(viewMode == 'grid'){
+//				html.find(".files-items-list").prepend('<li class="files-item col-xs-4 veryBig-back-button"><div class="files-item-container"><div class="files-item-inner"><div class="item-thumb"><a class="versions-back-button"><i class="icon-jfi-back"></i> '+$projectile.captions.back+'</a></div></div></div></li>');
+//			}else{
+//				html.find($projectile._config.list_selector).prepend('<div class="table-row nsrow row-back-button versions-back-button"><div class="table-col"><i class="icon-jfi-back files-item-icon"></i></div><div class="table-col"><span style="display:block; font-weight: bold;">'+$projectile.captions.back+'</span></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div><div class="table-col"></div></div>');	
+//			}
 
-			html.find('.versions-back-button').on("click", function(e){
+			$('body').on('click', '.versions-back-button', function(e){
 				$projectile._location.redirect_to($projectile._location.removeParameter("file"));
 			});
 
@@ -236,6 +241,7 @@ $projectile._config._filerOpts = {
 		$('.file-verions-right-side').fadeOut("slow", function(){
 			$(this).remove();
 			$(".right-side").fadeIn("slow");
+			$(".view-path").empty();
 			history.pushState({}, "Flyer", $projectile._location.removeParameter("file"));
 		});
 	},
@@ -284,7 +290,9 @@ $(function(){
         $('#header .header-fixed, .left-side .left-side-bg').css({
             'left': - $(this).scrollLeft()
         });
-    });
+    }).resize(function(){
+		$(".view-path").css('max-width', $('.folder-manipulation').position().left - $('.view-path').position().left - 31);
+	});
 	
 	// view swither
     $('body').on('click', ".view-switcher li a[class]", function(e){
@@ -411,7 +419,7 @@ $(function(){
                         return $(a).attr("data-file-user").toUpperCase().localeCompare($(b).attr("data-file-user").toUpperCase());
                     break;
                     case "date":
-                        return +new Date($(b).attr("data-file-date")) - +new Date($(a).attr("data-file-date"));
+                        return +new Date($(a).attr("data-file-date")) - +new Date($(b).attr("data-file-date"));
                     break;
 
                 }

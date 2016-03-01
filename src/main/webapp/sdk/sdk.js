@@ -17,6 +17,7 @@
         s: [],
         captions: {
             Flyer: "Flyer|Flyer",
+			home: "Flyer|Homedir",
             file: "Flyer|File",
             files: "Flyer|Files",
             lock: "Tooltip|Lock",
