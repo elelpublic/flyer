@@ -9,7 +9,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "0.1.18",
+        version: "0.1.19",
         u: window.self !== window.top || true ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top || true ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
