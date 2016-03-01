@@ -94,6 +94,7 @@
                         }
                         f._itFl = [];
                         f._itFc = null;
+						f._ajFc = 0;
                         l = $();
                         p.find('.jFiler-items').fadeOut("fast", function(){
                             $(this).remove();   
@@ -263,17 +264,11 @@
                             var el = '<span class="jFiler-icon-file ' + m[0] + '">' + m[1] + '</span>';
                             
                             if(m[2] == 1){
-                                var j = $(el).appendTo("body"),
-                                h = j.css("box-shadow");
-                            
-                                h = f._assets.text2Color(obj.extension) + h.substring(h.replace(/^.*(rgba?\([^)]+\)).*$/,'$1').length, h.length);
-                                j.css({
-                                    '-webkit-box-shadow' : h,
-                                    '-moz-box-shadow': h,
-                                    'box-shadow': h
-                                });
-                                el = j.prop('outerHTML');
+                                var j = $(el).appendTo("body");
 
+                                j.css('background-color', f._assets.text2Color(obj.extension));
+								
+                                el = j.prop('outerHTML');
                                 j.remove();
                             }
 
@@ -313,8 +308,13 @@
                                     }
                                     return myXhr
                                 },
-                                complete: function() {
+                                complete: function(jqXHR, textStatus) {
                                     c.ajax = false;
+									f._ajFc++;
+									if(f._ajFc >= f.files.length) {
+										f._ajFc = 0;
+										n.uploadFile.onComplete != null && typeof n.uploadFile.onComplete == "function" ? n.uploadFile.onComplete(l, p, o, s, jqXHR, textStatus) : null;
+									}
                                 },
                                 beforeSend: function(jqXHR, settings){
                                     return n.uploadFile.beforeSend != null && typeof n.uploadFile.beforeSend == "function" ? n.uploadFile.beforeSend(el, l, o, p, s, jqXHR, settings) : true;
@@ -340,6 +340,8 @@
                         progressHandling: function(e, el){
                             if (e.lengthComputable) {
 				                var t = Math.round(e.loaded * 100 / e.total).toString();
+								
+								t = t==100 ? 99 : t;
                                 
 				                n.uploadFile.onProgress != null && typeof n.uploadFile.onProgress == "function" ? n.uploadFile.onProgress(t, el, s) : null;
                                 
@@ -351,10 +353,10 @@
                         dragEnter: function(e){
                             e.preventDefault();
                             e.stopPropagation();
-                            p.addClass('dragged');
-                            f._set('feedback', n.captions.drop);
-                            clearTimeout(f._dgrChx);
-                            n.dragDrop.dragEnter != null && typeof n.dragDrop.dragEnter == "function" ? n.dragDrop.dragEnter(e, o, s, p) : null;
+							p.addClass('dragged');
+							f._set('feedback', n.captions.drop);
+							clearTimeout(f._dgrChx);
+							n.dragDrop.dragEnter != null && typeof n.dragDrop.dragEnter == "function" ? n.dragDrop.dragEnter(e, o, s, p) : null;
                         },
                         dragLeave: function(e) {
                             e.preventDefault();
@@ -524,7 +526,7 @@
                                 
                                 l.on('click', n.templates._selectors.remove, function(e){
                                     e.preventDefault();
-                                    if($projectile && $projectile._config && $projectile._config.removeAction){
+                                    if($projectile && $projectile._config && $projectile._config.removeAction && $(this).closest(n.templates._selectors.item).attr('data-jfiler-upload-error') == null){
                                         $projectile._config.removeAction({e: e, el: $(this).closest(n.templates._selectors.item)}, function(data){
                                             f._remove(data.e, data.el);
                                         });    
@@ -640,14 +642,22 @@
                                     return text;    
                             }
                         },
-                        text2Color: function(string){
-                            function md5cycle(e,t){var n=e[0],r=e[1],i=e[2],s=e[3];n=ff(n,r,i,s,t[0],7,-680876936);s=ff(s,n,r,i,t[1],12,-389564586);i=ff(i,s,n,r,t[2],17,606105819);r=ff(r,i,s,n,t[3],22,-1044525330);n=ff(n,r,i,s,t[4],7,-176418897);s=ff(s,n,r,i,t[5],12,1200080426);i=ff(i,s,n,r,t[6],17,-1473231341);r=ff(r,i,s,n,t[7],22,-45705983);n=ff(n,r,i,s,t[8],7,1770035416);s=ff(s,n,r,i,t[9],12,-1958414417);i=ff(i,s,n,r,t[10],17,-42063);r=ff(r,i,s,n,t[11],22,-1990404162);n=ff(n,r,i,s,t[12],7,1804603682);s=ff(s,n,r,i,t[13],12,-40341101);i=ff(i,s,n,r,t[14],17,-1502002290);r=ff(r,i,s,n,t[15],22,1236535329);n=gg(n,r,i,s,t[1],5,-165796510);s=gg(s,n,r,i,t[6],9,-1069501632);i=gg(i,s,n,r,t[11],14,643717713);r=gg(r,i,s,n,t[0],20,-373897302);n=gg(n,r,i,s,t[5],5,-701558691);s=gg(s,n,r,i,t[10],9,38016083);i=gg(i,s,n,r,t[15],14,-660478335);r=gg(r,i,s,n,t[4],20,-405537848);n=gg(n,r,i,s,t[9],5,568446438);s=gg(s,n,r,i,t[14],9,-1019803690);i=gg(i,s,n,r,t[3],14,-187363961);r=gg(r,i,s,n,t[8],20,1163531501);n=gg(n,r,i,s,t[13],5,-1444681467);s=gg(s,n,r,i,t[2],9,-51403784);i=gg(i,s,n,r,t[7],14,1735328473);r=gg(r,i,s,n,t[12],20,-1926607734);n=hh(n,r,i,s,t[5],4,-378558);s=hh(s,n,r,i,t[8],11,-2022574463);i=hh(i,s,n,r,t[11],16,1839030562);r=hh(r,i,s,n,t[14],23,-35309556);n=hh(n,r,i,s,t[1],4,-1530992060);s=hh(s,n,r,i,t[4],11,1272893353);i=hh(i,s,n,r,t[7],16,-155497632);r=hh(r,i,s,n,t[10],23,-1094730640);n=hh(n,r,i,s,t[13],4,681279174);s=hh(s,n,r,i,t[0],11,-358537222);i=hh(i,s,n,r,t[3],16,-722521979);r=hh(r,i,s,n,t[6],23,76029189);n=hh(n,r,i,s,t[9],4,-640364487);s=hh(s,n,r,i,t[12],11,-421815835);i=hh(i,s,n,r,t[15],16,530742520);r=hh(r,i,s,n,t[2],23,-995338651);n=ii(n,r,i,s,t[0],6,-198630844);s=ii(s,n,r,i,t[7],10,1126891415);i=ii(i,s,n,r,t[14],15,-1416354905);r=ii(r,i,s,n,t[5],21,-57434055);n=ii(n,r,i,s,t[12],6,1700485571);s=ii(s,n,r,i,t[3],10,-1894986606);i=ii(i,s,n,r,t[10],15,-1051523);r=ii(r,i,s,n,t[1],21,-2054922799);n=ii(n,r,i,s,t[8],6,1873313359);s=ii(s,n,r,i,t[15],10,-30611744);i=ii(i,s,n,r,t[6],15,-1560198380);r=ii(r,i,s,n,t[13],21,1309151649);n=ii(n,r,i,s,t[4],6,-145523070);s=ii(s,n,r,i,t[11],10,-1120210379);i=ii(i,s,n,r,t[2],15,718787259);r=ii(r,i,s,n,t[9],21,-343485551);e[0]=add32(n,e[0]);e[1]=add32(r,e[1]);e[2]=add32(i,e[2]);e[3]=add32(s,e[3])}function cmn(e,t,n,r,i,s){t=add32(add32(t,e),add32(r,s));return add32(t<<i|t>>>32-i,n)}function ff(e,t,n,r,i,s,o){return cmn(t&n|~t&r,e,t,i,s,o)}function gg(e,t,n,r,i,s,o){return cmn(t&r|n&~r,e,t,i,s,o)}function hh(e,t,n,r,i,s,o){return cmn(t^n^r,e,t,i,s,o)}function ii(e,t,n,r,i,s,o){return cmn(n^(t|~r),e,t,i,s,o)}function md51(e){txt="";var t=e.length,n=[1732584193,-271733879,-1732584194,271733878],r;for(r=64;r<=e.length;r+=64){md5cycle(n,md5blk(e.substring(r-64,r)))}e=e.substring(r-64);var i=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];for(r=0;r<e.length;r++)i[r>>2]|=e.charCodeAt(r)<<(r%4<<3);i[r>>2]|=128<<(r%4<<3);if(r>55){md5cycle(n,i);for(r=0;r<16;r++)i[r]=0}i[14]=t*8;md5cycle(n,i);return n}function md5blk(e){var t=[],n;for(n=0;n<64;n+=4){t[n>>2]=e.charCodeAt(n)+(e.charCodeAt(n+1)<<8)+(e.charCodeAt(n+2)<<16)+(e.charCodeAt(n+3)<<24)}return t}function rhex(e){var t="",n=0;for(;n<4;n++)t+=hex_chr[e>>n*8+4&15]+hex_chr[e>>n*8&15];return t}function hex(e){for(var t=0;t<e.length;t++)e[t]=rhex(e[t]);return e.join("")}function md5(e){return hex(md51(e))}function add32(e,t){return e+t&4294967295}var hex_chr="0123456789abcdef".split("");if(md5("hello")!="5d41402abc4b2a76b9719d911017c592"){function add32(e,t){var n=(e&65535)+(t&65535),r=(e>>16)+(t>>16)+(n>>16);return r<<16|n&65535}}
-                            return (!string || typeof string != "string" || string.length == 0 ? "#A4A7AC" : "#" + md5(string).slice(0, 6));
+                        text2Color: function(str){
+							if(!str || str.length == 0) {
+								return false
+							}
+							for(var i = 0, hash = 0; i < str.length; hash = str.charCodeAt(i++) + ((hash << 5) - hash));
+							for(var i = 0, colour = "#"; i < 3; colour += ("00" + ((hash >> i++ * 2) & 0xFF)
+									.toString(16))
+								.slice(-2));
+							
+							return colour;
                         }
                     },
                     files:null,
                     _itFl:[],
-                    _itFc: null
+                    _itFc: null,
+					_ajFc: null,
                 }
                 f.init();
                 s.on("filer.append", function(e, data){f._append(e, data)});

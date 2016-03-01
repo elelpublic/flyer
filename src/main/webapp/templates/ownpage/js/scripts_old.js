@@ -59,7 +59,7 @@ $projectile._config = {
         list: {
                 rightSide: '<div class="table-container files-items-table">\
                                 <div class="table-heading filter-list-mode">\
-                                    <div class="table-col" style="width:1px"><input type="checkbox" class="file-item-check" id="files-item-all" disabled><label for="files-item-all"></label></div>\
+                                    <div class="table-col" style="width:1px"></div>\
                                     <div class="table-col"><a class="selected" data-sort="name">'+$projectile.captions.tName+'</a></div>\
                                     <div class="table-col"><a data-sort="size">'+$projectile.captions.tSize+'</a></div>\
                                     <div class="table-col"><a data-sort="date">'+$projectile.captions.tDate+'</a></div>\
@@ -102,11 +102,15 @@ $projectile._config._filerOpts = {
             data: {},
             type: 'POST',
             enctype: 'multipart/form-data',
-            beforeSend: function(){},
+            beforeSend: function(){ $('#files-item-all').prop('checked', false); },
             success: function(data, el, l, o, p, s){},
             error: function(el){},
             statusCode: {},
             onProgress: function(){},
+			onComplete: function(l, p, o, s){
+				s.val("");
+				$("#filerComment").find("textarea").val("");
+			},
         },
         dragDrop: {
             dragEnter: function(){},
@@ -126,6 +130,11 @@ $projectile._config._filerOpts = {
         },
         afterShow: null,
         onRemove: function(el, data, id, callback){
+			if(el.attr('data-jfiler-upload-error') != null){
+				callback(el, id);
+				return;
+			}
+			
             $projectile._config.btnLoading(el.find(".item-trash-action"));
             $projectile.file.remove(data, function(r){
                 if(r._transfered){
@@ -214,8 +223,27 @@ $(function(){
     /* 
         Filter Items
     */
+	$('body').on('click', '.filter-mode', function(e) {
+		e.preventDefault();
+		
+		var $target = e.target ? $(e.target) : null,
+			$filterEl = $('.filter-mode');
+		
+		if($target.is($filterEl) || $target.parent().is($filterEl)){
+			$(this).toggleClass('active');
+		}
+	}).on('click', function(e){
+		var $target = e.target ? $(e.target) : null,
+			$filterEl = $('.filter-mode');
+		
+		if(!$target || !$filterEl) return;
+		if($target.is($filterEl) || $target.closest($filterEl).size() > 0) return;
+		
+		$('.filter-mode').removeClass('active');
+	});
     $('body').on('click', '.filter-list-type:not(.disabled) li a[data-type]', function(e){
         e.preventDefault();
+		
         $('.filter-list-type li').removeClass('selected');
         $(this).closest('li').addClass('selected');
         
@@ -238,11 +266,18 @@ $(function(){
     $('body').on('change', $projectile._config.item_selector + " input.file-item-check", function(e){
         var id = $(this).attr("id"),
             el = $(this).closest($projectile._config.item_selector),
+			checked = $(this).prop('checked'),
             ul = ".items-manipulation";
-        if($projectile._config.items_selected.length <= 0 || $.inArray(id, $projectile._config.items_selected) <= -1) {
+        if(checked) {
+			if($.inArray(id, $projectile._config.items_selected) > -1) return;
             $projectile._config.items_selected.push(id);
             $(ul).show();
             $(ul).find("li:first-child i.num").text($projectile._config.items_selected.length);
+			el.addClass('file-item-checked');
+			
+			if($projectile._config.items_selected.length == $('.files-items-list').children().size()){
+				$('#files-item-all').prop('checked', true);
+			}
         }else{
             $projectile._config.items_selected = $.grep($projectile._config.items_selected, function(value) {
                 return value != id;
@@ -251,21 +286,35 @@ $(function(){
             if($projectile._config.items_selected.length <= 0){
                 $(ul).hide();      
             }
+			el.removeClass('file-item-checked');
+			
+			$(this).prop('checked', false);
+			$('#files-item-all').prop('checked', false);
         }
     });
     
     /* 
         Selected items Manipulation 
     */
-    $('body').on('click', ".items-manipulation li a[class]", function(e){
-        e.preventDefault();
+    $('body').on('click change', ".items-manipulation li a[class], .items-manipulation li input.file-items-check", function(e){
         var current = $(this).attr("class");
-        if(!$projectile._config.items_selected || $projectile._config.items_selected.length <= 0){return false}
+        if(!$projectile._config.items_selected || $projectile._config.items_selected.length <= 0) return false;
         switch(current){
+			case "file-items-check":
+				var checked = $(this).prop('checked');
+				$($projectile._config.list_selector).children().find('.file-item-check').prop('checked', checked).trigger('change');
+				
+				return;
+			break;
             case "all-archive-action":
-                
+				e.preventDefault();
+				var download_buttons = $($projectile._config.item_selector).find('[download]');
+                for(var i = 0; i<download_buttons.size(); i++){
+                	download_buttons.get(i).click();
+                }
             break;
             case "all-lock-action":
+				e.preventDefault();
                 modal({type: "prompt", title: $projectile.captions.tPrompt, text: $projectile.captions.lockText+":", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}, callback: function(comment){
                     if(!comment){ modal({type: "warning", title: $projectile.captions.tInfo, text: $projectile.captions.lockCommentEmpty+"!", buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel},}); return true }
                     for(key in $projectile._config.items_selected){
@@ -279,10 +328,10 @@ $(function(){
                     }
                     
                     location.reload();
-                    return true;
                 }});
             break;
             case "all-trash-action":
+				e.preventDefault();
                 modal({type: "confirm", title: $projectile.captions.tConfirm, text: $projectile.captions.removeConfirmation, buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel}, callback: function(answear){
                     if(answear){
                         for(var key=0; key<$projectile._config.items_selected.length; key++){
@@ -299,14 +348,14 @@ $(function(){
                                 $(".items-manipulation").find("li:first-child i.num").text($projectile._config.items_selected.length-(key+1));
                             }
                         }
-                        
-                        $projectile._config.items_selected = [];
-						$('.file-item-check').prop('checked', false);
-                        $(".items-manipulation").hide();
                     }
                 }});
             break;
         }
+		
+		$projectile._config.items_selected = [];
+		$('#files-item-all, .file-item-check').prop('checked', false);
+		$(".items-manipulation").hide();
     });
     
     /* 
@@ -431,77 +480,4 @@ $(function(){
     }
     
     viewMode();
-    
-    /*
-        List View - Thumbnail
-    */
-    if($projectile.viewMode == 'list'){
-        $('body').on('mouseenter mousemove blur mouseout', $projectile._config.item_selector + '[data-file-type="image"] a.files-item-title', function(e){
-            var title = $(this),
-                parent = title.closest($projectile._config.item_selector),
-                tooltip = parent.find('div.files-item-tooltip-image'),
-                isVisible = tooltip.is(':visible'),
-                id = parseInt(parent.attr("data-file-orderkey"));
-            
-            title.removeAttr("title");
-            
-            e.offsetX = e.offsetX==undefined?e.pageX - title.offset().left:e.offsetX;
-            e.offsetY = e.offsetY==undefined?e.pageY - title.offset().top:e.offsetY;
-            
-            var setPosition = function(e, title, tooltip){
-                tooltip.css({
-                    left: title.offset().left + e.offsetX - $(window).scrollLeft(),
-                    top: title.offset().top + e.offsetY - $(window).scrollTop()
-                });
-                
-                //fix top
-                if(tooltip.offset().top+tooltip.outerHeight() > $(window).height()){
-                    tooltip.css({
-                        top: title.offset().top + e.offsetY/2 - 3 - title.outerHeight() - tooltip.outerHeight() - $(window).scrollTop()
-                    });
-                }                
-                if(tooltip.offset().top - $(window).scrollTop() < 0){
-                    tooltip.css({
-                        top: 3
-                    });
-                }
-                
-                //fix left
-                if(tooltip.offset().left+tooltip.outerWidth() > $(window).width()){
-                    tooltip.css({
-                        left: title.offset().left + e.offsetX/2 - 3 - tooltip.outerWidth() - $(window).scrollLeft()
-                    });
-                }                
-                if(tooltip.offset().left - $(window).scrollLeft() < 0){
-                    tooltip.css({
-                        left: 3
-                    });
-                }
-            };
-            
-            switch(e.type){
-                case 'mouseenter':
-                    if(!isVisible){
-                        window['lsvto42'+id] = setTimeout(function(title, tooltip){
-                            $.each($(".files-item-tooltip-image"), function(a, b){
-                                 $(b).hide();
-                            });
-                            if(title.is(':hover')){
-                                tooltip.show();
-                                setPosition(e, title, tooltip);
-                            }
-                        }, 540, title, tooltip);
-                    }
-                break;
-                case 'mousemove':
-                    setPosition(e, title, tooltip);
-                break;
-                case 'blur':
-                case 'mouseout':
-                    clearTimeout(window['lsvto42'+id]);
-                    tooltip.hide();
-                break;
-            }
-        });
-    }
 });

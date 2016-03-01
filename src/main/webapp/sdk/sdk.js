@@ -1,13 +1,8 @@
 /*
     .projectile-filer
-        | [data-filer-type]
-            | 0 : not defined
-            | 1 : used for iframe (default)
-            | 2 : used for custom html, which supports {{}} tags
         | [data-filer-theme]
-            | 0 : list view (default)
-            | 1 : tablew view
-            | 2 : all in {drag&drop, thumbnails, filters...}
+            | 1 : inline tabble-view
+            | 2 : own page
         | [data-filer-set-]
             | custom parameters for jquery.filer
 */
@@ -15,13 +10,14 @@
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
         version: "0.1.18",
-        u: window.self !== window.top ? "/projectile/apps/flyer/" : "/flyer/", // source directory
-        restUrl: window.self !== window.top ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
+        u: window.self !== window.top || true ? "/projectile/apps/flyer/" : "/flyer/", // source directory
+        restUrl: window.self !== window.top || true ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
         folder: null,
         s: [],
         captions: {
             Flyer: "Flyer|Flyer",
+			home: "Flyer|Homedir",
             file: "Flyer|File",
             files: "Flyer|Files",
             lock: "Tooltip|Lock",
@@ -30,6 +26,7 @@
             listView: "Flyer|ListView",
             gridView: "Flyer|GridView",
             filesSelected: "Flyer|Files selected",
+            selectAll: "Document|Select all",
             remove: "Tooltip|Delete",
             tName: "Document|Title",
             tSize: "Document|Size",
@@ -66,6 +63,7 @@
             no: "Tooltip|No",
             cancel: "Document|Cancel",
             openFile: "Document|Open",
+			uploading: "Flyer|Uploading",
             today: "System|Today",
             yesterday: "System|Yesterday",
             day_0: "WeekdayShort|0",
@@ -101,33 +99,16 @@
             
             f.folder = (f.s[0].el.getAttribute('data-filer-folderid') ? f.s[0].el.getAttribute('data-filer-folderid') : f._location.getParameter('list'));
             
-            if(attr("data-filer-type")){
-                switch(attr("data-filer-type")){
-                    case "1":
-                        f.load("1");
-                    break;
-                    case "2":
-                        f.load("2");
-                    break;
-                }
-            }
             if(attr("data-filer-theme")){
                 switch(attr("data-filer-theme")){
-                    case "0":
-                        f.load("list");
-                    break;
                     case "1":
-                        f.load("table");
+                        f.load("inline");
                     break;
                     case "2":
-                        f.load("thumbs");
+                        f.load("ownpage");
                     break;
                 }
             }
-        },
-        
-        check: function() {
-            
         },
 
         getStyles: function(href) {
@@ -208,43 +189,32 @@
             if(!type){
                 if (typeof jQuery == "undefined") { f.getScript("bower_components/jquery/jquery.min.js"); }
                 f.getScript("js/jquery.filer.js");
+				f.getStyles("css/plugins/jquery.filer.css");
                 if(typeof modal == "undefined") { f.getStyles("bower_components/jquery.modal/css/jquery.modal.css"); f.getScript("bower_components/jquery.modal/js/jquery.modal.min.js"); }
                 if(typeof notify == "undefined") { f.getStyles("bower_components/jquery.notify/css/jquery.notify.css"); f.getScript("bower_components/jquery.notify/js/jquery.notify.min.js"); }
                 f.getStyles("bower_components/jquery.dropdown/css/jquery.dropdown.css"); f.getScript("bower_components/jquery.dropdown/js/jquery.dropdown.min.js");
             }
-            if(type == "1") {
-                f.getStyles("css/plugins/jquery.filer.css");
-            }
-            if(type == "2") {
-                f.getStyles("css/plugins/jquery.filer.css");
-            }
-            if(type == "list") {
-                f.getStyles("templates/list/css/jquery.filer-table.css");
-                f._ajax(f.u + "templates/list/index.html", 'GET', {}, function(r){
+            if(type == "inline") {
+                f.getStyles("templates/inline/css/jquery.filer-inline.css");
+                f._ajax(f.u + "templates/inline/index.html", 'GET', {}, function(r){
                     f.s[0].el.innerHTML = r;
-                    f.getScript("templates/list/js/scripts.js");
-                    f.getScript("templates/list/js/custom.js");
-                });    
-            }
-            if(type == "table") {
-                f.getStyles("templates/table/css/jquery.filer-table.css");
-                f._ajax(f.u + "templates/table/index.html", 'GET', {}, function(r){
-                    f.s[0].el.innerHTML = r;
-                    f.getScript("templates/table/js/scripts.js");
-                    f.getScript("templates/table/js/custom.js");
+                    f.getScript("templates/inline/js/scripts.js");
+                    f.getScript("templates/inline/js/custom.js");
                 });
             }
-            if(type == "thumbs") {
-                f.getStyles("templates/thumbnails/css/jquery.filer-thumbnails.css");
-                f._ajax(f.u + "templates/thumbnails/index.html", 'GET', {}, function(r){
+            if(type == "ownpage") {
+                f.getStyles("templates/ownpage/css/jquery.filer-ownpage.css");
+                f._ajax(f.u + "templates/ownpage/index.html", 'GET', {}, function(r){
                     f.s[0].el.innerHTML = r;
-                    f.getScript("templates/thumbnails/js/scripts.js");
+                    f.getScript("templates/ownpage/js/scripts.js");
                     if(f.storage("ViewMode") && f.storage("ViewMode") == "grid"){
-                        f.getScript("templates/thumbnails/js/custom.js");
+						f.getStyles("templates/ownpage/css/custom-view-grid.css");
+                        f.getScript("templates/ownpage/js/custom-grid-view.js");
                         $projectile.viewMode = "grid";
                     }else{
-                        f.getScript("templates/thumbnails/js/custom-list-view.js");
-                        $projectile.viewMode = "list";
+						f.getStyles("templates/ownpage/css/custom-view-table.css");
+                        f.getScript("templates/ownpage/js/custom-table-view.js");
+                        $projectile.viewMode = "table";
                     }
                 });
             }
@@ -262,7 +232,7 @@
                             data.locked = true
                             r._transfered = true;
                         }else{
-                            if(typeof(r) != "object"){r = new Object()} 
+                            if(typeof(r) != "object"){r = new Object()}
                             r._transfered = false;
                         }
                         callback(r);
