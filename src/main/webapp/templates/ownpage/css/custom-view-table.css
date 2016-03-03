@@ -137,9 +137,9 @@
 }
 
 .files-item-actions {
-    text-align: center;
-	min-width: 110px;
-	padding: 15px 0 15px 15px !important
+    text-align: right;
+    min-width: 110px;
+    padding: 15px 10px 15px 10px !important;
 }
 
 .files-item-actions ul {
