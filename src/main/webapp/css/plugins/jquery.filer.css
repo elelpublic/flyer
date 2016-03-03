@@ -130,7 +130,7 @@ span.jFiler-icon-file {
 	position: relative;
     display: block;
     background: #e1e1e1 url('../../images/icons/file_196x.png') no-repeat;
-    background-size: contain;
+    background-size: cover;
     width: 57px;
     height: 74px;
     line-height: 90px;
