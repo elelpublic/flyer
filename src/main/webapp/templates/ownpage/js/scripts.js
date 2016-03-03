@@ -63,7 +63,7 @@ $projectile._config = {
         table: {
                 rightSide: '<div class="table-container files-items-table">\
                                 <div class="table-heading filter-list-mode">\
-                                    <div class="table-col" style="width:1px"></div>\
+                                    <div class="table-col" style="width:52px"></div>\
                                     <div class="table-col"><a class="selected" data-sort="name">'+$projectile.captions.tName+'</a></div>\
                                     <div class="table-col"><a data-sort="size">'+$projectile.captions.tSize+'</a></div>\
                                     <div class="table-col"><a data-sort="date">'+$projectile.captions.tDate+'</a></div>\
@@ -73,10 +73,10 @@ $projectile._config = {
                                 </div>\
                                 <div class="table-body files-items-list"></div>\
                             </div>\
-                            <p class="jFiler-emptyMessage text-center">- '+$projectile.captions.noFiles+' -</p>'
+                            <p class="jFiler-emptyMessage text-center">'+$projectile.captions.noFiles+'</p>'
             },
             grid: {
-                rightSide: '<ul class="files-items-list list-table"><p class="jFiler-emptyMessage text-center">- '+$projectile.captions.noFiles+' -</p></ul>'
+                rightSide: '<ul class="files-items-list list-table"></ul><p class="jFiler-emptyMessage text-center">'+$projectile.captions.noFiles+'</p>'
             }
     },
 	version_page: function(){
@@ -251,6 +251,9 @@ $projectile._config._filerOpts = {
 			callback(el, id);
 			return;
 		}
+		
+		//uncheck files-item-all
+		el.find('.file-item-check').prop('checked', false).trigger('change');
 
 		//remove files
 		$projectile._config.btnLoading(el.find(".item-trash-action"));
@@ -262,6 +265,10 @@ $projectile._config._filerOpts = {
 			}
 			$projectile._config.btnLoading(el.find(".item-trash-action"),true);
 		});
+	},
+	onEmpty: function(){
+		$('.jFiler-emptyMessage').remove();
+		$('.right-side').append('<p class="jFiler-emptyMessage text-center">'+$projectile.captions.noFiles+'</p>');
 	},
 	captions: {
 		button: $projectile.captions.browseFiles,
