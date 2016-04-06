@@ -434,7 +434,9 @@
         },
         
         dateFormat: function(date, strict) {
-
+			if(!date)
+				return '';
+			
             var parts = date.split('T'),
                 day = new Date(parts[0]),
                 dateParts = parts[0].split('-'),
