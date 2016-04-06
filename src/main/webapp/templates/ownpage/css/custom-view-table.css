@@ -83,7 +83,7 @@
 }
 
 .table-body a.ns-underline{
-	color: #747474;
+	color: #646464;
 }
 
 .table-body .files-item-title {
@@ -94,6 +94,8 @@
 
 .table-body .files-item-title i {
 	vertical-align: middle;
+	float: left;
+    margin-right: 5px;
 }
 
 .table-body a.ns-underline:hover, .table-body a.ns-underline:hover{
