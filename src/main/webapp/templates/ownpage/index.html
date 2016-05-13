@@ -1,0 +1,56 @@
+<div id="header">
+    <div class="container-fluid header-fixed">
+        <div class="row">
+            <div class="col-xs-3 header-logo _splr20">
+                <h3><a href="javascript:location.reload();"><i class="icon-jfi-folder"></i> %captions-Flyer%</a></h3>
+            </div>
+            <div class="col-xs-9 header-content bgcolor-2">
+                <ul class="view-switcher list-inline pull-left _splr30">
+                    <li><a class="table-view" title="%captions-listView%"><i class="icon-jfi-view-list"></i></a></li>
+                    <li><a class="grid-view" title="%captions-gridView%"><i class="icon-jfi-view-grid"></i></a></li>
+                </ul>
+				<ul class="breadcrumb view-path pull-left"></ul>
+                <ul class="items-manipulation list-inline pull-left _splr30">
+                    <li><input type="checkbox" class="file-items-check" id="files-item-all"><label for="files-item-all" title="%captions-selectAll%"></label> <i class="num"></i> %captions-filesSelected%:</li>
+                    <li><a class="all-archive-action"><i class="icon-jfi-zip"></i> %captions-download%</a></li>
+                    <li><a class="all-lock-action"><i class="icon-jfi-lock"></i> %captions-lock%</a></li>
+                    <li><a class="all-trash-action"><i class="icon-jfi-trash"></i> %captions-remove%</a></li>
+                </ul>
+                <ul class="folder-manipulation list-inline pull-right _splr30">
+					<!--<li>Create folder</li>-->
+                    <li class="filter-mode">
+						<span>%captions-sortBy%</span><i class="icon-jfi-sort"></i>
+						<ul class="filter-list-mode">
+							<li><a data-sort="name">%captions-tName%</a></li>
+							<li><a data-sort="size">%captions-tSize%</a></li>
+							<li><a data-sort="date" class="selected">%captions-tDate%</a></li>
+							<li><a data-sort="user">%captions-tUser%</a></li>	
+						</ul>
+					</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content" class="container-fluid">
+    <div class="row">
+
+        <div class="col-xs-3 _splr20 bgcolor-2 _sptG left-side">
+            <div class="col-xs-3 left-side-bg bgcolor-2"></div>
+            <div class="left-side-fixed">
+                <div>
+                    <input type="file" name="files[]" id="filer1" multiple="multiple" />
+                    <div id="filerComment">
+                        <textarea class="form-control" name="Comment" placeholder="%captions-commentLeave%"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-9 _splr30 _sptG right-side">
+            <div></div>
+        </div>
+    </div>
+</div>
+<div class="preloader"><span><img src="images/icons/loading.gif"></span></div>

@@ -16,7 +16,7 @@ apply plugin: 'jetty'
 
 
 group = 'com.infodesire'
-version = '0.1.18-SNAPSHOT'
+version = '0.1.19'
 
 httpPort = 8081
 
@@ -45,7 +45,7 @@ dependencies {
     	'com.google.guava:guava:18.0',
     	'com.infodesire:bsmcommons:0.4.5',
     	'com.infodesire:resthelper:0.1.2',
-    	'commons-collections:commons-collections:3.2.1',
+    	'commons-collections:commons-collections:3.2.2',
     	'log4j:log4j:1.2.17',
     	'org.apache.httpcomponents:httpclient:4.3.5',
     	'org.mitre.dsmiley.httpproxy:smiley-http-proxy-servlet:1.5'	

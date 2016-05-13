@@ -2,6 +2,12 @@
 	==============================
           * Custom Styles *
 	==============================
+
+font-family: 'Source Sans Pro', sans-serif;
+font-family: 'Montserrat', sans-serif;
+
+#48A0DC - new blue
+#FFA769 - new active, hover button
 */
 body {
     font-family: "Helvetica Neue", Helvetica,Arial, sans-serif;
@@ -49,6 +55,7 @@ input[type=checkbox]+label,input[type=radio]+label {
     background-image: url(../images/icons/sprite-forms.png);
     background-repeat: no-repeat;
     background-position: 0 -1px;
+	vertical-align: middle;
 }
 
 input[type=radio]+label {
@@ -150,7 +157,7 @@ ol {
 	padding: 30px;
 }
 .container-fluid{
-    min-width: 980px;
+    min-width: 940px;
     padding: 0;
 }
 
