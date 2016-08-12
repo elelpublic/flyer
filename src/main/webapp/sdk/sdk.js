@@ -9,7 +9,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "0.1.20",
+        version: "0.1.21",
         u: window.self !== window.top || true ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top || true ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
@@ -74,31 +74,31 @@
             day_5: "WeekdayShort|5",
             day_6: "WeekdayShort|6"
         },
-        
+
         init: function(){
             var element = document.querySelectorAll("[class^='projectile-filer']");
             if(!element || element.length <= 0){
                 return false;
             }else{
-                f.s.push( {t: "filer", el: element[0]} );  
+                f.s.push( {t: "filer", el: element[0]} );
             }
-            
+
             f.load();
-            
+
             f.getCaptions(function(){
                 f.customize();
             });
         },
-        
+
         customize: function() {
             var el = f.s[0].el,
                 attr = function(name) {
                     var a = el.getAttribute(name);
-                    if(!a || typeof a == "undefined") { return false; } else { return a.toString(); } 
+                    if(!a || typeof a == "undefined") { return false; } else { return a.toString(); }
                 };
-            
+
             f.folder = (f.s[0].el.getAttribute('data-filer-folderid') ? f.s[0].el.getAttribute('data-filer-folderid') : f._location.getParameter('list'));
-            
+
             if(attr("data-filer-theme")){
                 switch(attr("data-filer-theme")){
                     case "1":
@@ -129,7 +129,7 @@
             script.async = false;
             head.appendChild(script);
         },
-        
+
         _location: {
             addParameter: function(key, value, sourceURL){
                 var sourceURL = (sourceURL ? sourceURL : location.href),
@@ -172,15 +172,15 @@
                 location.href = url;
             }
         },
-        
+
         preloader: function(event) {
             event = (!event ? "show" : "hide");
             var preloader = document.body.getElementsByClassName('preloader');
-            
+
             if (preloader && preloader.length > 0) {
                 preloader[0].parentNode.removeChild(preloader[0]);
             }
-            
+
             if(event == "hide") { return; }
             document.body.innerHTML = document.body.innerHTML + '<div class="preloader"><span><img src="images/icons/loading.gif"></span></div>';
         },
@@ -219,7 +219,7 @@
                 });
             }
         },
-        
+
         file: {
             lock: function(data, callback){
                 if(!data.locked){
@@ -236,7 +236,7 @@
                             r._transfered = false;
                         }
                         callback(r);
-                        
+
                     }, "json");
                 }else{
                     var params = {
@@ -247,12 +247,12 @@
                             data.locked = false
                             r._transfered = true;
                         }else{
-                            if(typeof(r) != "object"){r = new Object()} 
+                            if(typeof(r) != "object"){r = new Object()}
                             r._transfered = false;
                         }
                         callback(r);
-                        
-                    }, "json");   
+
+                    }, "json");
                 }
             },
             edit: function(data, callback){
@@ -263,7 +263,7 @@
                     if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
                         r._transfered = true;
                     }else{
-                        if(typeof(r) != "object"){r = new Object()} 
+                        if(typeof(r) != "object"){r = new Object()}
                         r._transfered = false;
                     }
                     callback(r);
@@ -278,18 +278,18 @@
                         data.locked = true
                         r._transfered = true;
                     }else{
-                        if(typeof(r) != "object"){r = new Object()} 
+                        if(typeof(r) != "object"){r = new Object()}
                         r._transfered = false;
                     }
                     callback(r);
-                    
+
                 }, "json");
             },
             archive: function(){
-                
+
             },
         },
-        
+
         getFiles: function(folder, callback) {
             var files = [],
                 id = (folder && typeof folder == "string" ? folder : f.folder);
@@ -318,7 +318,7 @@
                                     for(var i = 0; i<r2.Entries.length; i++){
                                         r2.Entries[0].revisions.push(r2.Entries[i]);
                                     }
-                                } 
+                                }
 
                                 files.push(r2.Entries[0]);
                             }
@@ -330,14 +330,14 @@
                                 f.files = files;
                                 (folder && typeof folder == "function" ? folder(files) : (callback && typeof callback == "function" ? callback(files) : null));
                             }
-                        }, "json");  
-                    }    
+                        }, "json");
+                    }
                 }else{
                     (folder && typeof folder == "function" ? folder(files) : (callback && typeof callback == "function" ? callback(files) : null));
                 }
             }, "json");
         },
-        
+
         getCaptions: function(callback) {
             var captions = f.captions,
                 data = "",
@@ -348,7 +348,7 @@
                 data += param + 'id=' + value;
                 first = false;
             }
-            
+
             f._ajax(f.restUrl + "api/json/" + f.clientId + "/captions" + data, 'GET', {}, function(r){
                 var i = 0;
                 for(key in captions){
@@ -361,11 +361,11 @@
                 callback(captions);
             }, "json");
         },
-        
+
         changeCaptions: function() {
             f.s[0].el.innerHTML = f.s[0].el.innerHTML.replace(/\%captions-(.*?)\%/g, function(match, a){return f.captions[a]});
         },
-        
+
         _ajax: function(url, type, data, callback, dataType) {
             var request = new XMLHttpRequest(),
                 data = (!data || f.isEmptyObj(data) ? false : data),
@@ -377,21 +377,21 @@
                     }
                   return str.join("&");
                 };
-            
+
             request.open(type, url, true);
 
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400){
                     resp = request.responseText;
                     if(dataType && dataType == "json" && resp.substr(0,1)!="<"){
-                        resp = JSON.parse(resp);   
+                        resp = JSON.parse(resp);
                     }else{
                         if(resp.substr(0, 12) == "<html><head>"){
                             resp = false;
                         }
                     }
                     if(callback && typeof callback == "function"){
-                        callback(resp, data.a);   
+                        callback(resp, data.a);
                     }
                 }
             };
@@ -399,19 +399,19 @@
             request.onerror = function() {
                 console.error("Failed to load response data!", arguments);
             };
-            
+
             if(data){
                 request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
             }
-            
-            request.send((data ? serialize(data) : ""));   
+
+            request.send((data ? serialize(data) : ""));
         },
-        
+
         ready: function(callback) {
             var isFinished = [];
             //f.getCaptions(function(){isFinished.push("getCaptions"); allDone()});
             f.getFiles(function(){isFinished.push("getFiles"); allDone()});
-            
+
             function allDone() {
                 if(isFinished.length < 1) return;
                 f.preloader("hide");
@@ -419,7 +419,7 @@
                 callback(f);
             }
         },
-        
+
         storage: function(name, value){
             if(typeof(Storage) == "undefined") { return false }
 
@@ -432,11 +432,11 @@
                 return true;
             }
         },
-        
+
         dateFormat: function(date, strict) {
 			if(!date)
 				return '';
-			
+
             var parts = date.split('T'),
                 day = new Date(parts[0]),
                 dateParts = parts[0].split('-'),
@@ -470,11 +470,11 @@
 
             return dateformat + " " + d.hours + ":" + d.minutes + ":" + d.seconds;
         },
-        
+
         dateEqual: function( date1, date2 ) {
         	return date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate();
         },
-        
+
         sizeFormat: function(bytes){
             if(bytes == 0) return '0 Byte';
             var k = 1000;
@@ -482,7 +482,7 @@
             var i = Math.floor(Math.log(bytes) / Math.log(k));
             return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
         },
-        
+
         isEmptyObj: function (obj) {
             for(var prop in obj) {
                 if(obj.hasOwnProperty(prop))
@@ -491,7 +491,7 @@
 
             return true;
         },
-        
+
         supportDownload : typeof document.createElement('a').download != 'undefined'
         	&& !( navigator.userAgent.indexOf('Linux') != -1
         	&& navigator.userAgent.indexOf('Firefox') != -1 ), // download does not work with linux firefox
