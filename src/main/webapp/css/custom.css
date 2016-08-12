@@ -20,6 +20,7 @@ a,
 a:hover,
 a:active{
     text-decoration: none;
+	outline: none;
 }
 
 a:focus {
@@ -28,8 +29,10 @@ a:focus {
 }
 
 a.ns-underline:hover,
-a.ns-underline:active{
+a.ns-underline:focus,
+a.ns-underline:active {
     text-decoration: underline;
+	outline: none;
 }
 
 img {
