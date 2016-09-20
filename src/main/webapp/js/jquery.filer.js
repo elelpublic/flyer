@@ -754,6 +754,9 @@
                             for (var i = 0, colour = "#"; i < 3; colour += ("00" + ((hash >> i++ * 2) & 0xFF)
                                     .toString(16))
                                 .slice(-2));
+                                
+                            if(colour == '#ffffff')
+                                colour = '#e1e1e1';
 
                             return colour;
                         }
