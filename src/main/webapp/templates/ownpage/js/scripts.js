@@ -39,6 +39,19 @@ $projectile._config = {
             }
         });
     },
+	archiveService: function(data, callback) {
+        $projectile.file.archive(data, function(r) {
+            if (r._transfered) {
+                if (callback) {
+                    callback(r);
+                } else {
+                    return true
+                };
+            } else {
+                $projectile._config.requestErrorMessage("archive", r, data);
+            }
+        });
+    },
     editService: function(data, callback) {
         $projectile.file.edit(data, function(r) {
             if (r._transfered) {
@@ -366,7 +379,7 @@ $(function() {
                 var checked = $(this).prop('checked');
                 $($projectile._config.list_selector).children().find('.file-item-check').prop('checked', checked).trigger('change');
                 break;
-            case "all-archive-action":
+            case "all-download-action":
                 e.preventDefault();
 
                 for (key in $projectile._config.items_selected) {
@@ -378,6 +391,21 @@ $(function() {
 
                 reset_selected();
                 break;
+			case "all-archive-action":
+				for (key in $projectile._config.items_selected) {
+					var val = $projectile._config.items_selected[key],
+						data = $.grep($projectile.files, function(a, b) {
+							return a.fId == val.substring(11);
+						}),
+						el = $('[data-file-revisionid="' + data[0].fId + '"]')
+
+					$projectile._config.archiveService(data[0]);
+					el.remove();
+				}
+
+				reset_selected();
+				location.reload();
+				break;
             case "all-lock-action":
                 e.preventDefault();
                 modal({

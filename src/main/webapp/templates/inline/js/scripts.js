@@ -221,7 +221,7 @@ $(function(){
         var current = $(this).attr("class");
         if(!$projectile._config.items_selected || $projectile._config.items_selected.length <= 0){return false}
         switch(current){
-            case "all-archive-action":
+            case "all-download-action":
                 
             break;
             case "all-lock-action":
