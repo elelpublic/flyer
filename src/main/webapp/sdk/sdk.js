@@ -9,7 +9,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "0.1.22",
+        version: "0.1.23",
         u: window.self !== window.top || true ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top || true ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
@@ -50,6 +50,7 @@
             lockCommentEmpty: "Flyer|Please enter a comment",
             lockDenied: "${Flyer:File '$0' is locked by $1 at $2. Comment was '$3'}",
             tConfirm: "System|Hint",
+			archive: "Default|Archivieren",
             download: "Defaulft|Download",
             success: "Document|Success",
             versions: "Document|History",
@@ -285,8 +286,18 @@
 
                 }, "json");
             },
-            archive: function(){
+            archive: function(data, callback){
+				f._ajax(f.restUrl + "api/json/" + f.clientId + "/filearchives", 'POST', {fileHistoryId: data.fId}, function(r){
+					if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
+						data.locked = true
+						r._transfered = true;
+					}else{
+						if(typeof(r) != "object"){r = new Object()}
+						r._transfered = false;
+					}
+					callback(r);
 
+				}, "json");
             },
         },
 
