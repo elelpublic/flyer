@@ -9,7 +9,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "0.1.23",
+        version: "0.1.24",
         u: window.self !== window.top || true ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top || true ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
@@ -50,7 +50,7 @@
             lockCommentEmpty: "Flyer|Please enter a comment",
             lockDenied: "${Flyer:File '$0' is locked by $1 at $2. Comment was '$3'}",
             tConfirm: "System|Hint",
-			archive: "Default|Archivieren",
+            archive: "Action|Archive",
             download: "Defaulft|Download",
             success: "Document|Success",
             versions: "Document|History",

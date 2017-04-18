@@ -365,6 +365,9 @@ $(function() {
     });
 
     // selected items manipulation
+    if(!(window.top && window.top.BSM) || !window.top.BSM.Views.view.viewProperties.archiveFeature) {
+    	$('.all-archive-action').closest('li').hide();
+    }
     $('body').on('click change', ".items-manipulation li a[class], .items-manipulation li input.file-items-check", function(e) {
         var current = $(this).attr("class"),
             reset_selected = function() {
