@@ -14,6 +14,9 @@ $projectile._config = {
         if (a == "lock" && c && c.locked) {
             text = $projectile.captions.lockDenied.replace("$0", c.fileName).replace("$1", c.lockedByName).replace("$2", $projectile.dateFormat(c.lockTime, true)).replace("$3", c.lockComment);
         }
+        else if( a == "archive" && b && b.Message ) {
+        	text = b.Message;
+        }
 
         return modal({
             type: "error",
@@ -43,6 +46,7 @@ $projectile._config = {
         $projectile.file.archive(data, function(r) {
             if (r._transfered) {
                 if (callback) {
+                    r.rId = data.rId;
                     callback(r);
                 } else {
                     return true
@@ -395,19 +399,20 @@ $(function() {
                 reset_selected();
                 break;
 			case "all-archive-action":
+				e.preventDefault();
+				
 				for (key in $projectile._config.items_selected) {
 					var val = $projectile._config.items_selected[key],
 						data = $.grep($projectile.files, function(a, b) {
 							return a.fId == val.substring(11);
-						}),
-						el = $('[data-file-revisionid="' + data[0].fId + '"]')
+						});
 
-					$projectile._config.archiveService(data[0]);
-					el.remove();
+					$projectile._config.archiveService(data[0], function(r) {
+						$('[data-file-revisionid="' + r.rId + '"]').remove();
+					});
 				}
 
 				reset_selected();
-				location.reload();
 				break;
             case "all-lock-action":
                 e.preventDefault();
