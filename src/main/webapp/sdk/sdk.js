@@ -9,7 +9,7 @@
 (function(){
     var bsm = window.top && window.top.bsm || window.bsm;
     var f = {
-        version: "0.1.24",
+        version: "0.1.25",
         u: window.self !== window.top || true ? "/projectile/apps/flyer/" : "/flyer/", // source directory
         restUrl: window.self !== window.top || true ? "/projectile/restapps/flyer/" : "/flyer/rest/", // rest request url
         clientId: bsm ? bsm.clientId : '0',
@@ -287,17 +287,16 @@
                 }, "json");
             },
             archive: function(data, callback){
-				f._ajax(f.restUrl + "api/json/" + f.clientId + "/filearchives", 'POST', {fileHistoryId: data.fId}, function(r){
-					if(r && r.StatusCode && r.StatusCode.CodeNumber.toString()=="0"){
-						data.locked = true
-						r._transfered = true;
-					}else{
-						if(typeof(r) != "object"){r = new Object()}
-						r._transfered = false;
-					}
-					callback(r);
-
-				}, "json");
+            	f._send( f.restUrl + "api/json/" + f.clientId + "/filearchives", {fileHistoryId: data.fId}, function(r) {
+            		if( r && r.StatusCode && r.StatusCode.CodeNumber.toString() == "0" ) {
+            			r._transfered = true;
+            		}
+            		else {
+            			if(typeof(r) != "object"){r = new Object()}
+            			r._transfered = false;
+            		}
+            		callback( r );
+            	} );
             },
         },
 
@@ -416,6 +415,17 @@
             }
 
             request.send((data ? serialize(data) : ""));
+        },
+        
+        _send: function( url, data, callback ) {
+        	$.ajax({
+        		type: 'POST',
+        		url: url,
+        		data: JSON.stringify( data ),
+        		contentType: 'application/json',
+        		success: callback,
+        		error: callback
+        	});
         },
 
         ready: function(callback) {
