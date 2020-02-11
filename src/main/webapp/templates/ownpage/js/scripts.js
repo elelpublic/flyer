@@ -161,7 +161,7 @@ $projectile._config = {
             $('.view-path').empty();
             $(".view-path").css('max-width', $('.folder-manipulation').position().left - $('.view-path').position().left - 20);
             $('.view-path').append('<li><a class="versions-back-button" title="' + $projectile.captions.back + '"><i class="icon-jfi-arrow-left"></i></a></li>');
-            $('.view-path').append('<li title="' + data[0].name + '">' + data[0].name + '</li>');
+            $('.view-path').append('<li title="' + data[0].name.replace(/"/g,"&quot;") + '">' + $projectile._config.escapeXss(data[0].name) + '</li>');
 
             html.find("input.file-item-check").remove();
 
@@ -232,6 +232,12 @@ $projectile._config = {
         /* important */
         $('.projectile-filer').addClass(mode + "-view");
         $('.right-side div:first-child').html(_c[mode].rightSide);
+    },
+    escapeXss: function(text) {
+        if (!text || typeof text !== 'string') return text;
+        return text.replace(/["'<>/]/g, function(c) {
+            return '&#' + c.charCodeAt(0) + ';';
+        });
     }
 }
 
@@ -712,7 +718,7 @@ $(function() {
                 if (a) {
                     data.comment = b.find("textarea#file_comment_field_9").val();
                     $projectile._config.editService(data, function() {
-                        el.closest($projectile._config.item_selector).find(".file-comment").html(data.comment);
+                        el.closest($projectile._config.item_selector).find(".file-comment").text(data.comment);
                     });
                 }
                 return true;

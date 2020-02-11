@@ -197,9 +197,13 @@
                     },
                     _thumbCreator: {
                         create: function(i) {
-                            var file = f.files[i],
-                                id = f._itFc.id,
-                                name = file.name,
+                            let file = f.files[i];
+
+                            file.createdByName = $projectile._config.escapeXss(file.createdByName);
+                            file.comment = $projectile._config.escapeXss(file.comment);
+
+                            let id = f._itFc.id,
+                                name = $projectile._config.escapeXss(file.name),
                                 size = file.size,
                                 type = file.type.split("/", 1).toString().toLowerCase(),
                                 ext = name.indexOf(".") != -1 ? name.split(".").pop().toLowerCase() : "",
