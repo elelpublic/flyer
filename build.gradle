@@ -16,7 +16,7 @@ apply plugin: 'jetty'
 
 
 group = 'com.infodesire'
-version = '0.1.26'
+version = '0.1.27'
 
 httpPort = 8081
 
@@ -24,11 +24,15 @@ httpPort = 8081
 // In this section you declare where to find the dependencies of your project
 repositories {
 
+    maven {
+        url "https://repo.maven.apache.org/maven2/"
+    }
+
     mavenCentral()
 
 	ivy {
 		// there is a lot of legacy to adhere to here:
-    	url 'http://edge/s/repository/maven'
+    	url '/s/repository/maven'
     	layout 'pattern' , {
             artifact '[organisation].[module]/[type]s/[artifact]-[revision](.[ext])'
         }
