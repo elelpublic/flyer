@@ -12,7 +12,7 @@ $projectile._config = {
         var text = $projectile.captions.errorText + "!";
 
         if (a == "lock" && c && c.locked) {
-            text = $projectile.captions.lockDenied.replace("$0", c.fileName).replace("$1", c.lockedByName).replace("$2", $projectile.dateFormat(c.lockTime, true)).replace("$3", c.lockComment);
+            text = $projectile.captions.lockDenied.replace("$0", c.fileName).replace("$1", c.lockedByName).replace("$2", $projectile.dateFormat(c.lockTime, true)).replace("$3", $projectile._config.escapeXss(c.lockComment));
         }
         else if( a == "archive" && b && b.Message ) {
         	text = b.Message;
