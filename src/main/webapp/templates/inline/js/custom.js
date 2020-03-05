@@ -175,11 +175,20 @@ $(document).ready(function(){
                             el = p,
                             data = $.grep($projectile.files, function(a,b){
                                 return a.orderKey == id;
-                            })[0];
+                            })[0],
+                            eXss = $projectile._config.escapeXss;
+
                        modal({
                            type: "info",
                            title: $projectile.captions.tInfo,
-                           text: "<b>"+$projectile.captions.file+":</b><br>" + "<p>" + data.name + "</p>" + "<b>"+$projectile.captions.tUser+":</b><br>" + "<p>" + data.lockedByName + "</p>" + "<b>"+$projectile.captions.tDate+":</b><br>" + "<p>" + $projectile.dateFormat(data.lockTime, true) + "</p>" + "<b>"+$projectile.captions.tComment+":</b><br>" + "<p>" + data.lockComment + "</p>",
+                           text: "<b>" + $projectile.captions.file + ":</b><br>"
+                           + "<p>" + eXss(data.name); + "</p>"
+                           + "<b>" + $projectile.captions.tUser +":</b><br>"
+                           + "<p>" + eXss(data.lockedByName) + "</p>"
+                           + "<b>" + $projectile.captions.tDate +":</b><br>"
+                           + "<p>" + $projectile.dateFormat(data.lockTime, true) + "</p>"
+                           + "<b>" + $projectile.captions.tComment +":</b><br>"
+                           + "<p>" + eXss(data.lockComment) + "</p>",
                            center: false,
                            size: "small",
                            buttonText: {ok:$projectile.captions.ok,yes:$projectile.captions.yes,cancel:$projectile.captions.cancel},
