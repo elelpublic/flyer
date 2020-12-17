@@ -182,7 +182,7 @@ $(document).ready(function(){
                            type: "info",
                            title: $projectile.captions.tInfo,
                            text: "<b>" + $projectile.captions.file + ":</b><br>"
-                           + "<p>" + eXss(data.name); + "</p>"
+                           + "<p>" + eXss(data.name) + "</p>"
                            + "<b>" + $projectile.captions.tUser +":</b><br>"
                            + "<p>" + eXss(data.lockedByName) + "</p>"
                            + "<b>" + $projectile.captions.tDate +":</b><br>"

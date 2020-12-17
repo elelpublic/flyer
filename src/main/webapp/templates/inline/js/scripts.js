@@ -40,7 +40,13 @@ $projectile._config = {
     defaultSort: function(a, b){
         return +new Date(a.created) - +new Date(b.created);
     },
-    items_selected: []
+    items_selected: [],
+    escapeXss: function(text) {
+      if (!text || typeof text !== 'string') return text;
+      return text.replace(/["'<>/]/g, function(c) {
+        return '&#' + c.charCodeAt(0) + ';';
+      });
+    }
 }
 
 $projectile._config._filerOpts = {
